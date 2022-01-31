@@ -107,7 +107,7 @@ const TableList = observer(() => {
       })
       .then((res) => res.data);
 
-  const url = `${baseUrl}/party_supplier_list`;
+  const url = `${baseUrl}/supplier_list`;
   const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
 
 
@@ -145,7 +145,7 @@ const TableList = observer(() => {
     const party = await axios.post(
       `${baseUrl}/supplier_delete`,
       {
-        party_id: row_id,
+        supplier_id: row_id,
       },
       {
         headers: { Authorization: 'Bearer ' + user.auth_token },

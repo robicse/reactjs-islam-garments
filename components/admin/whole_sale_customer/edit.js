@@ -48,7 +48,7 @@ function Edit({ token, modal, editData, mutate }) {
             <CardBody>
               <Formik
                 initialValues={{
-                  party_id: editData?.id,
+                  customer_id: editData?.id,
                   name: editData?.name,
                   phone: editData?.phone,
                   email: editData?.email,
@@ -79,7 +79,7 @@ function Edit({ token, modal, editData, mutate }) {
                   setTimeout(() => {
                     Axios.post(
                       `${baseUrl}/customer_update`,
-                      { party_id: values.party_id,
+                      { customer_id: values.customer_id,
                         name: values.name,
                         phone: values.phone,
                         email: values.email,

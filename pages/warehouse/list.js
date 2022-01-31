@@ -26,7 +26,7 @@ import { baseUrl } from '../../const/api';
 
 import MuiAlert from '@material-ui/lab/Alert';
 import Edit from '../../components/admin/warehouse/edit';
-// import Create from '../../components/admin/warehouse/create';
+import Create from '../../components/admin/warehouse/create';
 import tableIcons from 'components/table_icon/icon';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 
@@ -86,19 +86,19 @@ const TableList = observer(() => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openWarning, setOpenWarning] = useState(false);
 
-  // const handleCloseWarning = (event, reason) => {
-  //   if (reason === 'clickaway') {
-  //     return;
-  //   }
-  //   setOpenWarning(false);
-  // };
+  const handleCloseWarning = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenWarning(false);
+  };
 
-  // const handleClickOpenCreate = () => {
-  //   setOpenCreateModal(true);
-  // };
-  // const handleCloseCreate = () => {
-  //   setOpenCreateModal(false);
-  // };
+  const handleClickOpenCreate = () => {
+    setOpenCreateModal(true);
+  };
+  const handleCloseCreate = () => {
+    setOpenCreateModal(false);
+  };
 
 
   const handleCloseEdit = () => {
@@ -136,13 +136,13 @@ const TableList = observer(() => {
   };
 
 
-  // const handleCreate = () => {
-  //   if (!user.can('create', subject)) {
-  //     setOpenWarning(true);
-  //     return null;
-  //   }
-  //   handleClickOpenCreate(true);
-  // };
+  const handleCreate = () => {
+    if (!user.can('create', subject)) {
+      setOpenWarning(true);
+      return null;
+    }
+    handleClickOpenCreate(true);
+  };
 
 
   return (
@@ -158,7 +158,7 @@ const TableList = observer(() => {
                  
                   </Box>
                 </Grid>
-                {/* <Grid
+                <Grid
                   container
                   item
                   xs={6}
@@ -172,7 +172,7 @@ const TableList = observer(() => {
                     onClick={handleCreate}>
                     Create {title}
                   </Button>
-                </Grid> */}
+                </Grid>
               </Grid>
             </CardHeader>
             <CardBody>
@@ -227,7 +227,7 @@ const TableList = observer(() => {
               )}
             </CardBody>
           </Card>
-          {/* <Dialog
+          <Dialog
             fullScreen
             open={openCreateModal}
             onClose={handleCloseCreate}
@@ -252,7 +252,7 @@ const TableList = observer(() => {
               endpoint={endpoint.create}
               mutate={mutate}
             />
-          </Dialog> */}
+          </Dialog>
 
           <Dialog
             open={openEditModal}

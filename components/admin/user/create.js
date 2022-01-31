@@ -63,7 +63,7 @@ const Create = ({ token, modal, endpoint, mutate,user }) => {
           const responseTwoR = responses[2];
           setWarehouse(responseOneB.data.data);
           setStore(responseTwoU.data.data);
-          setRoles(responseTwoR.data.response.role);
+          setRoles(responseTwoR.data.data);
         
         })
       )

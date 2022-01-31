@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "components/Grid/GridItem";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
+import cogoToast from 'cogo-toast';
 import CardBody from "components/Card/CardBody.js";
 import { Formik, Field } from "formik";
 import { TextField } from "formik-material-ui";
@@ -14,6 +15,7 @@ import Alert from "@material-ui/lab/Alert";
 import { baseUrl } from "../../../const/api";
 import { useAsyncEffect } from "use-async-effect";
 import axios from "axios";
+import AllApplicationErrorNotification from '../../utils/errorNotification';
 
 const styles = {
   cardCategoryWhite: {
@@ -125,14 +127,17 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                         console.log(res);
                         setSubmitting(false);
                         mutate();
-                        modal(false);
+                        //modal(false);
+                        cogoToast.success('Created Success',{position: 'top-right', bar:{size: '10px'}});
                       })
                       .catch(function (error) {
-                        setOpen({
-                          open: true,
-                          key: Object.values(error.response.data.message),
-                          value: Object.values(error.response.data.message),
-                        });
+                        // setOpen({
+                        //   open: true,
+                        //   key: Object.values(error.response.data.message),
+                        //   value: Object.values(error.response.data.message),
+                        // });
+                        AllApplicationErrorNotification(error?.response?.data)
+
                         setSubmitting(false);
                       });
                   });

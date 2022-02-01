@@ -6,6 +6,8 @@ import LocalMallIcon from '@material-ui/icons/LocalMall';
 import HouseIcon from '@material-ui/icons/House';
 import StoreIcon from '@material-ui/icons/Store';
 import SearchIcon from '@material-ui/icons/Search';
+import SettingsIcon from '@material-ui/icons/Settings';
+import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 
 
 
@@ -107,6 +109,15 @@ const dashboardRoutes = [
     icon: LocalMallIcon,
     childs: [
       {
+        id: 1,
+        collapse: false,
+        path: '/product_size',
+        childPath: '/list',
+        name: 'Product Size',
+        permission: 'product_size',
+        icon: FunctionsIcon,
+      },
+      {
         id: 2,
         collapse: false,
         path: '/product_unit',
@@ -123,6 +134,24 @@ const dashboardRoutes = [
         name: 'Product Management',
         permission: 'product_management',
         icon: LocalMallIcon,
+      },
+    ],
+  },
+  {
+    id: 13,
+    collapse: true,
+    path: '/pos_settings',
+    name: 'POS Setting',
+    icon: SettingsIcon,
+    childs: [
+      {
+        id: 1,
+        collapse: false,
+        path: '/role',
+        childPath: '/list',
+        permission: 'role',
+        name: 'Role',
+        icon: AccessibilityNewIcon,
       },
     ],
   },

@@ -1,19 +1,16 @@
 import React from 'react';
 import { useState } from 'react';
-// @material-ui/core components
+import cogoToast from 'cogo-toast';
 import { makeStyles } from '@material-ui/core/styles';
-// core components
 import GridItem from 'components/Grid/GridItem.js';
 import GridContainer from 'components/Grid/GridContainer.js';
 import Card from 'components/Card/Card.js';
 import CardHeader from 'components/Card/CardHeader.js';
 import CardBody from 'components/Card/CardBody.js';
 import Gurd from '../../components/guard/Gurd';
-import { useAsyncEffect } from 'use-async-effect';
 import axios from 'axios';
 import { useRootStore } from '../../models/root-store-provider';
 import { observer } from 'mobx-react-lite';
-import cogoToast from 'cogo-toast'
 import MaterialTable from 'material-table';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -24,21 +21,20 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { Box, Chip, Grid } from '@material-ui/core';
-import Create from '../../components/admin/role/create';
 import useSWR from 'swr';
-import Edit from '../../components/admin/role/edit';
-import { Swrloader } from '../../components/loader/Swrloader';
+// import { Swrloader } from '../../components/loader/Swrloader';
 import { baseUrl } from '../../const/api';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+// import MuiAlert from '@material-ui/lab/Alert';
+import Edit from '../../components/admin/product_size/edit';
+import Create from '../../components/admin/product_size/create';
 import tableIcons from 'components/table_icon/icon';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import AllApplicationErrorNotification from '../../components/utils/errorNotification';
+
+
 const styles = {
   cardCategoryWhite: {
     '&,& a,& a:hover,& a:focus': {
@@ -74,13 +70,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const title = 'Role';
-const subject = 'role';
+const title = 'Product Size';
+const subject = 'product_size';
 const endpoint = {
-  list: 'roles',
-  create: 'role_permission_create',
-  edit: 'role_permission_update',
-  delete: 'user_delete',
+  list: 'product_size_list',
+  create: 'product_size_create',
+  edit: 'product_size_edit',
+  delete: 'product_size_delete',
 };
 
 const TableList = observer(() => {
@@ -91,15 +87,7 @@ const TableList = observer(() => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openWarning, setOpenWarning] = useState(false);
 
-  // const handleClickWarning = () => {
-  //   setOpenWarning(true);
-  // };
-  // const handleCloseWarning = (event, reason) => {
-  //   if (reason === 'clickaway') {
-  //     return;
-  //   }
-  //   setOpenWarning(false);
-  // };
+
 
   const handleClickOpenCreate = () => {
     setOpenCreateModal(true);
@@ -128,19 +116,16 @@ const TableList = observer(() => {
   const columns = [
     { title: 'Name', field: 'name' },
     {
-      title: 'Permission',
-      field: 'permissions',
-      render: (rowData) =>
-        rowData.permissions.map((per) => (
-          <Chip
-            key={per.id}
-            color="primary"
-            size="small"
-            label={per.name}
-            icon={<CheckCircleIcon />}
-            style={{ margin: 4 }}
-          />
-        )),
+      title: 'Status',
+      field: 'status',
+      render: (rowData) => (
+        <Chip
+          color={rowData.status ? 'primary' : 'secondary'}
+          size="small"
+          label={rowData.status ? 'Active' : 'Inactive'}
+          icon={rowData.status ? <CheckCircleIcon /> : <ErrorIcon />}
+        />
+      ),
     },
   ];
 
@@ -152,7 +137,7 @@ const TableList = observer(() => {
     const dlt = await axios.post(
       `${baseUrl}/${endpoint.delete}`,
       {
-        user_id: row_id,
+        product_size_id: row_id,
       },
       {
         headers: { Authorization: 'Bearer ' + user.auth_token },
@@ -161,10 +146,6 @@ const TableList = observer(() => {
     mutate();
   };
   const handleEdit = (row) => {
-    // if (row.name == 'customer') {
-    //   cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
-    //   return null;
-    // }
     if (!user.can('edit', subject)) {
       cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
       return null;
@@ -188,14 +169,12 @@ const TableList = observer(() => {
             <CardHeader color="primary">
               <Grid container spacing={1}>
                 <Grid container item xs={6} spacing={3} direction="column">
-                  <Box p={1}>
+                  <Box p={2}>
                     <h4 className={classes.cardTitleWhite}>{title} List</h4>
-                    <p className={classes.cardCategoryWhite}>
-                      Details {title} List
-                    </p>
+                   
                   </Box>
                 </Grid>
-                {/* <Grid
+                <Grid
                   container
                   item
                   xs={6}
@@ -209,7 +188,7 @@ const TableList = observer(() => {
                     onClick={handleCreate}>
                     Create {title}
                   </Button>
-                </Grid> */}
+                </Grid>
               </Grid>
             </CardHeader>
             <CardBody>
@@ -229,17 +208,37 @@ const TableList = observer(() => {
                           <EditTwoToneIcon fontSize="small" color="white" />
                         </Button>
                       ),
-                      tooltip: 'Change Permission for this role',
+
+                      tooltip: 'Edit User',
                       onClick: (event, rowData) => handleEdit(rowData),
                     },
+                    (rowData) => ({
+                      icon: () => (
+                        <Button
+                          fullWidth={true}
+                          variant="contained"
+                          color="secondary">
+                          <DeleteForeverTwoToneIcon
+                            fontSize="small"
+                            color="white"
+                          />
+                        </Button>
+                      ),
+                      tooltip: 'Delete Party',
+                      onClick: (event, rowData) => (
+                        confirm('You want to delete ' + rowData.name),
+                        handleDelete(rowData.id)
+                      ),
+                      // disabled: rowData.birthYear < 2000,
+                    }),
                   ]}
                   options={{
                     actionsColumnIndex: -1,
                     // exportButton: true,
                     // grouping: true,
                     search: true,
-                    pageSize: 15,
-                    pageSizeOptions: [5, 10, 15, 20, 30],
+                    pageSize: 12,
+                    pageSizeOptions: [12],
                     padding: 'dense',
                   }}
                 />
@@ -276,8 +275,7 @@ const TableList = observer(() => {
           <Dialog
             open={openEditModal}
             onClose={handleCloseEdit}
-            TransitionComponent={Transition}
-            maxWidth="lg">
+            TransitionComponent={Transition}>
             <AppBar style={{ position: 'relative' }}>
               <Toolbar>
                 <IconButton
@@ -302,7 +300,7 @@ const TableList = observer(() => {
           </Dialog>
         </GridItem>
       </GridContainer>
-  
+
     </Gurd>
   );
 });

@@ -121,6 +121,7 @@ const TableList = observer(() => {
         </Typography>
       ),
     },
+    { title: 'Code', field: 'code' },
     { title: 'Phone', field: 'phone' },
     { title: 'Email', field: 'email' },
     { title: 'Address', field: 'address' },

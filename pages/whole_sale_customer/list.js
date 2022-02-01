@@ -145,10 +145,11 @@ const TableList = observer(() => {
 
   const columns = [
     { title: "Name", field: "name" },
+    { title: "Code", field: "code" },
     { title: "Phone", field: "phone" },
     { title: "Address", field: "address" },
     { title: "Initial Balance", field: "initial_due" },
-    { title: "Total Amount", field: "sale_total_amount" },
+    // { title: "Total Amount", field: "sale_total_amount" },
     {
       title: "Status",
       field: "status",

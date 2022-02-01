@@ -1,23 +1,16 @@
 import React from "react";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-// core components
 import cogoToast from 'cogo-toast';
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-//import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-material-ui";
 import Grid from "@material-ui/core/Grid";
 import { Button, MenuItem } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
 import { baseUrl } from "../../../const/api";
 import AllApplicationErrorNotification from '../../utils/errorNotification';
 
@@ -42,23 +35,8 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-function CreateParty({ token, modal, mutate }) {
+function CreateParty({ token, modal, mutate, endpoint}) {
   const classes = useStyles();
-  const [errorAlert, setOpen] = React.useState({
-    open: false,
-    key: "",
-    value: [],
-  });
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen({
-      open: false,
-      key: "",
-      value: [],
-    });
-  };
 
   return (
     <div>
@@ -92,15 +70,12 @@ function CreateParty({ token, modal, mutate }) {
                   if (!values.status) {
                     errors.status = "Required";
                   }
-                  // if (!values.initial_due) {
-                  //   errors.initial_due = "Required";
-                  // }
                   return errors;
                 }} 
                 onSubmit={(values, { setSubmitting }) => {
                   setTimeout(() => {
                     Axios.post(
-                      `${baseUrl}/whole_customer_create`,
+                      `${baseUrl}/${endpoint.create}`,
                       {
                       
                         name: values.name,
@@ -124,11 +99,7 @@ function CreateParty({ token, modal, mutate }) {
                       .catch(function (error) {
                         console.log(error);
                         AllApplicationErrorNotification(error?.response?.data)
-                        // setOpen({
-                        //   open: true,
-                        //   key: Object.values(error.response.data.message),
-                        //   value: Object.values(error.response.data.message),
-                        // });
+ 
                         setSubmitting(false);
                       });
                   });
@@ -237,23 +208,7 @@ function CreateParty({ token, modal, mutate }) {
                 )}
               </Formik>
             </CardBody>
-            <Snackbar
-              open={errorAlert.open}
-              autoHideDuration={2000}
-              onClose={handleClose}
-            >
-              <Alert
-                onClose={handleClose}
-                severity="error"
-                color="error"
-                style={{
-                  backgroundColor: "#ff1a1a",
-                  color: "white",
-                }}
-              >
-                {errorAlert.value[0]}
-              </Alert>
-            </Snackbar>
+
           </Card>
         </GridItem>
       </GridContainer>

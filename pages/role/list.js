@@ -75,7 +75,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = 'Role';
-const subject = 'role';
+const subject = 'Role';
 const endpoint = {
   list: 'roles',
   create: 'role_permission_create',
@@ -165,10 +165,10 @@ const TableList = observer(() => {
     //   cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
     //   return null;
     // }
-    if (!user.can('edit', subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
-      return null;
-    }
+    // if (!user.can('edit', subject)) {
+    //   cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
+    //   return null;
+    // }
     console.log(row);
     setEditData(row);
     setOpenEditModal(true);
@@ -181,7 +181,7 @@ const TableList = observer(() => {
     handleClickOpenCreate(true);
   };
   return (
-    <Gurd subject={subject}>
+<Gurd subject={subject}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -195,21 +195,7 @@ const TableList = observer(() => {
                     </p>
                   </Box>
                 </Grid>
-                {/* <Grid
-                  container
-                  item
-                  xs={6}
-                  spacing={3}
-                  direction="row"
-                  justify="flex-end"
-                  alignItems="center">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleCreate}>
-                    Create {title}
-                  </Button>
-                </Grid> */}
+
               </Grid>
             </CardHeader>
             <CardBody>

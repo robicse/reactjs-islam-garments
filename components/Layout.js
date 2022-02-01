@@ -145,7 +145,7 @@ export const Layout = observer(({ children }) => {
   const logout = () => {
     user.logOut();
     handleClose()
-    console.log('logout');
+ 
     router.push('/login');
     //window.location.href = window.location.origin + "/auth/login";
   };
@@ -313,7 +313,7 @@ export const Layout = observer(({ children }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={()=>{router.push('/role/list')} } >Setting</MenuItem>
         <MenuItem onClick={logout}>Logout</MenuItem>
       </Menu>
     </div>

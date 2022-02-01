@@ -1,46 +1,44 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import GridItem from 'components/Grid/GridItem.js';
-import cogoToast from 'cogo-toast';
-import GridContainer from 'components/Grid/GridContainer.js';
-import Card from 'components/Card/Card.js';
-import CardBody from 'components/Card/CardBody.js';
-import { Formik, Field } from 'formik';
-import { TextField } from 'formik-material-ui';
-import { Button, MenuItem } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Axios from 'axios';
-import { baseUrl } from '../../../const/api';
-import { useAsyncEffect } from 'use-async-effect';
-import axios from 'axios';
-import AllApplicationErrorNotification from '../../utils/errorNotification';
-
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import GridItem from "components/Grid/GridItem.js";
+import cogoToast from "cogo-toast";
+import GridContainer from "components/Grid/GridContainer.js";
+import Card from "components/Card/Card.js";
+import CardBody from "components/Card/CardBody.js";
+import { Formik, Field } from "formik";
+import { TextField } from "formik-material-ui";
+import { Button, MenuItem } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Axios from "axios";
+import { baseUrl } from "../../../const/api";
+import { useAsyncEffect } from "use-async-effect";
+import axios from "axios";
+import AllApplicationErrorNotification from "../../utils/errorNotification";
 
 const styles = {
   cardCategoryWhite: {
-    color: 'rgba(255,255,255,.62)',
-    margin: '0',
-    fontSize: '14px',
-    marginTop: '0',
-    marginBottom: '0',
+    color: "rgba(255,255,255,.62)",
+    margin: "0",
+    fontSize: "14px",
+    marginTop: "0",
+    marginBottom: "0",
   },
   cardTitleWhite: {
-    color: '#FFFFFF',
-    marginTop: '0px',
-    minHeight: 'auto',
-    fontWeight: '300',
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: '3px',
-    textDecoration: 'none',
+    marginBottom: "3px",
+    textDecoration: "none",
   },
 };
 
 const useStyles = makeStyles(styles);
 
 function Edit({ token, modal, editData, endpoint, mutate }) {
-console.log(editData);
+  console.log(editData);
   const classes = useStyles();
-
 
   const [roles, setRoles] = React.useState([]);
   const [warehouse, setWarehouse] = React.useState([]);
@@ -49,13 +47,13 @@ console.log(editData);
   let stor = `${baseUrl}/store_list`;
   let rol = `${baseUrl}/roles`;
   const requestOne = axios.get(ware, {
-    headers: { Authorization: 'Bearer ' + token },
+    headers: { Authorization: "Bearer " + token },
   });
   const requestTwo = axios.get(stor, {
-    headers: { Authorization: 'Bearer ' + token },
+    headers: { Authorization: "Bearer " + token },
   });
   const requestThree = axios.get(rol, {
-    headers: { Authorization: 'Bearer ' + token },
+    headers: { Authorization: "Bearer " + token },
   });
   useAsyncEffect(async (isMounted) => {
     await axios
@@ -64,13 +62,11 @@ console.log(editData);
         axios.spread((...responses) => {
           const responseOneB = responses[0];
 
-       
           const responseTwoU = responses[1];
           const responseTwoR = responses[2];
           setWarehouse(responseOneB.data.data);
           setStore(responseTwoU.data.data);
           setRoles(responseTwoR.data.data);
-  
         })
       )
       .catch((errors) => {
@@ -78,14 +74,11 @@ console.log(editData);
       });
   }, []);
 
-
-
   return (
     <div>
-      <GridContainer style={{ padding: '20px 30px', marginTop: 250 }}>
+      <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-         
             <CardBody>
               <Formik
                 initialValues={{
@@ -93,8 +86,8 @@ console.log(editData);
                   phone: editData.phone,
                   email: editData.email,
                   role: editData.role,
-                  password: '',
-                  confirm_password: '',
+                  password: "",
+                  confirm_password: "",
                   warehouse: editData.warehouse_id,
                   store: editData.store_id,
                   status: editData.status,
@@ -102,18 +95,18 @@ console.log(editData);
                 validate={(values) => {
                   const errors = {};
                   if (!values.phone) {
-                    errors.phone = 'Required';
+                    errors.phone = "Required";
                   } else if (values.phone.length != 11) {
-                    errors.phone = 'Invalid Phone Number';
+                    errors.phone = "Invalid Phone Number";
                   }
                   if (!values.role) {
-                    errors.role = 'Required';
+                    errors.role = "Required";
                   }
                   if (!values.name) {
-                    errors.name = 'Required';
+                    errors.name = "Required";
                   }
                   if (!values.status) {
-                    errors.status = 'Required';
+                    errors.status = "Required";
                   }
                   return errors;
                 }}
@@ -134,7 +127,7 @@ console.log(editData);
                         store_id: values.store,
                       },
                       {
-                        headers: { Authorization: 'Bearer ' + token },
+                        headers: { Authorization: "Bearer " + token },
                       }
                     )
                       .then((res) => {
@@ -143,15 +136,19 @@ console.log(editData);
                         mutate();
                         modal(false);
 
-                        cogoToast.success('Update Success',{position: 'top-right', bar:{size: '10px'}});
+                        cogoToast.success("Update Success", {
+                          position: "top-right",
+                          bar: { size: "10px" },
+                        });
                       })
                       .catch(function (error) {
-                        AllApplicationErrorNotification(error?.response?.data)
-                       
+                        AllApplicationErrorNotification(error?.response?.data);
+
                         setSubmitting(false);
                       });
                   });
-                }}>
+                }}
+              >
                 {({ submitForm, isSubmitting }) => (
                   <div className={classes.root}>
                     <div className={classes.paper}>
@@ -199,10 +196,10 @@ console.log(editData);
                               label="Role"
                               select
                               fullWidth
-                       
                               variant="outlined"
                               helperText="Please select roles"
-                              margin="normal">
+                              margin="normal"
+                            >
                               {roles.map((r) => (
                                 <MenuItem value={r.name} key={r.id}>
                                   {r.name}
@@ -219,17 +216,19 @@ console.log(editData);
                               label="Warehouse"
                               select
                               fullWidth
-                              
-                              disabled={editData.role === 'admin' ? true: false }
+                              disabled={
+                                editData.role === "admin" ? true : false
+                              }
                               variant="outlined"
                               helperText="Please select warehouse"
-                              margin="normal">
+                              margin="normal"
+                            >
                               {warehouse.map((w) => (
                                 <MenuItem value={w.id}>{w.name}</MenuItem>
                               ))}
                             </Field>
                           </GridItem>
-                          
+
                           <GridItem xs={12} sm={12} md={6}>
                             <Field
                               component={TextField}
@@ -240,16 +239,18 @@ console.log(editData);
                               fullWidth
                               variant="outlined"
                               helperText="Please select Store"
-                              disabled={editData.role === 'admin' ? true: false }
-                              margin="normal">
-                                <MenuItem value={null}>Unselect</MenuItem>
+                              disabled={
+                                editData.role === "admin" ? true : false
+                              }
+                              margin="normal"
+                            >
+                              <MenuItem value={null}>Unselect</MenuItem>
                               {store.map((s) => (
                                 <MenuItem value={s.id}>{s.store_name}</MenuItem>
                               ))}
-                               
                             </Field>
                           </GridItem>
-                        
+
                           <GridItem xs={12} sm={12} md={12}>
                             <Field
                               component={TextField}
@@ -260,7 +261,8 @@ console.log(editData);
                               fullWidth
                               variant="outlined"
                               helperText="Please select status"
-                              margin="normal">
+                              margin="normal"
+                            >
                               <MenuItem value="1">Active</MenuItem>
                               <MenuItem value="0">Inactive</MenuItem>
                             </Field>
@@ -295,11 +297,12 @@ console.log(editData);
                           color="primary"
                           className={classes.submit}
                           disabled={isSubmitting}
-                          onClick={submitForm}>
+                          onClick={submitForm}
+                        >
                           {isSubmitting ? (
                             <CircularProgress color="primary" size={24} />
                           ) : (
-                            'UPDATE'
+                            "UPDATE"
                           )}
                         </Button>
                       </form>
@@ -308,14 +311,11 @@ console.log(editData);
                 )}
               </Formik>
             </CardBody>
-
           </Card>
         </GridItem>
       </GridContainer>
     </div>
   );
 }
-
-
 
 export default Edit;

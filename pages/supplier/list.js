@@ -1,9 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
-// @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
-// core components
 import GridItem from 'components/Grid/GridItem.js';
+import cogoToast from "cogo-toast";
 import GridContainer from 'components/Grid/GridContainer.js';
 import Card from 'components/Card/Card.js';
 import CardHeader from 'components/Card/CardHeader.js';
@@ -12,7 +11,6 @@ import Gurd from '../../components/guard/Gurd';
 import axios from 'axios';
 import { useRootStore } from '../../models/root-store-provider';
 import { observer } from 'mobx-react-lite';
-// import MaterialTable from "material-table";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
@@ -32,7 +30,7 @@ import MaterialTable from 'material-table';
 import tableIcons from 'components/table_icon/icon';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
-import Link from 'next/link';
+import AllApplicationErrorNotification from "../../components/utils/errorNotification";
 
 const styles = {
   cardCategoryWhite: {
@@ -70,16 +68,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = 'Supplier';
-const subject = 'party';
+const subject = 'Supplier';
 
 const endpoint = {
-  // list: 'store_list',
-  // create: 'store_create',
+  list: 'store_list',
+  create: 'store_create',
   edit: 'supplier_update',
-  // delete: 'store_delete',
+  delete: 'store_delete',
 };
 
-const TableList = observer(() => {
+const SuplierComponent = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
   const [editData, setEditData] = useState(null);
@@ -100,6 +98,8 @@ const TableList = observer(() => {
     setOpenEditModal(false);
   };
 
+
+  // need to server pagination and remove this block
   const fetcher = (url, auth) =>
     axios
       .get(url, {
@@ -107,9 +107,9 @@ const TableList = observer(() => {
       })
       .then((res) => res.data);
 
-  const url = `${baseUrl}/supplier_list`;
+  const url = `${baseUrl}/${endpoint.list}`;
   const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
-
+// end block
 
   const columns = [
     {
@@ -138,37 +138,65 @@ const TableList = observer(() => {
       ),
     },
   ];
-  const handleDelete = async (row_id) => {
-    if (!user.can('delete', subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
-      return null;
-    }
-    const party = await axios.post(
-      `${baseUrl}/supplier_delete`,
-      {
-        supplier_id: row_id,
-      },
-      {
-        headers: { Authorization: 'Bearer ' + user.auth_token },
+
+
+
+    // handle edit
+    const handleEdit = (row) => {
+      if (!user.can("Edit", subject)) {
+        cogoToast.error("You don't have Edit permission!", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        return null;
       }
-    );
-    mutate();
-  };
-  const handleEdit = (row) => {
-    if (!user.can('edit', subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
-      return null;
-    }
-    setEditData(row);
-    setOpenEditModal(true);
-  };
-  const handleCreate = () => {
-    if (!user.can('create', subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
-      return null;
-    }
-    handleClickOpenCreate(true);
-  };
+      setEditData(row);
+      setOpenEditModal(true);
+    };
+  
+    // handle create
+    const handleCreate = () => {
+      if (!user.can("Create", subject)) {
+        cogoToast.error("You don't  have Create permission!", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        return null;
+      }
+      handleClickOpenCreate(true);
+    };
+  
+    // handle Delette
+    const handleDelete = async (row_id) => {
+      if (!user.can("Delete", subject)) {
+        cogoToast.warn("You don't have permission!", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        return null;
+      }
+  
+      try {
+        await axios.post(
+          `${baseUrl}/${endpoint.delete}`,
+          {
+            supplier_id: row_id,
+          },
+          {
+            headers: { Authorization: "Bearer " + user.auth_token },
+          }
+        );
+        cogoToast.success("Delete Success", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        mutate();
+      } catch (error) {
+        AllApplicationErrorNotification(error?.response?.data);
+      }
+    };
+
+
   return (
     <Gurd subject={subject}>
       <GridContainer>
@@ -179,9 +207,6 @@ const TableList = observer(() => {
                 <Grid container item xs={3} spacing={3} direction="column">
                   <Box p={2}>
                     <h4 className={classes.cardTitleWhite}>{title} List</h4>
-                    {/* <p className={classes.cardCategoryWhite}>
-                      Details {title} List
-                    </p> */}
                   </Box>
                 </Grid>
                 <Grid
@@ -243,8 +268,6 @@ const TableList = observer(() => {
                   ]}
                   options={{
                     actionsColumnIndex: -1,
-                    // exportButton: true,
-                    // grouping: true,
                     search: true,
                     pageSize: 12,
                     pageSizeOptions: [12],
@@ -315,4 +338,4 @@ const TableList = observer(() => {
   );
 });
 
-export default TableList;
+export default SuplierComponent;

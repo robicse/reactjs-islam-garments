@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import cogoToast from 'cogo-toast';
+import cogoToast from "cogo-toast";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
@@ -10,9 +10,8 @@ import { TextField } from "formik-material-ui";
 import { Button, MenuItem } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
-import AllApplicationErrorNotification from '../../utils/errorNotification';
+import AllApplicationErrorNotification from "../../utils/errorNotification";
 import { baseUrl } from "../../../const/api";
-
 
 const styles = {
   cardCategoryWhite: {
@@ -38,7 +37,6 @@ const useStyles = makeStyles(styles);
 function CreateParty({ token, modal, mutate }) {
   const classes = useStyles();
 
-
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
@@ -62,7 +60,7 @@ function CreateParty({ token, modal, mutate }) {
                   } else if (values.phone.length != 11) {
                     errors.phone = "Invalid Phone Number";
                   }
-            
+
                   if (!values.name) {
                     errors.name = "Required";
                   }
@@ -91,16 +89,17 @@ function CreateParty({ token, modal, mutate }) {
                       }
                     )
                       .then((res) => {
-                  
                         setSubmitting(false);
                         mutate();
                         modal(false);
 
- cogoToast.success('Create Success',{position: 'top-right', bar:{size: '10px'}});
+                        cogoToast.success("Create Success", {
+                          position: "top-right",
+                          bar: { size: "10px" },
+                        });
                       })
                       .catch(function (error) {
-                       
-                  AllApplicationErrorNotification(error?.response?.data)
+                        AllApplicationErrorNotification(error?.response?.data);
                         setSubmitting(false);
                       });
                   });
@@ -194,13 +193,11 @@ function CreateParty({ token, modal, mutate }) {
                 )}
               </Formik>
             </CardBody>
-
           </Card>
         </GridItem>
       </GridContainer>
     </div>
   );
 }
-
 
 export default CreateParty;

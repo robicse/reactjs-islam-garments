@@ -35,10 +35,9 @@ export const User = types
       self.details = undefined;
     },
     has_list_permission(subject) {
-      const action = `${subject}_list`;
- console.log(action,'jdj')
+     
+      const action = `${subject} List`;
       var __FOUND = self?.details?.permissions.find(function (permission, index) {
-      //  console.log(permission.name)
         if (permission.name == action) return true;
       });
      
@@ -49,8 +48,7 @@ export const User = types
       }
     },
     can(act, subject) {
-      const action = `${subject}_${act}`;
-      //console.log("checked crud gurd-" + action);
+      const action = `${subject} ${act}`;
       var __FOUND = self.details.permissions.find(function (permission, index) {
         if (permission.name == action) return true;
       });

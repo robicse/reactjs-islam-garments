@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const title = 'Dashboard';
-const subject = 'dashboard';
+const subject = 'Dashboard';
 
 const Dashboard = observer(() => {
   const classes = useStyles();

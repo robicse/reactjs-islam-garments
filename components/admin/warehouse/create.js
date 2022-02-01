@@ -3,19 +3,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "components/Grid/GridItem";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
-import cogoToast from 'cogo-toast';
+import cogoToast from "cogo-toast";
 import CardBody from "components/Card/CardBody.js";
 import { Formik, Field } from "formik";
 import { TextField } from "formik-material-ui";
 import { Button, MenuItem } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
 import { baseUrl } from "../../../const/api";
-import { useAsyncEffect } from "use-async-effect";
-import axios from "axios";
-import AllApplicationErrorNotification from '../../utils/errorNotification';
+import AllApplicationErrorNotification from "../../utils/errorNotification";
 
 const styles = {
   cardCategoryWhite: {
@@ -38,49 +34,14 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const Create = ({ token, modal, endpoint, mutate }) => {
+const Create = ({ token, endpoint, modal, mutate }) => {
   const classes = useStyles();
-  const [errorAlert, setOpen] = React.useState({
-    open: false,
-    key: "",
-    value: [],
-  });
-  const [roles, setRoles] = React.useState([]);
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen({
-      open: false,
-      key: "",
-      value: [],
-    });
-  };
-
-  useAsyncEffect(async (isMounted) => {
-    try {
-      const perList = await axios.get(`${baseUrl}/roles`, {
-        headers: { Authorization: "Bearer " + token },
-      });
-      if (!isMounted()) return;
-
-      if (perList.data.response.role != 0) {
-        setRoles(perList.data.response.role);
-      } else {
-        console.log("No Permissons");
-        modal(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
 
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-        
             <CardBody>
               <Formik
                 initialValues={{
@@ -127,16 +88,14 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                         console.log(res);
                         setSubmitting(false);
                         mutate();
-                        //modal(false);
-                        cogoToast.success('Created Success',{position: 'top-right', bar:{size: '10px'}});
+                        modal(false);
+                        cogoToast.success("Created Success", {
+                          position: "top-right",
+                          bar: { size: "10px" },
+                        });
                       })
                       .catch(function (error) {
-                        // setOpen({
-                        //   open: true,
-                        //   key: Object.values(error.response.data.message),
-                        //   value: Object.values(error.response.data.message),
-                        // });
-                        AllApplicationErrorNotification(error?.response?.data)
+                        AllApplicationErrorNotification(error?.response?.data);
 
                         setSubmitting(false);
                       });
@@ -230,23 +189,6 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                 )}
               </Formik>
             </CardBody>
-            <Snackbar
-              open={errorAlert.open}
-              autoHideDuration={2000}
-              onClose={handleClose}
-            >
-              <Alert
-                onClose={handleClose}
-                severity="error"
-                color="error"
-                style={{
-                  backgroundColor: "#ff1a1a",
-                  color: "white",
-                }}
-              >
-                {errorAlert.value[0]}
-              </Alert>
-            </Snackbar>
           </Card>
         </GridItem>
       </GridContainer>

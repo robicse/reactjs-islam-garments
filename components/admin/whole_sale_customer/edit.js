@@ -34,7 +34,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-function Edit({ token, modal, editData, mutate }) {
+function Edit({ token, modal, editData, mutate,endpoint}) {
 
   const classes = useStyles();
 
@@ -78,7 +78,7 @@ function Edit({ token, modal, editData, mutate }) {
                 onSubmit={(values, { setSubmitting }) => {
                   setTimeout(() => {
                     Axios.post(
-                      `${baseUrl}/customer_update`,
+                      `${baseUrl}/${endpoint.edit}`,
                       { customer_id: values.customer_id,
                         name: values.name,
                         phone: values.phone,

@@ -75,7 +75,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = "Product";
-const subject = "product";
+const subject = "Product";
 const endpoint = {
   list: "product_list_with_search",
   create: "product_create",

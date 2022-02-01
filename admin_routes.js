@@ -43,17 +43,7 @@ const dashboardRoutes = [
     childs: [],
   },
   {
-    id: 22,
-    collapse: false,
-    path: '/product_search/list',
-    childPath: '/list',
-    name: 'Search',
-    permission: 'product_search_list',
-    icon: SearchIcon,
-    childs: [],
-  },
-  {
-    id: 5,
+    id: 4,
     collapse: false,
     path: '/user/list',
     childPath: '/list',
@@ -63,7 +53,7 @@ const dashboardRoutes = [
     childs: [],
   },
   {
-    id: 14,
+    id: 5,
     collapse: false,
     path: '/supplier/list',
     childPath: '/list',
@@ -73,7 +63,7 @@ const dashboardRoutes = [
     childs: [],
   },
   {
-    id: 18,
+    id: 6,
     collapse: true,
     path: '/customer',
     childPath: '/list',
@@ -137,8 +127,19 @@ const dashboardRoutes = [
       },
     ],
   },
+
   {
-    id: 13,
+    id: 8,
+    collapse: false,
+    path: '/product_search/list',
+    childPath: '/list',
+    name: 'Product Search',
+    permission: 'product_search_list',
+    icon: SearchIcon,
+    childs: [],
+  },
+  {
+    id: 9,
     collapse: true,
     path: '/pos_settings',
     name: 'POS Setting',

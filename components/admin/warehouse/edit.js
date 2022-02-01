@@ -10,8 +10,6 @@ import { TextField } from "formik-material-ui";
 import { Button, MenuItem } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
-// import Snackbar from "@material-ui/core/Snackbar";
-// import Alert from "@material-ui/lab/Alert";
 import { baseUrl } from "../../../const/api";
 import AllApplicationErrorNotification from '../../utils/errorNotification';
 

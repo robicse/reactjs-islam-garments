@@ -70,7 +70,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = "pos_sale_customer_list";
-const subject = "pos_sale_customer";
+const subject = "Possale Customer";
 
 const TableList = observer(() => {
   const classes = useStyles();
@@ -82,12 +82,6 @@ const TableList = observer(() => {
   const [editData, setEditData] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [purchaseData, setPurchaseData] = useState(null);
-  const [openPurchaseModal, setPurchaseModal] = useState(false);
-  const [openWarning, setOpenWarning] = React.useState(false);
-
-
-
 
   // create and edit customerHandle
   const handleClickOpenCreate = () => {
@@ -100,53 +94,8 @@ const TableList = observer(() => {
     setOpenEditModal(false);
   };
 
-  const handleEdit = (row) => {
-    if (!user.can('edit', subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
-      return null;
-    }
-    setEditData(row);
-    setOpenEditModal(true);
-  };
-  const handleCreate = () => {
-    if (!user.can('create', subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
-      return null;
-    }
-    handleClickOpenCreate(true);
-  };
-  const handleDelete = async (row_id) => {
-    if (!user.can("delete", subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
-      return null;
-    }
-    const party = await axios.post(
-      `${baseUrl}/customer_delete`,
-      {
-        party_id: row_id,
-      },
-      {
-        headers: { Authorization: "Bearer " + user.auth_token },
-      }
-    );
-    handleRefress();
-  };
 
  
-
-  // purchase handler
-  const handlePurchaseHistory = (row) => {
-    // if (!user.can('edit', subject)) {
-    //   setOpenWarning(true);
-    //   return null;
-    // }
-    setPurchaseData(row);
-    setPurchaseModal(true);
-  };
-  const handleClosePurchesase = () => {
-    setPurchaseModal(false);
-  };
-
   const columns = [
     { title: "Name", field: "name" },
     { title: "Code", field: "code" },
@@ -168,8 +117,65 @@ const TableList = observer(() => {
     },
   ];
 
+
+    // handle edit
+    const handleEdit = (row) => {
+      if (!user.can("Edit", subject)) {
+        cogoToast.error("You don't have Edit permission!", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        return null;
+      }
+      setEditData(row);
+      setOpenEditModal(true);
+    };
+  
+    // handle create
+    const handleCreate = () => {
+      if (!user.can("Create", subject)) {
+        cogoToast.error("You don't  have Create permission!", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        return null;
+      }
+      handleClickOpenCreate(true);
+    };
+  
+    // handle Delette
+    const handleDelete = async (row_id) => {
+      if (!user.can("Delete", subject)) {
+        cogoToast.warn("You don't have permission!", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        return null;
+      }
+  
+      try {
+        await axios.post(
+          `${baseUrl}/${endpoint.delete}`,
+          {
+            store_id: row_id,
+          },
+          {
+            headers: { Authorization: "Bearer " + user.auth_token },
+          }
+        );
+        cogoToast.success("Delete Success", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        handleRefress();
+      } catch (error) {
+        AllApplicationErrorNotification(error?.response?.data);
+      }
+    };
+  
+
   return (
-    <Gurd subject="pos_sale_customer">
+    <Gurd subject={subject}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>

@@ -23,8 +23,8 @@ import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import { Box, Grid, Chip } from "@material-ui/core";
 import DeleteForeverTwoToneIcon from "@material-ui/icons/DeleteForeverTwoTone";
-import CreateNewPosCustomer from "../../components/admin/whole_sale_customer/create";
-import EditPosCustomer from "../../components/admin/whole_sale_customer/edit";
+import CreateWholesaleCustomer from "../../components/admin/whole_sale_customer/create";
+import EditWholesaleCustomer from "../../components/admin/whole_sale_customer/edit";
 import { baseUrl } from "../../const/api";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
@@ -68,7 +68,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = "Whole Sale Customer";
-const subject = "whole_sale_customer";
+const subject = "Wholesale Customer";
+const endpoint = {
+  list: "whole_sale_customer_list_pagination_with_search",
+  create: "whole_customer_create",
+  edit: "customer_update",
+  delete: "customer_delete",
+};
+
+
 
 const TableList = observer(() => {
   const classes = useStyles();
@@ -80,8 +88,6 @@ const TableList = observer(() => {
   const [editData, setEditData] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  const [purchaseData, setPurchaseData] = useState(null);
-  const [openPurchaseModal, setPurchaseModal] = useState(false);
 
 
 
@@ -97,50 +103,62 @@ const TableList = observer(() => {
     setOpenEditModal(false);
   };
 
+
+  // handle edit
   const handleEdit = (row) => {
-    if (!user.can('edit', subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
+    if (!user.can("Edit", subject)) {
+      cogoToast.error("You don't have Edit permission!", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
       return null;
     }
     setEditData(row);
     setOpenEditModal(true);
   };
+
+  // handle create
   const handleCreate = () => {
-     if (!user.can('create', subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
+    if (!user.can("Create", subject)) {
+      cogoToast.error("You don't  have Create permission!", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
       return null;
     }
-
     handleClickOpenCreate(true);
   };
-  const handleDelete = async (row_id) => {
 
-    if (!user.can("delete", subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}});
+  // handle Delette
+  const handleDelete = async (row_id) => {
+    if (!user.can("Delete", subject)) {
+      cogoToast.warn("You don't have permission!", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
       return null;
     }
 
-    const party = await axios.post(
-      `${baseUrl}/customer_delete`,
-      {
-        party_id: row_id,
-      },
-      {
-        headers: { Authorization: "Bearer " + user.auth_token },
-      }
-    );
-    handleRefress();
+    try {
+      await axios.post(
+        `${baseUrl}/${endpoint.delete}`,
+        {
+          store_id: row_id,
+        },
+        {
+          headers: { Authorization: "Bearer " + user.auth_token },
+        }
+      );
+      cogoToast.success("Delete Success", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+      handleRefress();
+    } catch (error) {
+      AllApplicationErrorNotification(error?.response?.data);
+    }
   };
- 
 
-  const handlePurchaseHistory = (row) => {
-
-    setPurchaseData(row);
-    setPurchaseModal(true);
-  };
-  const handleClosePurchesase = () => {
-    setPurchaseModal(false);
-  };
 
 
   const columns = [
@@ -165,7 +183,7 @@ const TableList = observer(() => {
   ];
 
   return (
-    <Gurd subject="whole_sale_customer">
+    <Gurd subject={subject}>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -206,7 +224,7 @@ const TableList = observer(() => {
                 data={query =>
                   new Promise((resolve, reject) => {
                    console.log(query)
-                    let url = `${baseUrl}/whole_sale_customer_list_pagination_with_search?`;
+                    let url = `${baseUrl}/${endpoint.list}?`;
                     //searching
                     if (query.search) {
                       url += `search=${query.search}`
@@ -315,10 +333,11 @@ const TableList = observer(() => {
                 </Typography>
               </Toolbar>
             </AppBar>
-            <CreateNewPosCustomer
+            <CreateWholesaleCustomer
               token={user.auth_token}
               modal={setOpenCreateModal}
               mutate={handleRefress}
+              endpoint={endpoint}
             />
           </Dialog>
 
@@ -342,11 +361,12 @@ const TableList = observer(() => {
                 </Typography>
               </Toolbar>
             </AppBar>
-            <EditPosCustomer
+            <EditWholesaleCustomer
               token={user.auth_token}
               modal={setOpenEditModal}
               editData={editData}
               mutate={handleRefress}
+              endpoint={endpoint}
             />
           </Dialog>
         </GridItem>

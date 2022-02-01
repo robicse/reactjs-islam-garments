@@ -1,20 +1,18 @@
 import React from "react";
-
 import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
+import cogoToast from "cogo-toast";
 import CardBody from "components/Card/CardBody.js";
 import { Formik, Field } from "formik";
 import { TextField } from "formik-material-ui";
 import { Button, MenuItem } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
 import { baseUrl } from "../../../const/api";
 import { useAsyncEffect } from "use-async-effect";
-import axios from "axios";
+import AllApplicationErrorNotification from "../../utils/errorNotification";
 
 const styles = {
   cardCategoryWhite: {
@@ -39,33 +37,16 @@ const useStyles = makeStyles(styles);
 
 const Create = ({ token, modal, endpoint, mutate }) => {
   const classes = useStyles();
-  const [errorAlert, setOpen] = React.useState({
-    open: false,
-    key: "",
-    value: [],
-  });
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen({
-      open: false,
-      key: "",
-      value: [],
-    });
-  };
 
   const [warehouse, setWarehouse] = React.useState([]);
+
   useAsyncEffect(async (isMounted) => {
     try {
-      const perList = await axios.get(`${baseUrl}/warehouse_list`, {
+      const perList = await Axios.get(`${baseUrl}/warehouse_list`, {
         headers: { Authorization: "Bearer " + token },
       });
       if (!isMounted()) return;
-
-      //if (perList.data.response.warehouses != 0) {
       if (perList.data.data != 0) {
-        //setWarehouse(perList.data.response.warehouses);
         setWarehouse(perList.data.data);
       } else {
         console.log("No Warehouse");
@@ -134,13 +115,13 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                         setSubmitting(false);
                         mutate();
                         modal(false);
+                        cogoToast.success("Created Success", {
+                          position: "top-right",
+                          bar: { size: "10px" },
+                        });
                       })
                       .catch(function (error) {
-                        setOpen({
-                          open: true,
-                          key: Object.values(error.response.data.message),
-                          value: Object.values(error.response.data.message),
-                        });
+                        AllApplicationErrorNotification(error?.response?.data);
                         setSubmitting(false);
                       });
                   });
@@ -251,23 +232,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                 )}
               </Formik>
             </CardBody>
-            <Snackbar
-              open={errorAlert.open}
-              autoHideDuration={2000}
-              onClose={handleClose}
-            >
-              <Alert
-                onClose={handleClose}
-                severity="error"
-                color="error"
-                style={{
-                  backgroundColor: "#ff1a1a",
-                  color: "white",
-                }}
-              >
-                {errorAlert.value[0]}
-              </Alert>
-            </Snackbar>
+
           </Card>
         </GridItem>
       </GridContainer>

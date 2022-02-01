@@ -36,13 +36,12 @@ const Gurd = observer(({ children, subject }) => {
     setOpen(false);
   };
   const { user } = useRootStore();
-  //   React.useEffect(() => {
-  //     console.log(children);
-  //   }, []);
+
 console.log(user.has_list_permission(subject))
-  // console.log("gurd logstatus-" + user.isLoggedIn);
+
 
   if (user.isLoggedIn) {
+    console.log(subject);
     const has_permission = user.has_list_permission(subject);
     if (has_permission) {
       return children;
@@ -60,12 +59,7 @@ console.log(user.has_list_permission(subject))
                 You dont't have permission!
               </Alert>
             </Snackbar>
-            {/* <Image
-              src={permissiondenied}
-              alt="Access Denied"
-              width={500}
-              height={500}
-            /> */}
+  
             <Box mt={5}>
               <img
                 src="https://interfacy.com/public/storage/Permissiondenied278cadb5c5a600fd354bbb4a32acf34407bf98f0.png"

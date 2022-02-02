@@ -12,7 +12,6 @@ import axios from 'axios';
 import { useRootStore } from '../../models/root-store-provider';
 import { observer } from 'mobx-react-lite';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -31,6 +30,13 @@ import tableIcons from 'components/table_icon/icon';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import AllApplicationErrorNotification from "../../components/utils/errorNotification";
+import Avatar from '@material-ui/core/Avatar';
+import Tooltip from '@material-ui/core/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import UploadAvatar from '../../components/admin/supplier/UoloadAvatar'
 
 const styles = {
   cardCategoryWhite: {
@@ -83,6 +89,8 @@ const SuplierComponent = observer(() => {
   const [editData, setEditData] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [supplierId, setSupplierId] = useState(null);
+  const [openUploadModal, setUploadModal] = useState(false);
 
 
 
@@ -96,6 +104,16 @@ const SuplierComponent = observer(() => {
 
   const handleCloseEdit = () => {
     setOpenEditModal(false);
+  };
+
+  const handleOpenUploadModal = (eid) => {
+    setSupplierId(eid)
+    setUploadModal(true);
+  };
+
+  const handleCloseUpload = () => {
+    console.log('click')
+    setUploadModal(!openUploadModal);
   };
 
 
@@ -125,6 +143,10 @@ const SuplierComponent = observer(() => {
     { title: 'Phone', field: 'phone' },
     { title: 'Email', field: 'email' },
     { title: 'Address', field: 'address' },
+    { title: 'Avatar', render: (rowData) => (
+      <Tooltip title="Upload Avatar" aria-label="add" style={{cursor:"pointer"}}>
+      <Avatar alt='o' src={`${baseUrl}/uploads/suppliers/${rowData.nid}`} onClick={()=>handleOpenUploadModal(rowData.id)}/>
+      </Tooltip>),  },
     {
       title: 'Status',
       field: 'status',
@@ -331,6 +353,26 @@ const SuplierComponent = observer(() => {
       
            
           </Dialog>
+
+          <Dialog onClose={handleCloseUpload} aria-labelledby="customized-dialog-title" open={openUploadModal}>
+            <DialogTitle id="customized-dialog-title" onClose={handleCloseUpload}>
+              Upload Avatar
+            </DialogTitle>
+            <DialogContent dividers>
+              <UploadAvatar
+                token={user.auth_token}
+                supplierId={supplierId}
+                handleCloseUpload={handleCloseUpload}
+                mutate={mutate}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button autoFocus onClick={handleCloseUpload} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
+
         </GridItem>
       </GridContainer>
  

@@ -165,7 +165,7 @@ const TableList = observer(() => {
 
 
   const handleDelete = async (row_id) => {
-    if (!user.can("delete", subject)) {
+    if (!user.can("Delete", subject)) {
       cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}})
       return null;
     }
@@ -181,7 +181,7 @@ const TableList = observer(() => {
     handleRefress();
   };
   const handleEdit = (row) => {
-    if (!user.can("edit", subject)) {
+    if (!user.can("Edit", subject)) {
       cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}})
       return null;
     }
@@ -190,7 +190,7 @@ const TableList = observer(() => {
     setOpenEditModal(true);
   };
   const handleCreate = () => {
-    if (!user.can("create", subject)) {
+    if (!user.can("Create", subject)) {
       cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}})
       return null;
     }

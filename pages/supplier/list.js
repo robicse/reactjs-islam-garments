@@ -71,10 +71,10 @@ const title = 'Supplier';
 const subject = 'Supplier';
 
 const endpoint = {
-  list: 'store_list',
-  create: 'store_create',
+  list: 'supplier_list',
+  create: 'supplier_create',
   edit: 'supplier_update',
-  delete: 'store_delete',
+  delete: 'supplier_delete',
 };
 
 const SuplierComponent = observer(() => {

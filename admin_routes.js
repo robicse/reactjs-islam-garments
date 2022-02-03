@@ -95,7 +95,7 @@ const dashboardRoutes = [
     collapse: true,
     path: '/product',
     childPath: '/list',
-    name: 'Product',
+    name: 'PRD Managment',
     icon: LocalMallIcon,
     childs: [
       {
@@ -121,7 +121,7 @@ const dashboardRoutes = [
         collapse: false,
         path: '/product_management',
         childPath: '/list',
-        name: 'Product Management',
+        name: 'Product',
         permission: 'product_management',
         icon: LocalMallIcon,
       },
@@ -138,8 +138,50 @@ const dashboardRoutes = [
     icon: SearchIcon,
     childs: [],
   },
+
   {
     id: 9,
+    collapse: true,
+    path: '/warehouse_management',
+    childPath: '/warehouse_stock',
+    name: 'WH Management',
+    icon: LocalMallIcon,
+    childs: [
+      {
+        id: 1,
+        collapse: false,
+        path: '/warehouse_management',
+        childPath: '/warehouse_stock',
+        name: 'Warehouse Stock',
+        permission: 'warehouse_stock',
+        icon: FunctionsIcon,
+      },
+ 
+    ],
+  },
+
+  {
+    id: 10,
+    collapse: true,
+    path: '/store_management',
+    childPath: '/store_stock',
+    name: 'STR Management',
+    icon: LocalMallIcon,
+    childs: [
+      {
+        id: 1,
+        collapse: false,
+        path: '/store_management',
+        childPath: '/store_stock',
+        name: 'Store Stock',
+        permission: 'warehouse_stock',
+        icon: FunctionsIcon,
+      },
+ 
+    ],
+  },
+  {
+    id: 11,
     collapse: true,
     path: '/pos_settings',
     name: 'POS Setting',

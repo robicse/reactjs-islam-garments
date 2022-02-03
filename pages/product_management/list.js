@@ -76,12 +76,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const title = "Product";
 const subject = "Product";
-const endpoint = {
-  list: "product_list_with_search",
-  create: "product_create",
-  edit: "product_edit",
-  delete: "product_delete",
-};
+
 
 const TableList = observer(() => {
   const classes = useStyles();
@@ -90,7 +85,6 @@ const TableList = observer(() => {
   const [editData, setEditData] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-  // const [openWarning, setOpenWarning] = useState(false);
   const [invoiceData, setInvoicedata, setInvoicedataPromise] =
     useStatePromise(null);
   const [invoiceProduct, setInvoiceproduct] = useState(null);
@@ -98,20 +92,21 @@ const TableList = observer(() => {
   const [barcodeProductName, setbarcodeproductname] = useState(null);
   const [barcodeProductPrice, setbarcodeproductprice] = useState(null);
   const [vatStatus, setVatStatus] = useState(null);
-  // const [search, setSearch] = useState("");
 
+  const endpoint = {
+    list: "product_list_with_search",
+    create: "product_create",
+    edit: "product_edit",
+    delete: "product_delete",
+    sizesUrl: `${baseUrl}/product_size_list`,
+    unitUrl: `${baseUrl}/product_unit_list`,
+    productDuplicateSearchUrl: `${baseUrl}/check_exists_product`,
+    headers: { headers: { Authorization: "Bearer " + user.details.token }}
+  };
   const handleRefress = () => {
     tableRef.current && tableRef.current.onQueryChange();
   };
-  // const handleClickWarning = () => {
-  //   setOpenWarning(true);
-  // };
-  // const handleCloseWarning = (event, reason) => {
-  //   if (reason === "clickaway") {
-  //     return;
-  //   }
-  //   setOpenWarning(false);
-  // };
+
 
   const handleClickOpenCreate = () => {
     setOpenCreateModal(true);
@@ -128,7 +123,9 @@ const TableList = observer(() => {
   };
 
   const columns = [
+    { title: "Product Type", field: "type_name" },
     {
+      
       title: "Name",
       field: "product_name",
       render: (rowData) => (
@@ -137,18 +134,13 @@ const TableList = observer(() => {
         </Typography>
       ),
     },
-    { title: "Bar Code", field: "barcode" },
-    {
-      title: "Item Code",
-      field: "item_code",
-      render: (rowData) => (rowData.item_code ? rowData.item_code : "Not Set"),
-    },
-    { title: "Purchase Price", field: "purchase_price" },
-    { title: "Whole Sale Price", field: "whole_sale_price" },
-    { title: "Selling Price", field: "selling_price" },
-    { title: "Warehouse Stock", field: "warehouse_current_stock" },
     { title: "Unit", field: "unit_name" },
-
+    { title: "Size", field: "size_name" },
+    {
+      title: "Product Code",
+      field: "item_code",
+    },
+    { title: "Price", field: "purchase_price" },
     {
       title: "Status",
       field: "status",
@@ -164,38 +156,7 @@ const TableList = observer(() => {
   ];
 
 
-  const handleDelete = async (row_id) => {
-    if (!user.can("Delete", subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}})
-      return null;
-    }
-    const dlt = await axios.post(
-      `${baseUrl}/${endpoint.delete}`,
-      {
-        product_id: row_id,
-      },
-      {
-        headers: { Authorization: "Bearer " + user.auth_token },
-      }
-    );
-    handleRefress();
-  };
-  const handleEdit = (row) => {
-    if (!user.can("Edit", subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}})
-      return null;
-    }
-    console.log(row);
-    setEditData(row);
-    setOpenEditModal(true);
-  };
-  const handleCreate = () => {
-    if (!user.can("Create", subject)) {
-      cogoToast.warn("You dont't have permission!",{position: 'top-right', bar:{size: '10px'}})
-      return null;
-    }
-    handleClickOpenCreate(true);
-  };
+
 
   const componentRef = React.useRef(null);
 
@@ -214,6 +175,60 @@ const TableList = observer(() => {
     content: () => componentRef.current,
   });
 
+
+    // handle edit
+    const handleEdit = (row) => {
+      if (!user.can("Edit", subject)) {
+        cogoToast.error("You don't have Edit permission!", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        return null;
+      }
+      setEditData(row);
+      setOpenEditModal(true);
+    };
+  
+    // handle create
+    const handleCreate = () => {
+      if (!user.can("Create", subject)) {
+        cogoToast.error("You don't  have Create permission!", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        return null;
+      }
+      handleClickOpenCreate(true);
+    };
+  
+    // handle Delette
+    const handleDelete = async (row_id) => {
+      if (!user.can("Delete", subject)) {
+        cogoToast.warn("You don't have permission!", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        return null;
+      }
+  
+      try {
+        await axios.post(
+          `${baseUrl}/${endpoint.delete}`,
+          {
+            product_id: row_id,
+          },
+          endpoint.headers
+        );
+          cogoToast.success("Delete Success", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+        handleRefress();
+      } catch (error) {
+        AllApplicationErrorNotification(error?.response?.data);
+      }
+    };
+  
   return (
     <Gurd subject={subject}>
       <div style={{ display: "none" }}>
@@ -386,7 +401,7 @@ const TableList = observer(() => {
         <Create
           token={user.auth_token}
           modal={setOpenCreateModal}
-          endpoint={endpoint.create}
+          endpoint={endpoint}
           mutate={handleRefress}
         />
       </Dialog>

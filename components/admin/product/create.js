@@ -87,7 +87,7 @@ const Create = ({ token, modal,endpoint, mutate }) => {
 
   const [sizeList, setSizeList] = React.useState([]);
   const [unitList, setUnitList] = React.useState([]);
-
+  const [categoryList, setCategoryList] = React.useState([]);
 
 
   
@@ -97,14 +97,17 @@ const Create = ({ token, modal,endpoint, mutate }) => {
       .all([
         axios.get(endpoint.sizesUrl, endpoint.headers),
         axios.get(endpoint.unitUrl,endpoint.headers),
+        axios.get(endpoint.categoryUrl,endpoint.headers),
       ])
       .then(
         axios.spread((...responses) => {
           if (!isMounted()) return;
           const responseOneB = responses[0];
           const responseTwoU = responses[1];
+          const responseThree = responses[2];
           setSizeList(responseOneB.data.data);
           setUnitList(responseTwoU.data.data);
+          setCategoryList(responseThree.data.data);
           // setLoad(true);
         })
       )
@@ -114,27 +117,28 @@ const Create = ({ token, modal,endpoint, mutate }) => {
       });
   }, []);
 
-const handleDuplicateProduct = async(name,type_name,unit_id, size_id)=>{
+const handleDuplicateProduct = async(type,product_category_id, product_unit_id, product_size_id)=>{
   const body = {
-    name,
-    type:type_name,
-    product_unit_id:unit_id,
-    product_size_id:size_id
+    type,
+    product_category_id,
+    product_unit_id,
+    product_size_id,
   }
 
   console.log(body);
   try {
    const response =  await axios.post(endpoint.productDuplicateSearchUrl,body,endpoint.headers);
-console.log(response);
-   return response.data.success
+    console.log(response);
+   
     // if(response.data.success){
-    //   // cogoToast.info('Product Alreday Exits',{position: 'top-right', bar:{size: '10px'}});
+     cogoToast.info('Product Alreday Exits',{position: 'top-right', bar:{size: '10px'}});
     //   return response.data.success
     // }
 
   } catch (error) {
+    console.log(error);
     // cogoToast.info('Name is available',{position: 'top-right', bar:{size: '10px'}});
-    return true
+    // return false
   }
 
 }
@@ -151,7 +155,7 @@ console.log(response);
                   type_name: "",
                   unit_name: "",
                   size_name: "",
-                  product_name: "",
+                  category_name: "",
                   item_code: "",
                   purchase_price: "",
                   note: "",
@@ -164,6 +168,12 @@ console.log(response);
                     errors.type_name = "Required";
                   }
 
+                  if (!values.category_name) {
+                    errors.type_name = "Required";
+                  }
+
+              
+
                   if (!values.unit_name) {
                     errors.unit_name = "Required";
                   }
@@ -175,12 +185,15 @@ console.log(response);
                   if (!values.product_name) {
                     errors.product_name = "Required";
                   }
-                    console.log(values);
-                  if (values.product_name && values.product_name.length > 3) {
-                    const functionResult =   handleDuplicateProduct(values.product_name,values.type_name,values.unit_name.id,values.size_name.id)
-                      if(functionResult){
-                      errors.product_name = "Product Already Exits";
-                }
+
+
+
+                  if (values.type_name && values.category_name && values.unit_name && values.size_name) {
+                    const functionResult =   handleDuplicateProduct(values.type_name,values?.category_name?.id,values?.unit_name.id,values?.size_name.id)
+                     
+                    // if(!functionResult){
+                    //   errors.product_name = "Product Already Exits";
+                    //   }
                   }
                    
               
@@ -201,65 +214,66 @@ console.log(response);
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  console.log({
-                        type:values.type_name,
-                        product_unit_id: values.unit_name.id,
-                        product_size_id: values.size_name.id,
-                        name: values.product_name,
-                        item_code: values.item_code,
-                        purchase_price: values.purchase_price,
-                        selling_price:  values.purchase_price,
-                        whole_sale_price: values.purchase_price,
-                        status: values.status,
-                        note: values.note,
-                        vat_status: '0',
-                        vat_percentage:'0',
-                        vat_amount: '0',
-                        vat_whole_amount: '0',
+
+                  // console.log({
+                  //       type:values.type_name,
+                  //       product_unit_id: values.unit_name.id,
+                  //       product_size_id: values.size_name.id,
+                  //       name: values.product_name,
+                  //       item_code: values.item_code,
+                  //       purchase_price: values.purchase_price,
+                  //       selling_price:  values.purchase_price,
+                  //       whole_sale_price: values.purchase_price,
+                  //       status: values.status,
+                  //       note: values.note,
+                  //       vat_status: '0',
+                  //       vat_percentage:'0',
+                  //       vat_amount: '0',
+                  //       vat_whole_amount: '0',
                         
 
 
-                  });
-                  setSubmitting(false);
-                  // setTimeout(() => {
-                  //   Axios.post(
-                  //     `${baseUrl}/${endpoint}`,
-                  //     {
-                    // type:values.type_name,
-                    // product_unit_id: values.unit_name.id,
-                    // product_size_id: values.size_name.id,
-                    // name: values.product_name,
-                    // item_code: values.item_code,
-                    // purchase_price: values.purchase_price,
-                    // selling_price:  values.purchase_price,
-                    // whole_sale_price: values.purchase_price,
-                    // status: values.status,
-                    // note: values.note,
-                    // vat_status: '0',
-                    // vat_percentage:'0',
-                    // vat_amount: '0',
-                    // vat_whole_amount: '0',,
-                  //     },
-                  //     {
-                  //       headers: { Authorization: "Bearer " + token },
-                  //     }
-                  //   )
-                  //     .then((res) => {
-                  //       console.log(res);
-                  //       setSubmitting(false);
-                  //       setInsertedProduct(res.data.response);
-                  //       handleClickOpenUpload();
-                  //       // mutate();
-                  //       // modal(false);
-                  //       cogoToast.success('Create Success',{position: 'top-right', bar:{size: '10px'}});
-                  //     })
-                  //     .catch(function (error) {
-
-                  //       AllApplicationErrorNotification(error?.response?.data)
-                      
-                  //       setSubmitting(false);
-                  //     });
                   // });
+                  // setSubmitting(false);
+                  setTimeout(() => {
+                    Axios.post(
+                     endpoint.createAPi,
+                      {
+                    type:values.type_name,
+                    product_unit_id: values.unit_name.id,
+                    product_size_id: values.size_name.id,
+                    name: values.product_name,
+                    product_code: values.item_code,
+                    purchase_price: values.purchase_price,
+                    selling_price:  values.purchase_price,
+                    whole_sale_price: values.purchase_price,
+                    status: values.status,
+                    note: values.note,
+                    vat_status: '0',
+                    vat_percentage:'0',
+                    vat_amount: '0',
+                    vat_whole_amount: '0',
+                      },
+                      {
+                        headers: { Authorization: "Bearer " + token },
+                      }
+                    )
+                      .then((res) => {
+                        console.log(res);
+                        setSubmitting(false);
+                        setInsertedProduct(res.data.response);
+                        handleClickOpenUpload();
+                        // mutate();
+                        // modal(false);
+                        cogoToast.success('Create Success',{position: 'top-right', bar:{size: '10px'}});
+                      })
+                      .catch(function (error) {
+
+                        AllApplicationErrorNotification(error?.response?.data)
+                      
+                        setSubmitting(false);
+                      });
+                  });
                 }}
               >
                 {({ submitForm, isSubmitting }) => (
@@ -280,10 +294,31 @@ console.log(response);
                               // helperText="Please select status"
                               margin="normal"
                             >
-                              <MenuItem value="own">Own</MenuItem>
-                              <MenuItem value="buy">Buy</MenuItem>
+                              <MenuItem value="Own">Own</MenuItem>
+                              <MenuItem value="Buy">Buy</MenuItem>
                             </Field>
                           </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                         
+                         <Field
+                           name="category_name"
+                           component={Autocomplete}
+                           options={categoryList}
+                           getOptionLabel={(option) => option.name}
+                           renderInput={(params) => (
+                             <MuiTextField
+                               {...params}
+                               label="Category"
+                               variant="outlined"
+                               fullWidth
+                               // helperText="Please select unit"
+                               margin="normal"
+                             />
+                           )}
+                         />
+                      
+                     </GridItem>
 
 
                           <GridItem xs={12} sm={4} md={3}>

@@ -143,8 +143,8 @@ const SuplierComponent = observer(() => {
     { title: 'Phone', field: 'phone' },
     { title: 'Email', field: 'email' },
     { title: 'Address', field: 'address' },
-    { title: 'Avatar', render: (rowData) => (
-      <Tooltip title="Upload Avatar" aria-label="add" style={{cursor:"pointer"}}>
+    { title: 'NID', render: (rowData) => (
+      <Tooltip title="Upload NID" aria-label="add" style={{cursor:"pointer"}}>
       <Avatar alt='o' src={`${baseUrl}/uploads/suppliers/${rowData.nid}`} onClick={()=>handleOpenUploadModal(rowData.id)}/>
       </Tooltip>),  },
     {
@@ -356,7 +356,7 @@ const SuplierComponent = observer(() => {
 
           <Dialog onClose={handleCloseUpload} aria-labelledby="customized-dialog-title" open={openUploadModal}>
             <DialogTitle id="customized-dialog-title" onClose={handleCloseUpload}>
-              Upload Avatar
+              Upload NID
             </DialogTitle>
             <DialogContent dividers>
               <UploadAvatar

@@ -95,9 +95,18 @@ const dashboardRoutes = [
     collapse: true,
     path: '/product',
     childPath: '/list',
-    name: 'PRD Managment',
+    name: 'PROD Managment',
     icon: LocalMallIcon,
     childs: [
+      {
+        id: 0,
+        collapse: false,
+        path: '/product_management',
+        childPath: '/category',
+        name: 'Category',
+        permission: 'product_category',
+        icon: FunctionsIcon,
+      },
       {
         id: 1,
         collapse: false,
@@ -121,7 +130,7 @@ const dashboardRoutes = [
         collapse: false,
         path: '/product_management',
         childPath: '/list',
-        name: 'Product',
+        name: 'Product List',
         permission: 'product_management',
         icon: LocalMallIcon,
       },

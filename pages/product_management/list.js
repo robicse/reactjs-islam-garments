@@ -124,22 +124,22 @@ const TableList = observer(() => {
   };
 
   const columns = [
-    { title: "Product Type", field: "type_name" },
+    { title: "Type", field: "type" },
     {
       
-      title: "Name",
-      field: "product_name",
-      render: (rowData) => (
-        <Typography variant="subtitle2" style={{ width: "250px" }}>
-          {rowData.product_name}
-        </Typography>
-      ),
+      title: "Category",
+      field: "category_name",
+        // render: (rowData) => (
+        //   <Typography variant="subtitle2" style={{ width: "250px" }}>
+        //     {rowData.category_name}
+        //   </Typography>
+        // ),
     },
     { title: "Unit", field: "unit_name" },
     { title: "Size", field: "size_name" },
     {
       title: "Product Code",
-      field: "item_code",
+      field: "product_code",
     },
     { title: "Price", field: "purchase_price" },
     {
@@ -309,51 +309,51 @@ const TableList = observer(() => {
                   }
 
                   actions={[
-                    {
-                      icon: () => (
-                        <Button
-                          fullWidth={true}
-                          variant="contained"
-                          color="primary"
-                        >
-                          <PrintTwoToneIcon fontSize="small" color="white" />
-                        </Button>
-                      ),
-                      tooltip: "Barcode Print",
-                      onClick: (event, rowData) => handlePrint(rowData),
-                    },
-                    {
-                      icon: () => (
-                        <Button
-                          fullWidth={true}
-                          variant="contained"
-                          color="primary"
-                        >
-                          <EditTwoToneIcon fontSize="small" color="white" />
-                        </Button>
-                      ),
-                      tooltip: "Edit Product",
-                      onClick: (event, rowData) => handleEdit(rowData),
-                    },
-                    (rowData) => ({
-                      icon: () => (
-                        <Button
-                          fullWidth={true}
-                          variant="contained"
-                          color="secondary"
-                        >
-                          <DeleteForeverTwoToneIcon
-                            fontSize="small"
-                            color="white"
-                          />
-                        </Button>
-                      ),
-                      tooltip: "Delete Party",
-                      onClick: (event, rowData) => (
-                        confirm("You want to delete " + rowData.name),
-                        handleDelete(rowData.id)
-                      ),
-                    }),
+                    // {
+                    //   icon: () => (
+                    //     <Button
+                    //       fullWidth={true}
+                    //       variant="contained"
+                    //       color="primary"
+                    //     >
+                    //       <PrintTwoToneIcon fontSize="small" color="white" />
+                    //     </Button>
+                    //   ),
+                    //   tooltip: "Barcode Print",
+                    //   onClick: (event, rowData) => handlePrint(rowData),
+                    // },
+                    // {
+                    //   icon: () => (
+                    //     <Button
+                    //       fullWidth={true}
+                    //       variant="contained"
+                    //       color="primary"
+                    //     >
+                    //       <EditTwoToneIcon fontSize="small" color="white" />
+                    //     </Button>
+                    //   ),
+                    //   tooltip: "Edit Product",
+                    //   onClick: (event, rowData) => handleEdit(rowData),
+                    // },
+                    // (rowData) => ({
+                    //   icon: () => (
+                    //     <Button
+                    //       fullWidth={true}
+                    //       variant="contained"
+                    //       color="secondary"
+                    //     >
+                    //       <DeleteForeverTwoToneIcon
+                    //         fontSize="small"
+                    //         color="white"
+                    //       />
+                    //     </Button>
+                    //   ),
+                    //   tooltip: "Delete Party",
+                    //   onClick: (event, rowData) => (
+                    //     confirm("You want to delete " + rowData.name),
+                    //     handleDelete(rowData.id)
+                    //   ),
+                    // }),
                     {
                       icon: RefreshIcon,
                       tooltip: "Refresh Data",

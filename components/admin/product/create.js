@@ -130,10 +130,12 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
    const response =  await axios.post(endpoint.productDuplicateSearchUrl,body,endpoint.headers);
     console.log(response);
    
-    // if(response.data.success){
-     cogoToast.info('Product Alreday Exits',{position: 'top-right', bar:{size: '10px'}});
+    if(response.data.success){
+    console.log('ok');
     //   return response.data.success
-    // }
+    }else{
+      cogoToast.info('Product Alreday Exits',{position: 'top-right', bar:{size: '10px'}});
+    }
 
   } catch (error) {
     console.log(error);
@@ -182,10 +184,7 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
                     errors.size_name = "Required";
                   }
 
-                  if (!values.product_name) {
-                    errors.product_name = "Required";
-                  }
-
+              
 
 
                   if (values.type_name && values.category_name && values.unit_name && values.size_name) {
@@ -214,7 +213,7 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-
+console.log(values);
                   // console.log({
                   //       type:values.type_name,
                   //       product_unit_id: values.unit_name.id,
@@ -240,9 +239,9 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
                      endpoint.createAPi,
                       {
                     type:values.type_name,
+                    product_category_id: values.category_name.id,
                     product_unit_id: values.unit_name.id,
                     product_size_id: values.size_name.id,
-                    name: values.product_name,
                     product_code: values.item_code,
                     purchase_price: values.purchase_price,
                     selling_price:  values.purchase_price,
@@ -366,17 +365,6 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
                           </GridItem>
 
 
-                          <GridItem xs={12} sm={4} md={3}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                              type="text"
-                              label="Name"
-                              name="product_name"
-                            />
-                          </GridItem>
 
 
 
@@ -415,7 +403,7 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
                               select
                               fullWidth
                               variant="outlined"
-                              helperText="Please select status"
+                              // helperText="Please select status"
                               margin="normal"
                             >
                               <MenuItem value="1">Active</MenuItem>

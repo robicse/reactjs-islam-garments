@@ -7,7 +7,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import Gurd from "../../components/guard/Gurd";
+import Gurd from "components/guard/Gurd";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import axios from "axios";
 import { useRootStore } from "../../models/root-store-provider";
@@ -26,7 +26,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import AllApplicationErrorNotification from '../../components/utils/errorNotification';
+import AllApplicationErrorNotification from 'components/utils/errorNotification';
+import StockInComponent from 'components/admin/warehouse_management/StockIn';
+
 
 
 
@@ -76,15 +78,28 @@ const WarehouseStock = observer(() => {
   const [warehouseId, setWarehouseId] = useState(null);
   const [warehouseList, setWarehouseList] = useState([]);
 
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const handleClickOpenCreate = () => {
+    setOpenCreateModal(true);
+  };
+  const handleCloseCreate = () => {
+    setOpenCreateModal(false);
+  };
 
 const endpoint = {
   title:"Warehouse Stock",
   subject: "Warehouse Stock",
-  activeWarehouselistApi: `${baseUrl}/warehouse_active_list`,
+  warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
+  supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
+  sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
+  unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
+  categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
   stockListApi: `${baseUrl}/warehouse_stock_list_pagination_with_search`,
   stockInAPi: `${baseUrl}/warehouse_stock_in`,
   stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
   deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
+  stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
+  productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
   headers: { headers: { Authorization: "Bearer " + user.details.token }}
 };
 
@@ -94,7 +109,7 @@ const endpoint = {
 
 const warehouseListFetch = async()=>{
     try {
-      const response =  await axios.get(endpoint.activeWarehouselistApi,endpoint.headers);
+      const response =  await axios.get(endpoint.warehouseActiveListUrl,endpoint.headers);
       setWarehouseList([])
     } catch (error) {
         AllApplicationErrorNotification(error?.response?.data);
@@ -148,7 +163,10 @@ React.useEffect(()=>{
                   direction="row"
                   justify="flex-end"
                   alignItems="center"
-                ></Grid>
+                >
+<span onClick={handleClickOpenCreate}>    Stock In</span>
+              
+                </Grid>
               </Grid>
             </CardHeader>
 
@@ -239,7 +257,7 @@ React.useEffect(()=>{
               
             </CardBody>
           </Card>
-          {/* <Dialog
+          <Dialog
             fullScreen
             open={openCreateModal}
             onClose={handleCloseCreate}
@@ -254,17 +272,16 @@ React.useEffect(()=>{
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ flex: 1 }}>
-                  Transfer Stock
+                  Stock In
                 </Typography>
               </Toolbar>
             </AppBar>
-            <Create
-              token={user.auth_token}
+            <StockInComponent
               modal={setOpenCreateModal}
-              endpoint={endpoint.create}
-              mutate={mutate}
+              endpoint={endpoint}
+              handleRefress={handleRefress}
             />
-          </Dialog> */}
+          </Dialog>
         </GridItem>
       </GridContainer>
     {/* </Gurd> */}

@@ -25,6 +25,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import AllApplicationErrorNotification from "../../utils/errorNotification";
 import Productstable from "./utils/Productstable";
+import Calculation from "./utils/calculation";
 
 const styles = {
   cardCategoryWhite: {
@@ -51,21 +52,21 @@ const styles = {
 const useStyles = makeStyles(styles);
 const Create = ({ endpoint }) => {
   const classes = useStyles();
-
+  console.log(endpoint.warehouseActiveListUrl);
   const [openModal, setModalOpen] = React.useState(false);
 
   const handleModalClose = () => {
     setModalOpen(false);
   };
-
-  const [total, setTotal] = React.useState(0);
-  const [paid, setPaid] = React.useState(0);
+  const [subTotal, setSubTotal] = React.useState(0);
+  const [paid, setPaid] = React.useState();
   const [due, setDue] = React.useState(0);
-  const [load, setLoad] = React.useState(false);
-  const [product, setProduct] = React.useState(null);
-  const [store, setStore] = React.useState(null);
-  const [warehouse, setWarehouse] = React.useState([]);
-  const [warehouse_id, setWarehouseId] = React.useState(null);
+  const [discountAmount, setDiscountAmount] = React.useState(0);
+  const [grand, setGrand] = React.useState(0);
+  const [discountType, setDiscountType] = React.useState("Flat");
+  const [paymentType, setPaymentType] = React.useState(1);
+  const [discountParcent, setDiscountParcent] = React.useState(0);
+  const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
 
   const [warehouseList, setWarehouseList] = React.useState([]);
   const [supplyerList, setSupplyerList] = React.useState([]);
@@ -73,12 +74,14 @@ const Create = ({ endpoint }) => {
   const [unitList, setUnitList] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
 
+  const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedType, setSelectedType] = React.useState(null);
   const [selectedWarehouse, setSelectedWarehouse] = React.useState(null);
   const [selectedSupplyer, setSelectedSupplyer] = React.useState(null);
   const [selectedSize, setSelectedSize] = React.useState(null);
   const [selectedUnit, setSelectedUnit] = React.useState(null);
   const [selectedCategory, setSelectedCategory] = React.useState(null);
+  const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   const fakeProduct = [
     {
@@ -119,7 +122,7 @@ const Create = ({ endpoint }) => {
 
     setSelectedProduct(
       selectedProductList.map((item) =>
-        item.id === prodId ? { ...item, qty: qty || 0 } : item
+        item.id === prodId ? { ...item, qty: qty  } : item
       )
     );
   };
@@ -134,36 +137,36 @@ const Create = ({ endpoint }) => {
   };
 
   useAsyncEffect(async (isMounted) => {
-    await axios
-      .all([
-        axios.get(endpoint.warehouseActiveListUrl, endpoint.headers),
-        axios.get(endpoint.supplyerActiveListUrl, endpoint.headers),
-        axios.get(endpoint.sizesActiveListUrl, endpoint.headers),
-        axios.get(endpoint.unitActiveListUrl, endpoint.headers),
-        axios.get(endpoint.categoryActiveListUrl, endpoint.headers),
-      ])
-      .then(
-        axios.spread((...responses) => {
-          if (!isMounted()) return;
-          const warehouseRes = responses[0];
-          const supplyerRes = responses[1];
-          const sizeRes = responses[2];
-          const unitRes = responses[3];
-          const categoryRes = responses[4];
-          console.log(warehouseRes?.data);
-          setWarehouseList(warehouseRes?.data?.data);
-          setSupplyerList(supplyerRes?.data?.data);
-          setSizeList(sizeRes?.data?.data);
-          setUnitList(unitRes?.data?.data);
-          setCategoryList(categoryRes?.data?.data);
-
-          // setLoad(true);
-        })
-      )
-      .catch((errors) => {
-        console.error(errors);
-        // setLoad(false);
-      });
+    try {
+      const warehouseRes = await axios.get(
+        endpoint.warehouseActiveListUrl,
+        endpoint.headers
+      );
+      console.log(warehouseRes);
+      const supplyerRes = await axios.get(
+        endpoint.supplyerActiveListUrl,
+        endpoint.headers
+      );
+      const sizeRes = await axios.get(
+        endpoint.sizesActiveListUrl,
+        endpoint.headers
+      );
+      const unitRes = await axios.get(
+        endpoint.unitActiveListUrl,
+        endpoint.headers
+      );
+      const categoryRes = await axios.get(
+        endpoint.categoryActiveListUrl,
+        endpoint.headers
+      );
+      setWarehouseList(warehouseRes?.data?.data);
+      setSupplyerList(supplyerRes?.data?.data);
+      setSizeList(sizeRes?.data?.data);
+      setUnitList(unitRes?.data?.data);
+      setCategoryList(categoryRes?.data?.data);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const productSearchHandle = async (
@@ -185,12 +188,12 @@ const Create = ({ endpoint }) => {
         body,
         endpoint.headers
       );
-      console.log( response.data.data[0]);
+      console.log(response.data.data[0]);
 
       if (response.data.data.length) {
-            if(!selectedProductList.length){
-            return  setSelectedProduct([response.data.data[0]]);
-            }
+        if (!selectedProductList.length) {
+          return setSelectedProduct([response.data.data[0]]);
+        }
 
         const filterList = selectedProductList.filter((item) => {
           if (item.id == response.data.data[0].id) {
@@ -206,24 +209,13 @@ const Create = ({ endpoint }) => {
             });
           }
         });
-    
       }
-
-      // if(response.data.success){
-      // console.log('ok');
-      // //   return response.data.success
-      // }else{
-      //   cogoToast.info('Product Alreday Exits',{position: 'top-right', bar:{size: '10px'}});
-      // }
     } catch (error) {
       console.log(error);
       cogoToast.info("Product Not Found", {
         position: "top-right",
         bar: { size: "10px" },
       });
-      //
-      // cogoToast.info('Name is available',{position: 'top-right', bar:{size: '10px'}});
-      // return false
     }
   };
 
@@ -238,6 +230,68 @@ const Create = ({ endpoint }) => {
     }
   }, [selectedType, selectedCategory, selectedUnit, selectedSize]);
 
+  const handleFinalStockInCreate = async () => {
+    if (!selectedDate) {
+      return cogoToast.warn("Please Select Date", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
+
+    if (!selectedSupplyer) {
+      return cogoToast.warn("Please Select Supplier", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
+
+    // if (!selectedProductList.lengh) {
+    //   return cogoToast.warn("Please Select Product", {
+    //     position: "top-right",
+    //     bar: { size: "10px" },
+    //   });
+    // }
+
+    if (subTotal < 0) {
+      return cogoToast.warn("Please Input Valid Amount", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
+
+    const body = {
+      date: selectedDate,
+      supplier_id: selectedSupplyer,
+      warehouse_id: selectedWarehouse,
+      products: selectedProductList,
+      sub_total_amount: subTotal,
+      discount_type: discountAmount,
+      discount_percent: discountType,
+      discount_amount: discountAmount,
+      after_discount_amount: afterDiscountAmount,
+      grand_total_amount: grand,
+      paid_amount: paid,
+      due_amount: due,
+      payment_type_id:1,
+    };
+    console.log(body);
+    try {
+      setButtonLoading(true);
+      setTimeout(() => {
+        console.log("hu");
+      }, 30000);
+      cogoToast.success("Submit Success", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    const submitResponse = await axios.post(endpoint.stockInAPi,body,endpoint.headers);
+      setButtonLoading(false);
+    } catch (error) {
+      AllApplicationErrorNotification(error);
+      setButtonLoading(false);
+    }
+  };
+
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
@@ -247,6 +301,8 @@ const Create = ({ endpoint }) => {
             id="standard-basic"
             variant="outlined"
             type="date"
+            // value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
             style={{ width: "100%" }}
           />
         </GridItem>
@@ -255,12 +311,13 @@ const Create = ({ endpoint }) => {
             fullWidth={true}
             size="small"
             id="combo-box-demo"
+            // value={selectedSupplyer}
             options={supplyerList}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
               <TextField {...params} label="Supplyer" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedSupplyer(v)}
+            onChange={(e, v) => setSelectedSupplyer(v.id)}
           />
         </GridItem>
 
@@ -277,6 +334,7 @@ const Create = ({ endpoint }) => {
           <Autocomplete
             size="small"
             fullWidth={true}
+            // value={selectedWarehouse}
             id="combo-box-demo"
             options={warehouseList}
             getOptionLabel={(option) => option.name}
@@ -288,7 +346,7 @@ const Create = ({ endpoint }) => {
         </GridItem>
 
         <GridItem xs={12} sm={12} md={12}>
-          <Typography variant="h6" style={{ padding: "10px" }}>
+          <Typography variant="body1" style={{ padding: "10px" }}>
             {" "}
             product Select
           </Typography>
@@ -299,6 +357,7 @@ const Create = ({ endpoint }) => {
             size="small"
             fullWidth={true}
             id="combo-box-demo"
+            // value={selectedType}
             options={[
               {
                 name: "Own",
@@ -322,6 +381,7 @@ const Create = ({ endpoint }) => {
             size="small"
             id="combo-box-demo"
             options={categoryList}
+            // value={selectedCategory}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
               <TextField {...params} label="Category" variant="outlined" />
@@ -334,6 +394,7 @@ const Create = ({ endpoint }) => {
           <Autocomplete
             size="small"
             id="combo-box-demo"
+            // value={selectedUnit}
             options={unitList}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
@@ -348,6 +409,7 @@ const Create = ({ endpoint }) => {
             size="small"
             id="combo-box-demo"
             options={sizeList}
+            // value={selectedSize}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
               <TextField {...params} label="Product Size" variant="outlined" />
@@ -356,13 +418,6 @@ const Create = ({ endpoint }) => {
           />
         </GridItem>
 
-        {/* 
-<GridItem xs={12} sm={2} md={2}>
-  price
-</GridItem>
-<GridItem xs={12} sm={2} md={2}>
-  add
-</GridItem> */}
         <GridItem xs={12} sm={12} md={12}>
           <Typography variant="h6" style={{ padding: "10px" }}>
             {" "}
@@ -376,6 +431,46 @@ const Create = ({ endpoint }) => {
             handdleproductRemove={handdleproductRemove}
             handdleQuantityChange={handdleQuantityChange}
           />
+        </GridItem>
+
+        <GridItem>
+          <GridItem xs={12} sm={12} md={12}>
+            {selectedProductList.length > 0 && (
+              <Calculation
+                products={selectedProductList}
+                subTotal={subTotal}
+                setSubTotal={setSubTotal}
+                grand={grand}
+                setGrand={setGrand}
+                paid={paid}
+                setPaid={setPaid}
+                due={due}
+                setDue={setDue}
+                discountAmount={discountAmount}
+                setDiscountAmount={setDiscountAmount}
+                discountType={discountType}
+                setDiscountType={setDiscountType}
+                discountParcent={discountParcent}
+                setDiscountParcent={setDiscountParcent}
+                afterDiscountAmount={afterDiscountAmount}
+                setAfterDiscountAmount={setAfterDiscountAmount}
+                paymentType={paymentType}
+                setPaymentType={setPaymentType}
+              />
+            )}
+          </GridItem>
+        </GridItem>
+
+        <GridItem xs={12} sm={12} md={12} style={{ textAlign: "center" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleFinalStockInCreate}
+            // className={classes.button}
+            // endIcon={<Icon>send</Icon>}
+          >
+            {submitButtonLoading ? "loading" : "Submit"}
+          </Button>
         </GridItem>
       </GridContainer>
     </div>

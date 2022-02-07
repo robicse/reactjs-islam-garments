@@ -126,14 +126,9 @@ const TableList = observer(() => {
   const columns = [
     { title: "Type", field: "type" },
     {
-      
+
       title: "Category",
       field: "category_name",
-        // render: (rowData) => (
-        //   <Typography variant="subtitle2" style={{ width: "250px" }}>
-        //     {rowData.category_name}
-        //   </Typography>
-        // ),
     },
     { title: "Unit", field: "unit_name" },
     { title: "Size", field: "size_name" },
@@ -142,18 +137,18 @@ const TableList = observer(() => {
       field: "product_code",
     },
     { title: "Price", field: "purchase_price" },
-    {
-      title: "Status",
-      field: "status",
-      render: (rowData) => (
-        <Chip
-          color={rowData.status ? "primary" : "secondary"}
-          size="small"
-          label={rowData.status ? "Active" : "Inactive"}
-          icon={rowData.status ? <CheckCircleIcon /> : <ErrorIcon />}
-        />
-      ),
-    },
+    // {
+    //   title: "Status",
+    //   field: "status",
+    //   render: (rowData) => (
+    //     <Chip
+    //       color={rowData.status ? "primary" : "secondary"}
+    //       size="small"
+    //       label={rowData.status ? "Active" : "Inactive"}
+    //       icon={rowData.status ? <CheckCircleIcon /> : <ErrorIcon />}
+    //     />
+    //   ),
+    // },
   ];
 
 

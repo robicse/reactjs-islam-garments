@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import cogoToast from 'cogo-toast';
+import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
 import { makeStyles } from "@material-ui/core/styles";
 // import TextField from "@material-ui/core/TextField";
 import GridItem from "components/Grid/GridItem.js";
@@ -24,16 +25,15 @@ import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import { Box, Chip, Grid } from "@material-ui/core";
 import { baseUrl } from "../../const/api";
-import Edit from "../../components/admin/product_whole_purchase/edit";
-import Create from "../../components/admin/product_whole_purchase/create";
-import Details from "../../components/admin/product_whole_purchase/details";
+import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
+import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
 import tableIcons from "components/table_icon/icon";
 import { useReactToPrint } from "react-to-print";
-import WholePurchaseInvoicePrint from "components/admin/product_whole_purchase/wholePurchaseInvoicePrint";
-import useStatePromise from "hooks/use-state-promise";
-import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
-// import DeleteForeverTwoToneIcon from "@material-ui/icons/DeleteForeverTwoTone";
-import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
+// custom component
+import StockInComponent from 'components/admin/warehouse_management/StockIn';
+import Details from "components/admin/warehouse_management/productDetails";
+import StockInPrint from "components/admin/warehouse_management/productDetails";
+// utils component
 import { convertFristCharcapital } from "helper/getMonthToNumber";
 import {dateFormatWithTime} from 'helper/dateFormat';
 
@@ -73,14 +73,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const title = "Product Whole Purchase";
-const subject = "product_whole_purchase";
-const endpoint = {
-  list: "product_whole_purchase_list_pagination_with_search",
-  create: "product_whole_purchase_create",
-  edit: "product_whole_purchase_edit",
-  delete: "product_whole_purchase_delete",
-};
+const title = "Warehouse Stock In";
+const subject = "Warehouse Stock";
+
 
 const WarehouseStockIn = observer(() => {
   const classes = useStyles();
@@ -89,19 +84,32 @@ const WarehouseStockIn = observer(() => {
   const handleRefress = () => {
     tableRef.current && tableRef.current.onQueryChange();
   };
-  const [editData, setEditData] = useState(null);
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState(false);
-  const [openWarning, setOpenWarning] = useState(false);
-  const [openDetailModal, setOpenDetailModal] = useState(false);
-  // const [search, setSearch] = useState("");
-  const [invoiceData, setInvoicedata, setInvoicedataPromise] =
-    useStatePromise(null);
-  const [invoiceProduct, setInvoiceproduct] = useState(null);
-  // const handleClickWarning = () => {
-  //   setOpenWarning(true);
-  // };
 
+
+const endpoint = {
+  title:"Warehouse Stock",
+  subject: "Warehouse Stock",
+  warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
+  supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
+  sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
+  unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
+  categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
+  stockInAPi: `${baseUrl}/product_purchase_create`,
+  stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
+  deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
+  stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
+  productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
+  paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
+  stockInListAPI: `${baseUrl}/product_purchase_list_pagination_with_search`,
+  warehouseProductdetailsUrl:`${baseUrl}/product_purchase_details`,
+  headers: { headers: { Authorization: "Bearer " + user.details.token }}
+};
+
+  const [openCreateModal, setOpenCreateModal] = useState(false);;
+  const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [invoiceData, setInvoicedata] = useState(null)
+  const [invoiceProduct, setInvoiceproduct] = useState(null);
+  const [editData, setEditData] = useState(null);
 
   const handleClickOpenCreate = () => {
     setOpenCreateModal(true);
@@ -110,21 +118,25 @@ const WarehouseStockIn = observer(() => {
     setOpenCreateModal(false);
   };
 
-  const handleCloseEdit = () => {
-    setOpenEditModal(false);
-  };
-  const handleCloseDetail = () => {
+  const handleCloseDetails = () => {
     setOpenDetailModal(false);
   };
 
+  const handleDetails = (row) => {
+    setEditData(row);
+    setOpenDetailModal(true);
+  };
+
+
   const columns = [
     { title: "Invoice No",   render: (rowData) => convertFristCharcapital(rowData.invoice_no)},
+    { title: "Warehouse Name", field: "warehouse_name" },
     { title: "Supplier Name", field: "supplier_name" },
     { title: "User Name", field: "user_name" },
     { title: "Purchase Date Time", field: "purchase_date_time",render: (rowData) => dateFormatWithTime(rowData.purchase_date_time)},
     {
-      title: "Total Taka",
-      field: "total_amount",
+      title: "Grand total",
+      field: "grand_total_amount",
     },
   ];
 
@@ -133,7 +145,7 @@ const WarehouseStockIn = observer(() => {
   const handlePrint = async (row) => {
     await axios
       .post(
-        `${baseUrl}/product_whole_purchase_details`,
+        `${baseUrl}/product_purchase_details`,
         {
           product_purchase_id: row.id,
         },
@@ -142,10 +154,8 @@ const WarehouseStockIn = observer(() => {
         }
       )
       .then((res) => {
-        const state = setInvoicedataPromise(row).then(() => {
-          console.log("running promise");
-        });
         setInvoiceproduct(res.data.response);
+        setInvoicedata(row)
       });
     if (handlePrintInvoice) {
       handlePrintInvoice();
@@ -158,66 +168,26 @@ const WarehouseStockIn = observer(() => {
   });
 
 
-
-    // handle edit
-    const handleEdit = (row) => {
-        if (!user.can("Edit", subject)) {
-          cogoToast.error("You don't have Edit permission!", {
-            position: "top-right",
-            bar: { size: "10px" },
-          });
-          return null;
-        }
-        setEditData(row);
-        setOpenEditModal(true);
-      };
     
       // handle create
       const handleCreate = () => {
-        if (!user.can("Create", subject)) {
-          cogoToast.error("You don't  have Create permission!", {
-            position: "top-right",
-            bar: { size: "10px" },
-          });
-          return null;
-        }
+        // if (!user.can("Create", subject)) {
+        //   cogoToast.error("You don't  have Create permission!", {
+        //     position: "top-right",
+        //     bar: { size: "10px" },
+        //   });
+        //   return null;
+        // }
         handleClickOpenCreate(true);
       };
     
-      // handle Delette
-      const handleDelete = async (row_id) => {
-        if (!user.can("Delete", subject)) {
-          cogoToast.warn("You don't have permission!", {
-            position: "top-right",
-            bar: { size: "10px" },
-          });
-          return null;
-        }
-    
-        try {
-          await axios.post(
-            `${baseUrl}/${endpoint.delete}`,
-            {
-                product_purchase_id: row_id,
-            },
-            endpoint.headers
-          );
-            cogoToast.success("Delete Success", {
-            position: "top-right",
-            bar: { size: "10px" },
-          });
-          handleRefress();
-        } catch (error) {
-          AllApplicationErrorNotification(error?.response?.data);
-        }
-      };
-  
       
 
   return (
-    <Gurd subject={subject}>
+    // <Gurd subject={subject}>
+    <div>
       {/* <div style={{ display: "none" }}>
-        <WholePurchaseInvoicePrint
+        <StockInPrint
           ref={componentRef}
           inv={invoiceData}
           invoiceProduct={invoiceProduct}
@@ -246,7 +216,7 @@ const WarehouseStockIn = observer(() => {
                   <Button
                     variant="contained"
                     color="primary"
-                    // onClick={handleCreate}
+                    onClick={handleCreate}
                   >
                     Create {title}
                   </Button>
@@ -263,7 +233,7 @@ const WarehouseStockIn = observer(() => {
                 data={query =>
                   new Promise((resolve, reject) => {
                    
-                    let url = `${baseUrl}/${endpoint.list}?`;
+                    let url = `${endpoint.stockInListAPI}?`;
                     //searching
                     if (query.search) {
                       url += `search=${query.search}`
@@ -303,6 +273,21 @@ const WarehouseStockIn = observer(() => {
                     // onClick: (event, rowData) => handlePrint(rowData),
                   },
 
+                  {
+                    icon: () => (
+                      <Button
+                        fullWidth={true}
+                        variant="contained"
+                        color="primary"
+                      >
+                        <ListAltTwoToneIcon fontSize="small" color="white" />
+                      </Button>
+                    ),
+                    tooltip: "Show Products",
+                    onClick: (event, rowData) => handleDetails(rowData),
+                  },
+               
+
 
                   {
                     icon: RefreshIcon,
@@ -323,10 +308,71 @@ const WarehouseStockIn = observer(() => {
             </CardBody>
           </Card>
 
+          <Dialog
+            fullScreen
+            open={openCreateModal}
+            onClose={handleCloseCreate}
+            TransitionComponent={Transition}>
+            <AppBar style={{ position: 'relative' }}>
+              <Toolbar>
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={handleCloseCreate}
+                  aria-label="close">
+                  <CloseIcon />
+                </IconButton>
+                <Typography variant="h6" style={{ flex: 1 }}>
+                  Stock In
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <StockInComponent
+              modal={setOpenCreateModal}
+              endpoint={endpoint}
+              handleRefress={handleRefress}
+            />
+          </Dialog>
+
+
+
+
+          <Dialog
+            open={openDetailModal}
+            onClose={handleCloseDetails}
+            TransitionComponent={Transition}
+            fullWidth={true}
+            maxWidth="lg"
+          >
+            <AppBar style={{ position: "relative" }}>
+              <Toolbar>
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={handleCloseDetails}
+                  aria-label="close"
+                >
+                  <CloseIcon />
+                </IconButton>
+                <Typography variant="h6" style={{ flex: 1 }}>
+                  Product details
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <Details
+              modal={setOpenDetailModal}
+              endpoint={endpoint}
+              editData={editData}
+            />
+          </Dialog>
+
+
+
         </GridItem>
       </GridContainer>
 
-    </Gurd>
+    {/* </Gurd> */}
+    </div>
   );
 });
 

@@ -21,9 +21,9 @@ const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove })
         <>
             <TableContainer
                 component={Paper}
-                style={{ height: "400px", overflowY: "scroll", padding: "0px" }}
+                style={{ height: "300px", overflowY: "scroll", padding: "0px" }}
             >
-                <Table aria-label="simple table" size="15px" padding="checkbox">
+                <Table aria-label="simple table" size="15px" padding="checkbox" stickyHeader>
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">Sl</TableCell>
@@ -60,6 +60,7 @@ const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove })
                                         size="small"
                                         id="standard-number"
                                         type="number"
+                                        value={product?.qty}
                                         onChange={(e) => handdleQuantityChange(product?.id, e.target.value)}
                                         InputLabelProps={{
                                             shrink: true,

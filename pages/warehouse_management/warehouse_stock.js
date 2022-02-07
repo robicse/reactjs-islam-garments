@@ -13,24 +13,15 @@ import axios from "axios";
 import { useRootStore } from "../../models/root-store-provider";
 import { observer } from "mobx-react-lite";
 import MaterialTable from "material-table";
-import Dialog from "@material-ui/core/Dialog";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
-import { Box, Grid, TextField } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import { baseUrl } from "../../const/api";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import AllApplicationErrorNotification from 'components/utils/errorNotification';
-import StockInComponent from 'components/admin/warehouse_management/StockIn';
-
-
-
+import AllApplicationErrorNotification from "components/utils/errorNotification";
 
 const styles = {
   cardCategoryWhite: {
@@ -63,9 +54,6 @@ const styles = {
 };
 
 const useStyles = makeStyles(styles);
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 
 const WarehouseStock = observer(() => {
@@ -78,50 +66,39 @@ const WarehouseStock = observer(() => {
   const [warehouseId, setWarehouseId] = useState(null);
   const [warehouseList, setWarehouseList] = useState([]);
 
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const handleClickOpenCreate = () => {
-    setOpenCreateModal(true);
+  const endpoint = {
+    title: "Warehouse Stock",
+    subject: "Warehouse Stock",
+    warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
+    // supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
+    // sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
+    // unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
+    // categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
+    stockListApi: `${baseUrl}/warehouse_current_stock_by_id`,
+    // stockInAPi: `${baseUrl}/warehouse_stock_in`,
+    // stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
+    // deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
+    // stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
+    // productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
+    headers: { headers: { Authorization: "Bearer " + user.details.token } },
   };
-  const handleCloseCreate = () => {
-    setOpenCreateModal(false);
-  };
 
-const endpoint = {
-  title:"Warehouse Stock",
-  subject: "Warehouse Stock",
-  warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
-  supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
-  sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
-  unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
-  categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
-  stockListApi: `${baseUrl}/warehouse_stock_list_pagination_with_search`,
-  stockInAPi: `${baseUrl}/warehouse_stock_in`,
-  stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
-  deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
-  stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
-  productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
-  headers: { headers: { Authorization: "Bearer " + user.details.token }}
-};
+  //warehouse active list fetch
 
-
-
-//warehouse active list fetch
-
-const warehouseListFetch = async()=>{
+  const warehouseListFetch = async () => {
     try {
-      const response =  await axios.get(endpoint.warehouseActiveListUrl,endpoint.headers);
-      setWarehouseList([])
+      const response = await axios.get(
+        endpoint.warehouseActiveListUrl,
+        endpoint.headers
+      );
+      setWarehouseList(response?.data?.data);
     } catch (error) {
-        AllApplicationErrorNotification(error?.response?.data);
+      AllApplicationErrorNotification(error?.response?.data);
     }
-  
-  }
-React.useEffect(()=>{
-    warehouseListFetch()
-},[])
-
-
-
+  };
+  React.useEffect(() => {
+    warehouseListFetch();
+  }, []);
 
   const columns = [
     {
@@ -133,12 +110,11 @@ React.useEffect(()=>{
         </Typography>
       ),
     },
-    { title: "Unit", field: "unit_name" },
-    { title: "Size", field: "size_name" },
+    { title: "Unit", field: "product_unit_name" },
+    { title: "Size", field: "product_size_name" },
     { title: "Price", field: "purchase_price" },
-    { title: "Product Code", field: "item_code" },
+    { title: "Product Code", field: "product_code" },
     { title: "Current Stock", field: "current_stock" },
-    
   ];
 
   return (
@@ -152,20 +128,7 @@ React.useEffect(()=>{
                 <Grid container item xs={6} spacing={3} direction="column">
                   <Box p={2}>
                     <h4 className={classes.cardTitleWhite}>{endpoint.title}</h4>
-             
                   </Box>
-                </Grid>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  spacing={3}
-                  direction="row"
-                  justify="flex-end"
-                  alignItems="center"
-                >
-<span onClick={handleClickOpenCreate}>    Stock In</span>
-              
                 </Grid>
               </Grid>
             </CardHeader>
@@ -176,7 +139,7 @@ React.useEffect(()=>{
               style={{ margin: "10px 15px" }}
             >
               <InputLabel id="demo-simple-select-filled-label">
-              Warehouse List
+                Warehouse List
               </InputLabel>
               <Select
                 labelId="demo-simple-select-filled-label"
@@ -186,105 +149,75 @@ React.useEffect(()=>{
                   handleRefress();
                 }}
               >
-                {
-                  warehouseList.map((war) => (
-                    <MenuItem key={war.id} value={war.id}>
-                      {war.name}
-                    </MenuItem>
-                  ))}
+                {warehouseList.map((war) => (
+                  <MenuItem key={war.id} value={war.id}>
+                    {war.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <CardBody>
-  
-                <MaterialTable
-                  icons={tableIcons}
-                  title={endpoint.title}
-                  tableRef={tableRef}
-                  columns={columns}
-                  data={(query) =>
-                    new Promise((resolve, reject) => {
-                      let url = `${endpoint.stockListApi}?`;
+              <MaterialTable
+                icons={tableIcons}
+                title={endpoint.title}
+                tableRef={tableRef}
+                columns={columns}
+                data={(query) =>
+                  new Promise((resolve, reject) => {
+                    let url = `${endpoint.stockListApi}?`;
+                    let data = new FormData();
+                    data.append("warehouse_id", JSON.stringify(warehouseId));
+                    const requestOptions = {
+                      method: "POST",
+                      headers: {
+                        Authorization: "Bearer " + user.auth_token,
+                      },
+                      body: data,
+                    };
 
-                      let data = new FormData();
-                      data.append("warehouse_id", JSON.stringify(warehouseId));
-                      const requestOptions = {
-                        method: "POST",
-                        headers: {
-                          Authorization: "Bearer " + user.auth_token,
-                        },
-                        body: data,
-                      };
+                    //searching
+                    if (query.search) {
+                      url += `search=${query.search}`;
+                    }
 
-                      //searching
-                      if (query.search) {
-                        url += `search=${query.search}`;
-                      }
-
-                      url += `&page=${query.page + 1}`;
-                      url += "&warehouse_id=" + warehouseId;
-                      fetch(url, requestOptions)
-                        .then((resp) => resp.json())
-                        .then((resp) => {
-                          resolve({
-                            // data: resp?.response?.store_current_stock_list
-                            //   ?.data,
-                            // page:
-                            //   resp.response?.store_current_stock_list
-                            //     ?.current_page - 1,
-                            // totalCount:
-                            //   resp?.response?.store_current_stock_list?.total,
-                          });
+                    url += `&page=${query.page + 1}`;
+                    url += "&warehouse_id=" + warehouseId;
+                    fetch(url, requestOptions)
+                      .then((resp) => resp.json())
+                      .then((resp) => {
+                        console.log(resp.data);
+                        resolve({
+                          data: resp?.data?.data,
+                          page:
+                            resp?.current_page - 1,
+                           totalCount:
+                           resp?.data?.total,
                         });
-                    })
-                  }
-                  actions={[
-                    {
-                      icon: RefreshIcon,
-                      tooltip: "Refresh Data",
-                      isFreeAction: true,
-                      onClick: () => handleRefress(),
-                    },
-                  ]}
-                  options={{
-                    actionsColumnIndex: -1,
+                      });
+                  })
+                }
+                actions={[
+                  {
+                    icon: RefreshIcon,
+                    tooltip: "Refresh Data",
+                    isFreeAction: true,
+                    onClick: () => handleRefress(),
+                  },
+                ]}
+                options={{
+                  actionsColumnIndex: -1,
 
-                    pageSize: 12,
-                    pageSizeOptions: [12],
+                  pageSize: 12,
+                  pageSizeOptions: [12],
 
-                    padding: "dense",
-                  }}
-                />
-              
+                  padding: "dense",
+                }}
+              />
             </CardBody>
           </Card>
-          <Dialog
-            fullScreen
-            open={openCreateModal}
-            onClose={handleCloseCreate}
-            TransitionComponent={Transition}>
-            <AppBar style={{ position: 'relative' }}>
-              <Toolbar>
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  onClick={handleCloseCreate}
-                  aria-label="close">
-                  <CloseIcon />
-                </IconButton>
-                <Typography variant="h6" style={{ flex: 1 }}>
-                  Stock In
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <StockInComponent
-              modal={setOpenCreateModal}
-              endpoint={endpoint}
-              handleRefress={handleRefress}
-            />
-          </Dialog>
         </GridItem>
       </GridContainer>
-    {/* </Gurd> */}
+      {/* </Gurd> */}
     </div>
   );
 });

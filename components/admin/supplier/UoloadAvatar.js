@@ -16,9 +16,9 @@ const UploadAvatarCom = ({token,supplierId, handleCloseUpload, mutate}) => {
 
   const handleSubmit = async() => {
     setLoadingButton(true)
-    console.log(img)
+    console.log('img',img)
     const formData = new FormData();
-    formData.append('nid', img);
+    formData.append('nid_image', img);
     formData.append('supplier_id', supplierId);
   
   const config = { headers: 

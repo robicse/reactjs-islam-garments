@@ -22,7 +22,7 @@ import { Box, Grid, Chip } from '@material-ui/core';
 import CreateSupplier from '../../components/admin/supplier/create';
 import useSWR from 'swr';
 import EditSupplier from '../../components/admin/supplier/edit';
-import { baseUrl } from '../../const/api';
+import { baseUrl, webUrl } from '../../const/api';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import MaterialTable from 'material-table';
@@ -91,8 +91,8 @@ const SuplierComponent = observer(() => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [supplierId, setSupplierId] = useState(null);
   const [openUploadModal, setUploadModal] = useState(false);
-
-
+  const [openNidPopUp, setNidPopUp] = useState(false);
+  const [nidImage, setNidImage] = useState(null);
 
   const handleClickOpenCreate = () => {
     setOpenCreateModal(true);
@@ -115,6 +115,19 @@ const SuplierComponent = observer(() => {
     console.log('click')
     setUploadModal(!openUploadModal);
   };
+
+
+  // popup open
+
+  const handleOncickImagePopIp = (img) => {
+    setNidImage(img)
+    setNidPopUp(true);
+  };
+// popup close
+  const handleNidPopUpClose = () => {
+    setNidPopUp(!openNidPopUp);
+  };
+
 
 
   // need to server pagination and remove this block
@@ -145,7 +158,11 @@ const SuplierComponent = observer(() => {
     { title: 'Address', field: 'address' },
     { title: 'NID', render: (rowData) => (
       <Tooltip title="Upload NID" aria-label="add" style={{cursor:"pointer"}}>
-      <Avatar alt='o' src={`${baseUrl}/uploads/suppliers/${rowData.nid}`} onClick={()=>handleOpenUploadModal(rowData.id)}/>
+      <Avatar alt='o' 
+      src={`${webUrl}/uploads/suppliers/${rowData.nid}`} 
+      onClick={()=>handleOpenUploadModal(rowData.id)}
+      
+      />
       </Tooltip>),  },
     {
       title: 'Status',
@@ -266,6 +283,18 @@ const SuplierComponent = observer(() => {
                           <EditTwoToneIcon fontSize="small" color="white" />
                         </Button>
                       ),
+                      tooltip: 'open NID',
+                      onClick: (event, rowData) => handleOncickImagePopIp(rowData.nid),
+                    },
+                    {
+                      icon: () => (
+                        <Button
+                          fullWidth={true}
+                          variant="contained"
+                          color="primary">
+                          <EditTwoToneIcon fontSize="small" color="white" />
+                        </Button>
+                      ),
                       tooltip: 'Edit Supplier',
                       onClick: (event, rowData) => handleEdit(rowData),
                     },
@@ -372,6 +401,24 @@ const SuplierComponent = observer(() => {
               </Button>
             </DialogActions>
           </Dialog>
+
+
+
+
+          <Dialog onClose={handleNidPopUpClose} aria-labelledby="customized-dialog-title" open={openNidPopUp}>
+            <DialogTitle id="customized-dialog-title" onClose={handleNidPopUpClose}>
+               NID
+            </DialogTitle>
+            <DialogContent dividers>
+            
+            </DialogContent>
+            <DialogActions>
+              <Button autoFocus onClick={handleNidPopUpClose} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
+
 
         </GridItem>
       </GridContainer>

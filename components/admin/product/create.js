@@ -66,6 +66,7 @@ const Create = ({ token, modal,endpoint, mutate }) => {
 
   const [insertedProduct, setInsertedProduct] = React.useState(null);
   const [openUpload, setOpenupload] = React.useState(false);
+  const [submitAllow, setSubmitAllow] = React.useState(false);
   const handleClickOpenUpload = () => {
     setOpenupload(true);
   };
@@ -125,22 +126,24 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
     product_size_id,
   }
 
-  console.log(body);
   try {
    const response =  await axios.post(endpoint.productDuplicateSearchUrl,body,endpoint.headers);
-    console.log(response);
    
-    if(response.data.success){
-    console.log('ok');
-    //   return response.data.success
-    }else{
-      cogoToast.info('Product Alreday Exits',{position: 'top-right', bar:{size: '10px'}});
-    }
 
+        
+   if(response?.data?.code == 200){
+   return setSubmitAllow(true)
+
+  }
+  
+  setSubmitAllow(false)
   } catch (error) {
-    console.log(error);
-    // cogoToast.info('Name is available',{position: 'top-right', bar:{size: '10px'}});
-    // return false
+       
+   if(error?.response?.data?.code == 409){
+    setSubmitAllow(false)
+    cogoToast.info('Product Alreday Exits',{position: 'top-right', bar:{size: '10px'}});
+  }
+
   }
 
 }
@@ -190,9 +193,7 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
                   if (values.type_name && values.category_name && values.unit_name && values.size_name) {
                     const functionResult =   handleDuplicateProduct(values.type_name,values?.category_name?.id,values?.unit_name.id,values?.size_name.id)
                      
-                    // if(!functionResult){
-                    //   errors.product_name = "Product Already Exits";
-                    //   }
+                  
                   }
                    
               
@@ -213,7 +214,13 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-console.log(values);
+                            
+
+                  if (!submitAllow) {
+                    setSubmitting(false);
+                    return cogoToast.info('Product Alreday Exits',{position: 'top-right', bar:{size: '10px'}});
+                  }
+
                   // console.log({
                   //       type:values.type_name,
                   //       product_unit_id: values.unit_name.id,
@@ -368,7 +375,7 @@ console.log(values);
 
 
 
-                          <GridItem xs={12} sm={12} md={4}>
+                          <GridItem xs={12} sm={4} md={3}>
                             <Field
                               component={TextField}
                               name="item_code"
@@ -380,7 +387,7 @@ console.log(values);
                             />
                           </GridItem>
 
-                          <GridItem xs={12} sm={12} md={2}>
+                          <GridItem xs={12} sm={4} md={3}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -394,7 +401,7 @@ console.log(values);
 
                   
                     
-                          <GridItem xs={12} sm={12} md={2}>
+                          <GridItem xs={12} sm={4} md={3}>
                             <Field
                               component={TextField}
                               type="text"
@@ -415,7 +422,7 @@ console.log(values);
                   
 
 
-                          <GridItem xs={12} sm={12} md={4}>
+                          <GridItem xs={12} sm={4} md={3}>
                             <Field
                               component={TextField}
                               variant="outlined"

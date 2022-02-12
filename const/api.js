@@ -2,8 +2,8 @@
  * API Server Related Constants.
  */
 
-const protocol = process.env.PROTOCOL
-const host = process.env.HOST
+const protocol = 'https://'
+const host = 'islam-garments-backend.starit-ltd.xyz'
 
 
 const api = '/api';

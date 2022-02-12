@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "next dev -p 3005",
     "build": "next build",
-    "start": "next start -p 3001",
-    "deploy-demo": "pm2 stop 6 && rm -rf .next && npm run build && pm2 start 6"
+    "start": "next start -p 3005",
+    "deploy-demo": "pm2 stop 9 && rm -rf .next && npm run build && pm2 start 9"
   },
   "dependencies": {
     "@createnextapp/react-barcode": "^1.1.1",

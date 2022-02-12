@@ -4,6 +4,7 @@ import cogoToast from "cogo-toast";
 import TextField from "@material-ui/core/TextField";
 import Table from "@material-ui/core/Table";
 import Paper from '@material-ui/core/Paper'
+import Avatar from '@material-ui/core/Avatar';
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -16,6 +17,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { webUrl } from "const/api";
+
 const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove }) => {
     return (
         <>
@@ -27,6 +30,7 @@ const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove })
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">Sl</TableCell>
+                            <TableCell align="center">Image</TableCell>
                             <TableCell align="center">Type</TableCell>
 
                             <TableCell align="center">Category</TableCell>
@@ -46,6 +50,15 @@ const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove })
                         {products.length && products?.map((product, index) => (
                             <TableRow>
                                 <TableCell align="center">{index + 1}</TableCell>
+                                <TableCell style={{textAlign:"center"}}>
+                                <Avatar  alt='O' 
+                                variant="square"
+                                src="" 
+                    //  src={`${webUrl}/uploads/products/${rowData.image}`} 
+    
+      />
+
+                                </TableCell>
                                 <TableCell align="center">{product?.type}</TableCell>
                                 <TableCell align="center">{product?.category_name}</TableCell>
                                 <TableCell align="center">{product?.unit_name}</TableCell>

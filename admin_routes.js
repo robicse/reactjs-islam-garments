@@ -8,6 +8,8 @@ import StoreIcon from '@material-ui/icons/Store';
 import SearchIcon from '@material-ui/icons/Search';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 
 
@@ -194,6 +196,54 @@ const dashboardRoutes = [
         name: 'Store Stock',
         permission: 'warehouse_stock',
         icon: FunctionsIcon,
+      },
+ 
+    ],
+  },
+
+  {
+    id: 10,
+    collapse: true,
+    path: '/sale_management',
+    childPath: '/pos_sale',
+    name: 'Sale Management',
+    icon: ShoppingCartIcon,
+    childs: [
+      {
+        id: 1,
+        collapse: false,
+        path: '/sale_management',
+        childPath: '/pos_sale',
+        name: 'Stock Out(POS)',
+        permission: 'pos_sale',
+        icon: ShoppingCartIcon,
+      },
+      {
+        id: 2,
+        collapse: false,
+        path: '/sale_management',
+        childPath: '/whole_sale',
+        name: 'Stock Out(Whole)',
+        permission: 'whole_sale',
+        icon: ShoppingCartIcon,
+      },
+      {
+        id: 3,
+        collapse: false,
+        path: '/sale_management',
+        childPath: '/pos_sale_return',
+        name: 'Sale Return(POS)',
+        permission: 'whole_sale',
+        icon: KeyboardReturnIcon,
+      },
+      {
+        id: 4,
+        collapse: false,
+        path: '/sale_management',
+        childPath: '/whole_sale_return',
+        name: 'Sale Return(Whole)',
+        permission: 'whole_sale',
+        icon: KeyboardReturnIcon,
       },
  
     ],

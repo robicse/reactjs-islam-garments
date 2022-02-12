@@ -49,7 +49,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function Edit({ token, modal, editData, endpoint, mutate }) {
-  console.log(mutate);
+
+  console.log(token)
   const classes = useStyles();
 
   const [insertedProduct, setInsertedProduct] = React.useState(editData);
@@ -62,39 +63,9 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
     mutate();
     modal(false);
   };
-  const [vat, setVat] = React.useState(editData.vat_status ? true : false);
 
-  const handleVat = (event) => {
-    setVat(event.target.checked);
-  };
-  const [brand, setBrand] = React.useState([]);
-  const [unit, setUnit] = React.useState([]);
-  let brands = `${baseUrl}/product_brand_list`;
-  let units = `${baseUrl}/product_unit_list`;
 
-  useAsyncEffect(async (isMounted) => {
-    await axios
-      .all([
-        axios.get(brands, {
-          headers: { Authorization: 'Bearer ' + token },
-        }),
-        axios.get(units, {
-          headers: { Authorization: 'Bearer ' + token },
-        }),
-      ])
-      .then(
-        axios.spread((...responses) => {
-          const responseOneB = responses[0];
-          const responseTwoU = responses[1];
-          // setBrand(responseOneB.data.data);
-          setUnit(responseTwoU.data.data);
-          //console.log(responseOneB, responseTwoU);
-        })
-      )
-      .catch((errors) => {
-        console.error(errors);
-      });
-  }, []);
+
 
   return (
     <div>
@@ -105,57 +76,48 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
             <CardBody>
               <Formik
                 initialValues={{
-                  product_name: editData.product_name,
-                  item_code: editData.item_code,
-                  barcode: editData.barcode,
+ 
+                  type:editData.type,
+                  product_category_id: editData.category_id,
+                  product_unit_id: editData.unit_id,
+                  product_size_id: editData.size_id,
+                  product_code: editData.product_code,
                   purchase_price: editData.purchase_price,
-                  selling_price: editData.selling_price,
-                  whole_sale_price: editData.whole_sale_price,
-                  self_no: editData.self_no,
-                  low_inventory_alert: editData.low_inventory_alert,
-                  brand_name: editData.brand_id,
-                  unit_name: editData.unit_id,
+                  selling_price:  editData.purchase_price,
+                  whole_sale_price: editData.purchase_price,
+                  status: '2',
                   note: editData.note,
-                  status: editData.status,
+                  vat_status: '0',
+                  vat_percentage:'0',
+                  vat_amount: '0',
+                  vat_whole_amount: '0',
                 }}
                 validate={(values) => {
                   const errors = {};
-                  if (!values.product_name) {
-                    errors.product_name = 'Required';
-                  }
-                 
-                  if (!values.purchase_price) {
-                    errors.purchase_price = 'Required';
-                  }
-                  if (!values.selling_price) {
-                    errors.selling_price = 'Required';
-                  }
-                
-                  if (!values.unit_name) {
-                    errors.unit_name = 'Required';
-                  }
+              
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  setTimeout(() => {
+                 setTimeout(() => {
+
+      
                     Axios.post(
                       `${baseUrl}/${endpoint}`,
                       {
-                        product_id: editData.id,
-                        name: values.product_name,
-                        product_unit_id: values.unit_name,
-                        item_code: values.item_code,
-                        barcode: values.barcode,
-                        self_no: values.self_no,
-                        low_inventory_alert: values.low_inventory_alert,
-                        product_brand_id: values.brand_name,
+                        type:values.type,
+                        product_category_id: values.product_category_id,
+                        product_unit_id: values.product_unit_id,
+                        product_size_id: values.product_size_id,
+                        product_code: values.product_code,
                         purchase_price: values.purchase_price,
-                        selling_price: values.selling_price,
-                        whole_sale_price: values.whole_sale_price,
-                        note: values.note,
-                        date: '2021-01-01',
-                        vat_status: vat ? 1 : 0,
+                        selling_price:  values.purchase_price,
+                        whole_sale_price: values.purchase_price,
                         status: values.status,
+                        note: values.note,
+                        vat_status: '0',
+                        vat_percentage:'0',
+                        vat_amount: '0',
+                        vat_whole_amount: '0',
                       },
                       {
                         headers: { Authorization: 'Bearer ' + token },
@@ -164,11 +126,9 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                       .then((res) => {
                         console.log(res);
                         setSubmitting(false);
-
                         setInsertedProduct(editData);
                         handleClickOpenUpload();
-                        // mutate();
-                        // modal(false);
+
                         cogoToast.success('Update Success',{position: 'top-right', bar:{size: '10px'}});
                       })
                       .catch(function (error) {
@@ -182,21 +142,99 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                     <div className={classes.paper}>
                       <form className={classes.form} noValidate>
                         <GridContainer>
-                          <GridItem xs={12} sm={12} md={6}>
+
+{/* 
+                        <GridItem xs={6} sm={4} md={3}>
                             <Field
                               component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
                               type="text"
-                              label="Name"
-                              name="product_name"
-                            />
+                              name="type_name"
+                              label="Type"
+                              select
+                              fullWidth
+                              variant="outlined"
+                              // helperText="Please select status"
+                              margin="normal"
+                            >
+                              <MenuItem value="Own">Own</MenuItem>
+                              <MenuItem value="Buy">Buy</MenuItem>
+                            </Field>
                           </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                         
+                         <Field
+                           name="category_name"
+                           component={Autocomplete}
+                           options={categoryList}
+                           getOptionLabel={(option) => option.name}
+                           renderInput={(params) => (
+                             <MuiTextField
+                               {...params}
+                               label="Category"
+                               variant="outlined"
+                               fullWidth
+                               // helperText="Please select unit"
+                               margin="normal"
+                             />
+                           )}
+                         />
+                      
+                     </GridItem>
+
+
+                          <GridItem xs={12} sm={4} md={3}>
+                         
+                              <Field
+                                name="unit_name"
+                                component={Autocomplete}
+                                options={unitList}
+                                getOptionLabel={(option) => option.name}
+                                renderInput={(params) => (
+                                  <MuiTextField
+                                    {...params}
+                                    label="Unit"
+                                    variant="outlined"
+                                    fullWidth
+                                    // helperText="Please select unit"
+                                    margin="normal"
+                                  />
+                                )}
+                              />
+                           
+                          </GridItem>
+
+
+
+                          <GridItem xs={12} sm={4} md={3}>
+                        
+                              <Field
+                                name="size_name"
+                                component={Autocomplete}
+                                options={sizeList}
+                                getOptionLabel={(option) => option.name}
+                                renderInput={(params) => (
+                                  <MuiTextField
+                                    {...params}
+                                    label="Size"
+                                    variant="outlined"
+                                    fullWidth
+                                    // helperText="Please select unit"
+                                    margin="normal"
+                                  />
+                                )}
+                              />
+                         
+                          </GridItem> */}
+
+
+
+
+
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
-                              name="item_code"
+                              name="product_code"
                               type="text"
                               label="Item Code"
                               variant="outlined"
@@ -204,113 +242,22 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               fullWidth
                             />
                           </GridItem>
+
                           <GridItem xs={12} sm={12} md={2}>
                             <Field
                               component={TextField}
                               variant="outlined"
                               margin="normal"
                               fullWidth
-                              type="text"
-                              label="Barcode"
-                              name="barcode"
-                              InputProps={{
-                                readOnly: true,
-                              }}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                              type="text"
-                              label="Purchase Price"
+                               type="tel"
+                              label="Price"
                               name="purchase_price"
                             />
                           </GridItem>
 
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                           type="tel"
-                              label="Whole Sale Price"
-                              name="whole_sale_price"
-                              hidden
-                            />
-                          </GridItem>
-                          
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                           type="tel"
-                              label="Selling Price"
-                              name="selling_price"
-                            />
-                          </GridItem>
-                       
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                           type="tel"
-                              label="Self No"
-                              name="self_no"
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                           type="tel"
-                              label="Low Inventory Alert"
-                              name="low_inventory_alert"
-                            />
-                          </GridItem>
-
-                          {/* <GridItem xs={12} sm={12} md={3}>
-                            <Field
-                              component={TextField}
-                              type="text"
-                              name="brand_name"
-                              label="Brand"
-                              select
-                              fullWidth
-                              variant="outlined"
-                              helperText="Please select brand"
-                              margin="normal">
-                              {brand.map((b) => (
-                                <MenuItem value={b.id}>{b.name}</MenuItem>
-                              ))}
-                            </Field>
-                          </GridItem> */}
-                          <GridItem xs={12} sm={12} md={2}>
-                            <Field
-                              component={TextField}
-                              type="text"
-                              name="unit_name"
-                              label="Unit"
-                              select
-                              fullWidth
-                              variant="outlined"
-                              helperText="Please select unit"
-                              margin="normal">
-                              {unit.map((u) => (
-                                <MenuItem value={u.id}>{u.name}</MenuItem>
-                              ))}
-                            </Field>
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={2}>
+                  
+                    
+                          {/* <GridItem xs={12} sm={12} md={2}>
                             <Field
                               component={TextField}
                               type="text"
@@ -319,30 +266,19 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               select
                               fullWidth
                               variant="outlined"
-                              helperText="Please select status"
-                              margin="normal">
+                              // helperText="Please select status"
+                              margin="normal"
+                            >
                               <MenuItem value="1">Active</MenuItem>
                               <MenuItem value="0">Inactive</MenuItem>
                             </Field>
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={1}>
-                            <Box mt={3}>
-                              <FormControlLabel
-                                control={
-                                  <Switch
-                                    checked={vat}
-                                    onChange={handleVat}
-                                    name="checkedA"
-                                    inputProps={{
-                                      'aria-label': 'secondary checkbox',
-                                    }}
-                                  />
-                                }
-                                label="VAT"
-                              />
-                            </Box>
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={11}>
+                          </GridItem> */}
+
+
+                  
+
+
+                          <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -353,6 +289,12 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               name="note"
                             />
                           </GridItem>
+
+
+
+
+
+                         
                         </GridContainer>
                         <Button
                           fullWidth

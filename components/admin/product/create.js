@@ -260,7 +260,7 @@ console.log(values);
                       .then((res) => {
                         console.log(res);
                         setSubmitting(false);
-                        setInsertedProduct(res.data.response);
+                        setInsertedProduct(res.data.data);
                         handleClickOpenUpload();
                         // mutate();
                         // modal(false);

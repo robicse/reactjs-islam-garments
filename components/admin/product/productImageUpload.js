@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { Box, Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ImageUploading from "react-images-uploading";
@@ -25,6 +25,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProductImageUpload = ({ product, token }) => {
+
+  console.log(product, token)
   const classes = useStyles();
   const [images, setImages] = React.useState([]);
   const [prd, setPrd] = React.useState(null);
@@ -61,7 +63,7 @@ const ProductImageUpload = ({ product, token }) => {
       `${baseUrl}/product_image`,
       {
         pro_img: imageList[0].data_url,
-        product_id: product.id,
+        product_id: product,
       },
       {
         headers: { Authorization: "Bearer " + token },
@@ -70,7 +72,7 @@ const ProductImageUpload = ({ product, token }) => {
       .then((res) => {
         setPicsubmit(false);
 
-        setPrd(res.data.response.product);
+        setPrd(res.data.data);
         setLoad(true);
         setAlert({
           open: true,

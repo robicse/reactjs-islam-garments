@@ -317,19 +317,19 @@ const TableList = observer(() => {
                     //   tooltip: "Barcode Print",
                     //   onClick: (event, rowData) => handlePrint(rowData),
                     // },
-                    // {
-                    //   icon: () => (
-                    //     <Button
-                    //       fullWidth={true}
-                    //       variant="contained"
-                    //       color="primary"
-                    //     >
-                    //       <EditTwoToneIcon fontSize="small" color="white" />
-                    //     </Button>
-                    //   ),
-                    //   tooltip: "Edit Product",
-                    //   onClick: (event, rowData) => handleEdit(rowData),
-                    // },
+                    {
+                      icon: () => (
+                        <Button
+                          fullWidth={true}
+                          variant="contained"
+                          color="primary"
+                        >
+                          <EditTwoToneIcon fontSize="small" color="white" />
+                        </Button>
+                      ),
+                      tooltip: "Edit Product",
+                      onClick: (event, rowData) => handleEdit(rowData),
+                    },
                     // (rowData) => ({
                     //   icon: () => (
                     //     <Button

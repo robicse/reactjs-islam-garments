@@ -39,6 +39,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    // background:"#800080"
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    background:"#800080"
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -85,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toolbar: {
-    // backgroundColor:"red",
+  //backgroundColor:"#800080",
     //  boxShadow:"50px 1px #888888",
     display: 'flex',
     alignItems: 'center',
@@ -94,6 +96,18 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
+
+  toolba2: {
+     backgroundColor:"#800080",
+    //  boxShadow:"50px 1px #888888",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  },
+
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -177,7 +191,7 @@ export const Layout = observer(({ children }) => {
               })}>
               <MenuIcon />
             </IconButton>
-            <Typography variant="subtitle2." noWrap style={{ flexGrow: 1 }}>
+            <Typography variant="subtitle2"  style={{ flexGrow: 1 }} >
               Welcome Back {user.name}  (Role: {user?.details?.role})
             </Typography>
 
@@ -210,7 +224,7 @@ export const Layout = observer(({ children }) => {
               [classes.drawerClose]: !open,
             }),
           }}>
-          <div className={classes.toolbar} style={{boxShadow:"10px 3px 15px #888888"}}>
+          <div className={classes.toolba2} style={{boxShadow:"10px 3px 15px #888888"}}>
             <img src="/logo.png" alt="starit" width="140px"  height="38px"/>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === 'rtl' ? (
@@ -259,7 +273,7 @@ export const Layout = observer(({ children }) => {
                     <List
                       component="div"
                       disablePadding
-                      style={{ marginLeft: 8 }}>
+                      style={{ marginLeft: 8}}>
                       {route.childs.map((child) => (
                         <Link href={child.path + child.childPath} key={index}>
                           <a>

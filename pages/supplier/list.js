@@ -28,6 +28,7 @@ import ErrorIcon from '@material-ui/icons/Error';
 import MaterialTable from 'material-table';
 import tableIcons from 'components/table_icon/icon';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
+import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import AllApplicationErrorNotification from "../../components/utils/errorNotification";
 import Avatar from '@material-ui/core/Avatar';
@@ -280,10 +281,10 @@ const SuplierComponent = observer(() => {
                           fullWidth={true}
                           variant="contained"
                           color="primary">
-                          <EditTwoToneIcon fontSize="small" color="white" />
+                          <ListAltTwoToneIcon fontSize="small" color="white" />
                         </Button>
                       ),
-                      tooltip: 'open NID',
+                      tooltip: 'Open NID',
                       onClick: (event, rowData) => handleOncickImagePopIp(rowData.nid),
                     },
                     {
@@ -410,6 +411,7 @@ const SuplierComponent = observer(() => {
                NID
             </DialogTitle>
             <DialogContent dividers>
+            <img  src={`${webUrl}/uploads/suppliers/${nidImage}`}  alt="mid" width="500" height="300"/>
             
             </DialogContent>
             <DialogActions>

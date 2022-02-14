@@ -109,7 +109,6 @@ const TableList = observer(() => {
     { title: "Phone", field: "phone" },
     { title: "Email", field: "email" },
     { title: "Address", field: "address" },
-    { title: "Warehouse", field: "warehouse_name" },
     {
       title: "Status",
       field: "status",

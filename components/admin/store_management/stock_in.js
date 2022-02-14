@@ -69,7 +69,9 @@ const StoreStockIn = ({ endpoint }) => {
   const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
 
   const [warehouseList, setWarehouseList] = React.useState([]);
-  const [supplyerList, setSupplyerList] = React.useState([]);
+  const [storeList, setStoreList] = React.useState([]);
+
+  
   const [sizeList, setSizeList] = React.useState([]);
   const [unitList, setUnitList] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
@@ -77,6 +79,7 @@ const StoreStockIn = ({ endpoint }) => {
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedType, setSelectedType] = React.useState(null);
   const [selectedWarehouse, setSelectedWarehouse] = React.useState(null);
+  const [selectedStore, setSelecteStore] = React.useState(null);
   const [selectedSupplyer, setSelectedSupplyer] = React.useState(null);
   const [selectedSize, setSelectedSize] = React.useState(null);
   const [selectedUnit, setSelectedUnit] = React.useState(null);
@@ -142,28 +145,30 @@ const StoreStockIn = ({ endpoint }) => {
         endpoint.warehouseActiveListUrl,
         endpoint.headers
       );
-      console.log(warehouseRes);
-      const supplyerRes = await axios.get(
-        endpoint.supplyerActiveListUrl,
+
+      const storeRes = await axios.get(
+        endpoint.storeActiveListUrl,
         endpoint.headers
       );
-      const sizeRes = await axios.get(
-        endpoint.sizesActiveListUrl,
-        endpoint.headers
-      );
-      const unitRes = await axios.get(
-        endpoint.unitActiveListUrl,
-        endpoint.headers
-      );
-      const categoryRes = await axios.get(
-        endpoint.categoryActiveListUrl,
-        endpoint.headers
-      );
+      // const sizeRes = await axios.get(
+      //   endpoint.sizesActiveListUrl,
+      //   endpoint.headers
+      // );
+      // const unitRes = await axios.get(
+      //   endpoint.unitActiveListUrl,
+      //   endpoint.headers
+      // );
+      // const categoryRes = await axios.get(
+      //   endpoint.categoryActiveListUrl,
+      //   endpoint.headers
+      // );
       setWarehouseList(warehouseRes?.data?.data);
-      setSupplyerList(supplyerRes?.data?.data);
-      setSizeList(sizeRes?.data?.data);
-      setUnitList(unitRes?.data?.data);
-      setCategoryList(categoryRes?.data?.data);
+      setStoreList(storeRes?.data?.data)
+
+
+      // setSizeList(sizeRes?.data?.data);
+      // setUnitList(unitRes?.data?.data);
+      // setCategoryList(categoryRes?.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -341,12 +346,12 @@ const StoreStockIn = ({ endpoint }) => {
             fullWidth={true}
             // value={selectedWarehouse}
             id="combo-box-demo"
-            options={warehouseList}
-            getOptionLabel={(option) => option.name}
+            options={storeList}
+            getOptionLabel={(option) => option.store_name}
             renderInput={(params) => (
               <TextField {...params} label="Store" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedWarehouse(v.id)}
+            onChange={(e, v) => setSelecteStore(v.id)}
           />
         </GridItem>
 

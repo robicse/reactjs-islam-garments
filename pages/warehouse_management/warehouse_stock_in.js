@@ -102,7 +102,17 @@ const endpoint = {
   paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
   stockInListAPI: `${baseUrl}/product_purchase_list_pagination_with_search`,
   warehouseProductdetailsUrl:`${baseUrl}/product_purchase_details`,
-  headers: { headers: { Authorization: "Bearer " + user.details.token }}
+  headers: { headers: { 
+    Authorization: "Bearer " + user.details.token,
+    'Content-type': 'application/javascript'
+  
+  
+  }},
+  FrpmDataheaders: { headers: 
+    { 
+      'Authorization': "Bearer " + user.details.token,
+      'Content-type': 'multipart/form-data'
+ }}
 };
 
   const [openCreateModal, setOpenCreateModal] = useState(false);;
@@ -245,12 +255,24 @@ const endpoint = {
                           headers: { Authorization: "Bearer " + user.auth_token },
                         }
                       ).then(resp => resp.json()).then(resp => {
-            
-                      resolve({
-                            data: resp.data,
-                            page: resp?.meta?.current_page - 1,
-                            totalCount: resp?.meta?.total,
-                      });
+
+
+  if (resp.data) {
+    resolve({
+      data: resp.data || [],
+      page: resp?.meta?.current_page - 1 || 0,
+      totalCount: resp?.meta?.total || 0,
+});
+  }else{
+    resolve({
+      data:[],
+      page:  0,
+      totalCount:0,
+});
+  }
+        
+                  
+                   
                     })
         
                   })

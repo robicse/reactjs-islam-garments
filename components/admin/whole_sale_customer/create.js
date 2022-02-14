@@ -173,7 +173,7 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                           </GridItem>
 
 
-                            <GridItem xs={12} sm={12} md={4}>
+                            {/* <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -183,7 +183,7 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                               label="Initil Balance"
                               name="initial_due"
                             />
-                          </GridItem> 
+                          </GridItem>  */}
 
                        
                         </GridContainer>

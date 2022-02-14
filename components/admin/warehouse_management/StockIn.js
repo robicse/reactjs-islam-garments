@@ -49,6 +49,9 @@ const styles = {
     color: "#FFFFFF",
     backgroundColor: "blue",
   },
+  submit:{
+    marginTop:"15px"
+  }
 };
 const useStyles = makeStyles(styles);
 const Create = ({ endpoint }) => {
@@ -182,11 +185,14 @@ const Create = ({ endpoint }) => {
       product_unit_id,
       product_size_id,
     };
+  
+    const data = new FormData();
+    Object.keys(body).forEach(key => data.append(key, body[key]));
 
     try {
       const response = await axios.post(
         endpoint.productFindForStockIn,
-        body,
+        data,
         endpoint.headers
       );
       console.log(response.data.data[0]);
@@ -261,21 +267,26 @@ const Create = ({ endpoint }) => {
     }
 
     const body = {
-      date: selectedDate,
-      supplier_id: selectedSupplyer,
-      warehouse_id: selectedWarehouse,
-      products: selectedProductList,
-      sub_total_amount: subTotal,
-      discount_type: discountType,
-      discount_percent: discountParcent,
-      discount_amount: discountAmount,
-      after_discount_amount: afterDiscountAmount,
-      grand_total_amount: grand,
-      paid_amount: grand,
-      due_amount: due,
-      payment_type_id:1,
+      "date": selectedDate,
+      "supplier_id": selectedSupplyer,
+      "warehouse_id": selectedWarehouse,
+      "products":JSON.stringify(selectedProductList),
+      "sub_total_amount": subTotal,
+      "discount_type": discountType,
+      "discount_percent": discountParcent,
+      "discount_amount": discountAmount,
+      "after_discount_amount": afterDiscountAmount,
+      "grand_total_amount": grand,
+      "paid_amount": grand,
+      "due_amount": due,
+      "payment_type_id":1,
     };
-    console.log(body);
+   
+
+    const data = new FormData();
+    Object.keys(body).forEach(key => data.append(key, body[key]));
+
+    
     try {
       setButtonLoading(true);
       setTimeout(() => {
@@ -285,7 +296,8 @@ const Create = ({ endpoint }) => {
         position: "top-right",
         bar: { size: "10px" },
       });
-    const submitResponse = await axios.post(endpoint.stockInAPi,body,endpoint.headers);
+      const submitResponse = await axios.post(endpoint.stockInAPi,data,endpoint.FrpmDataheaders);
+      console.log(submitResponse)
       setButtonLoading(false);
     } catch (error) {
       AllApplicationErrorNotification(error);
@@ -462,7 +474,7 @@ const Create = ({ endpoint }) => {
           </GridItem>
         </GridItem>
 
-        <GridItem xs={12} sm={12} md={12} style={{ textAlign: "center" }}>
+        <GridItem xs={12} sm={12} md={12} style={{ textAlign: "center",marginTop:"15px" }}>
           <Button
             variant="contained"
             color="primary"

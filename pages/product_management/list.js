@@ -9,13 +9,18 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import Gurd from "../../components/guard/Gurd";
 import axios from "axios";
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { useRootStore } from "../../models/root-store-provider";
 import { observer } from "mobx-react-lite";
 import MaterialTable from "material-table";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import Avatar from '@material-ui/core/Avatar';
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
@@ -23,9 +28,6 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import Slide from "@material-ui/core/Slide";
 import { Box, Chip, Grid} from "@material-ui/core";
 import { baseUrl, webUrl } from "../../const/api";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import ErrorIcon from "@material-ui/icons/Error";
-// import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Edit from "../../components/admin/product/edit";
 import Create from "../../components/admin/product/create";
@@ -51,7 +53,7 @@ const styles = {
     "& a,& a:hover,& a:focus": {
       color: "#FFFFFF",
     },
-  },
+  }, 
   cardTitleWhite: {
     color: "#FFFFFF",
     marginTop: "0px",
@@ -92,6 +94,9 @@ const TableList = observer(() => {
   const [barcodeProductName, setbarcodeproductname] = useState(null);
   const [barcodeProductPrice, setbarcodeproductprice] = useState(null);
   const [vatStatus, setVatStatus] = useState(null);
+  const [openImagePopUp, setproductImagePopUp] = useState(false);
+  const [productImage, setproductImage] = useState(null);
+
 
   const endpoint = {
     list: "product_list_with_search",
@@ -124,6 +129,14 @@ const TableList = observer(() => {
   };
 
   const columns = [
+
+    { title: 'Image', render: (rowData) => (
+
+      <Avatar alt='o'  variant="square"
+      src={`${webUrl}/uploads/products/${rowData?.image}`} 
+      
+      />
+    )},
     { title: "Type", field: "type" },
     {
 
@@ -224,6 +237,21 @@ const TableList = observer(() => {
         AllApplicationErrorNotification(error?.response?.data);
       }
     };
+
+
+
+
+  // popup open
+
+  const handleImagePopup = (img) => {
+    setproductImage(img)
+    setproductImagePopUp(true);
+  };
+// popup close
+  const handleImagePopUpClose = () => {
+    setproductImagePopUp(!openImagePopUp);
+  };
+
   
   return (
     <Gurd subject={subject}>
@@ -317,6 +345,18 @@ const TableList = observer(() => {
                     //   tooltip: "Barcode Print",
                     //   onClick: (event, rowData) => handlePrint(rowData),
                     // },
+                    {
+                      icon: () => (
+                        <Button
+                          fullWidth={true}
+                          variant="contained"
+                          color="primary">
+                          <ListAltTwoToneIcon fontSize="small" color="white" />
+                        </Button>
+                      ),
+                      tooltip: 'Open Image',
+                      onClick: (event, rowData) => handleImagePopup(rowData.image),
+                    },
                     {
                       icon: () => (
                         <Button
@@ -430,6 +470,23 @@ const TableList = observer(() => {
           endpoint={endpoint.edit}
           mutate={handleRefress}
         />
+      </Dialog>
+
+  
+
+      <Dialog onClose={handleImagePopUpClose} aria-labelledby="customized-dialog-title" open={openImagePopUp}>
+            <DialogTitle id="customized-dialog-title" onClose={handleImagePopUpClose}>
+              product Image
+            </DialogTitle>
+            <DialogContent dividers>
+            <img  src={`${webUrl}/uploads/products/${productImage}`}  alt="mid" width="500" height="300"/>
+            
+            </DialogContent>
+            <DialogActions>
+              <Button autoFocus onClick={handleImagePopUpClose} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
       </Dialog>
 
     </Gurd>

@@ -90,6 +90,7 @@ const endpoint = {
   subject: "Store Stock",
   warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
   supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
+  storeActiveListUrl:`${baseUrl}/store_active_list`,
   sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
   unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
   categoryActiveListUrl: `${baseUrl}/product_category_active_list`,

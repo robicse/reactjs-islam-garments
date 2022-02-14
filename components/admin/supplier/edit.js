@@ -40,6 +40,11 @@ const useStyles = makeStyles(styles);
 
 function Edit({ token, modal, editData, endpoint, mutate }) {
 
+
+  const [nidFront, setNidFront] = React.useState(null);
+  const [nidBack, setNidBack] = React.useState(null);
+
+
   const classes = useStyles();
 
 
@@ -77,21 +82,48 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                   if (!values.status) {
                     errors.status = "Required";
                   }
+
+
+               
+
+                  
+
+                   
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+                  if (!nidFront) {
+                    setSubmitting(false);
+                    return cogoToast.warn('Please Upload NID Front Image',{position: 'top-right', bar:{size: '10px'}});
+                  }
+                  if (!nidBack) {
+                    setSubmitting(false);
+                    return cogoToast.warn('Please Upload NID Back Image',{position: 'top-right', bar:{size: '10px'}});
+                  }
+
+                  const body = {
+                    supplier_id: values.supplier_id,
+                    name: values.name,
+                    phone: values.phone,
+                    email: values.email,
+                    address: values.address,
+                    status: values.status,
+                    nid_front: nidFront,
+                    nid_back:nidBack,
+                  }
+               
+                  const formData = new FormData();
+                  Object.keys(body).forEach(key => formData.append(key, body[key]));
+
                   setTimeout(() => {
                     Axios.post(
                       `${baseUrl}/supplier_update`,
-                      { supplier_id: values.supplier_id,
-                        name: values.name,
-                        phone: values.phone,
-                        email: values.email,
-                        address: values.address,
-                        status: values.status,
-                      },
+                      formData,
                       {
-                        headers: { Authorization: "Bearer " + token },
+                        headers: {
+                           Authorization: "Bearer " + token,
+                           'Content-type': 'multipart/form-data'
+                      },
                       }
                     )
                       .then((res) => {
@@ -157,6 +189,43 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                             />
                           </GridItem>
 
+                     
+
+
+
+                          <GridItem xs={12} sm={4} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              // label="Image"
+                              name="image"
+                              helperText="NID Front Page"
+                              onChange={(e)=>{
+                                setNidFront(e.target.files[0])
+                              }}
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              helperText="NID Backpage Page"
+                              // label="Image"
+                              name="image"
+                              onChange={(e)=>{
+                                setNidBack(e.target.files[0])
+                            
+                              }}
+                            />
+                          </GridItem>
+
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
@@ -173,6 +242,8 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               <MenuItem value="0">Inactive</MenuItem>
                             </Field>
                           </GridItem>
+
+
                         </GridContainer>
 
                         <Button

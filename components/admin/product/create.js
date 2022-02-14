@@ -62,11 +62,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Create = ({ token, modal,endpoint, mutate }) => {
  
   const classes = useStyles();
-
-
   const [insertedProduct, setInsertedProduct] = React.useState(null);
   const [openUpload, setOpenupload] = React.useState(false);
   const [submitAllow, setSubmitAllow] = React.useState(false);
+
+  
   const handleClickOpenUpload = () => {
     setOpenupload(true);
   };
@@ -90,7 +90,7 @@ const Create = ({ token, modal,endpoint, mutate }) => {
   const [unitList, setUnitList] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
 
-
+  const [image, setImage] = React.useState(null);
   
 
   useAsyncEffect(async (isMounted) => {
@@ -147,6 +147,14 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
   }
 
 }
+
+
+
+const uploadImageHnadle= (img) => {
+  setImage(img)
+ }
+
+ 
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
@@ -221,56 +229,47 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
                     return cogoToast.info('Product Alreday Exits',{position: 'top-right', bar:{size: '10px'}});
                   }
 
-                  // console.log({
-                  //       type:values.type_name,
-                  //       product_unit_id: values.unit_name.id,
-                  //       product_size_id: values.size_name.id,
-                  //       name: values.product_name,
-                  //       item_code: values.item_code,
-                  //       purchase_price: values.purchase_price,
-                  //       selling_price:  values.purchase_price,
-                  //       whole_sale_price: values.purchase_price,
-                  //       status: values.status,
-                  //       note: values.note,
-                  //       vat_status: '0',
-                  //       vat_percentage:'0',
-                  //       vat_amount: '0',
-                  //       vat_whole_amount: '0',
-                        
 
+                     const body = {
+                      type:values.type_name,
+                      product_category_id: values.category_name.id,
+                      product_unit_id: values.unit_name.id,
+                      product_size_id: values.size_name.id,
+                      product_code: values.item_code,
+                      purchase_price: values.purchase_price,
+                      selling_price:  values.purchase_price,
+                      whole_sale_price: values.purchase_price,
+                      status: values.status,
+                      note: values.note,
+                      vat_status: '0',
+                      vat_percentage:'0',
+                      vat_amount: '0',
+                      vat_whole_amount: '0',
+                      image:image,
 
-                  // });
-                  // setSubmitting(false);
+                     }
+
+                     const formData = new FormData();
+                     Object.keys(body).forEach(key => formData.append(key, body[key]));
+        
+              
+
                   setTimeout(() => {
                     Axios.post(
                      endpoint.createAPi,
+                     formData,
                       {
-                    type:values.type_name,
-                    product_category_id: values.category_name.id,
-                    product_unit_id: values.unit_name.id,
-                    product_size_id: values.size_name.id,
-                    product_code: values.item_code,
-                    purchase_price: values.purchase_price,
-                    selling_price:  values.purchase_price,
-                    whole_sale_price: values.purchase_price,
-                    status: values.status,
-                    note: values.note,
-                    vat_status: '0',
-                    vat_percentage:'0',
-                    vat_amount: '0',
-                    vat_whole_amount: '0',
+                        headers: {
+                           Authorization: "Bearer " + token,
+                           'Content-type': 'multipart/form-data'
                       },
-                      {
-                        headers: { Authorization: "Bearer " + token },
                       }
                     )
                       .then((res) => {
                         console.log(res);
                         setSubmitting(false);
-                        setInsertedProduct(res.data.data);
-                        handleClickOpenUpload();
-                        // mutate();
-                        // modal(false);
+                        mutate();
+                        modal(false);
                         cogoToast.success('Create Success',{position: 'top-right', bar:{size: '10px'}});
                       })
                       .catch(function (error) {
@@ -433,6 +432,24 @@ const handleDuplicateProduct = async(type,product_category_id, product_unit_id, 
                               name="note"
                             />
                           </GridItem>
+
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              // label="Image"
+                              name="image"
+                              onChange={(e)=>{
+                                uploadImageHnadle(e.target.files[0])
+                            
+                              }}
+                            />
+                          </GridItem>
+
                         </GridContainer>
 
                         <Button

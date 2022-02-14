@@ -185,14 +185,28 @@ const WarehouseStock = observer(() => {
                     fetch(url, requestOptions)
                       .then((resp) => resp.json())
                       .then((resp) => {
-                        console.log(resp.data);
-                        resolve({
-                          data: resp?.data?.data,
-                          page:
-                            resp?.current_page - 1,
-                           totalCount:
-                           resp?.data?.total,
-                        });
+                       
+
+
+  if (resp.data) {
+    resolve({
+      data: resp?.data?.data,
+      page:
+        resp?.current_page - 1,
+       totalCount:
+       resp?.data?.total,
+    });
+  }else{
+    resolve({
+      data:[],
+      page:  0,
+      totalCount:0,
+});
+  }
+
+                    
+
+
                       });
                   })
                 }

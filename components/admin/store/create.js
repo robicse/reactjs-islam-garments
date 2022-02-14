@@ -41,24 +41,6 @@ const useStyles = makeStyles(styles);
 const Create = ({ token, modal, endpoint, mutate }) => {
   const classes = useStyles();
 
-  const [warehouse, setWarehouse] = React.useState([]);
-
-  useAsyncEffect(async (isMounted) => {
-    try {
-      const perList = await Axios.get(`${baseUrl}/warehouse_list`, {
-        headers: { Authorization: "Bearer " + token },
-      });
-      if (!isMounted()) return;
-      if (perList.data.data != 0) {
-        setWarehouse(perList.data.data);
-      } else {
-        console.log("No Warehouse");
-        modal(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
 
   return (
     <div>
@@ -92,9 +74,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                   if (!values.address) {
                     errors.address = "Required";
                   }
-                  if (!values.warehouse) {
-                    errors.warehouse = "Required";
-                  }
+              
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
@@ -107,7 +87,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                         email: values.email,
                         address: values.address,
                         status: values.status,
-                        warehouse_id: values.warehouse,
+                        
                       },
                       {
                         headers: { Authorization: "Bearer " + token },
@@ -180,23 +160,6 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                             />
                           </GridItem>
 
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              type="text"
-                              name="warehouse"
-                              label="Warehouse"
-                              select
-                              fullWidth
-                              variant="outlined"
-                            
-                              margin="normal"
-                            >
-                              {warehouse.map((data) => (
-                                <MenuItem value={data.id}>{data.name}</MenuItem>
-                              ))}
-                            </Field>
-                          </GridItem>
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}

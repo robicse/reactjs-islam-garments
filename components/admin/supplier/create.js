@@ -30,13 +30,17 @@ const styles = {
     marginBottom: "3px",
     textDecoration: "none",
   },
+  submit: {
+    marginTop:"15px"
+  }
 };
-
+ 
 const useStyles = makeStyles(styles);
 
 function CreateParty({ token, modal, mutate }) {
   const classes = useStyles();
-
+  const [nidFront, setNidFront] = React.useState(null);
+  const [nidBack, setNidBack] = React.useState(null);
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
@@ -73,19 +77,40 @@ function CreateParty({ token, modal, mutate }) {
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+
+
+                  if (!nidFront) {
+                    setSubmitting(false);
+                    return cogoToast.warn('Please Upload NID Front Image',{position: 'top-right', bar:{size: '10px'}});
+                  }
+                  if (!nidBack) {
+                    setSubmitting(false);
+                    return cogoToast.warn('Please Upload NID Back Image',{position: 'top-right', bar:{size: '10px'}});
+                  }
+
+                  const body = {
+                    type: values.type,
+                    name: values.name,
+                    phone: values.phone,
+                    email: values.email,
+                    address: values.address,
+                    status: values.status,
+                    nid_front: nidFront,
+                    nid_back:nidBack,
+                  }
+
+                  const formData = new FormData();
+                  Object.keys(body).forEach(key => formData.append(key, body[key]));
+
                   setTimeout(() => {
                     Axios.post(
                       `${baseUrl}/supplier_create`,
+                     formData,
                       {
-                        type: values.type,
-                        name: values.name,
-                        phone: values.phone,
-                        email: values.email,
-                        address: values.address,
-                        status: values.status,
+                        headers: {
+                           Authorization: "Bearer " + token,
+                           'Content-type': 'multipart/form-data'
                       },
-                      {
-                        headers: { Authorization: "Bearer " + token },
                       }
                     )
                       .then((res) => {
@@ -164,13 +189,50 @@ function CreateParty({ token, modal, mutate }) {
                               select
                               fullWidth
                               variant="outlined"
-                              helperText="Please select status"
+                              // helperText="Please select status"
                               margin="normal"
                             >
                               <MenuItem value="1">Active</MenuItem>
                               <MenuItem value="0">Inactive</MenuItem>
                             </Field>
                           </GridItem>
+
+
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              // label="Image"
+                              name="image"
+                              helperText="NID Front Page"
+                              onChange={(e)=>{
+                                setNidFront(e.target.files[0])
+                              }}
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              helperText="NID Backpage Page"
+                              // label="Image"
+                              name="image"
+                              onChange={(e)=>{
+                                setNidBack(e.target.files[0])
+                            
+                              }}
+                            />
+                          </GridItem>
+
+
                         </GridContainer>
 
                         <Button

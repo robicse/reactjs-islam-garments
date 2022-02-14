@@ -31,13 +31,13 @@ import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import AllApplicationErrorNotification from "../../components/utils/errorNotification";
-import Avatar from '@material-ui/core/Avatar';
-import Tooltip from '@material-ui/core/Tooltip';
+// import Avatar from '@material-ui/core/Avatar';
+// import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import UploadAvatar from '../../components/admin/supplier/UoloadAvatar'
+// import UploadAvatar from '../../components/admin/supplier/UoloadAvatar'
 
 const styles = {
   cardCategoryWhite: {
@@ -93,7 +93,9 @@ const SuplierComponent = observer(() => {
   const [supplierId, setSupplierId] = useState(null);
   const [openUploadModal, setUploadModal] = useState(false);
   const [openNidPopUp, setNidPopUp] = useState(false);
-  const [nidImage, setNidImage] = useState(null);
+  const [nidImageFront, setNidFront] = useState(null);
+  const [nidImageBack, setNidBack] = useState(null);
+
 
   const handleClickOpenCreate = () => {
     setOpenCreateModal(true);
@@ -120,8 +122,9 @@ const SuplierComponent = observer(() => {
 
   // popup open
 
-  const handleOncickImagePopIp = (img) => {
-    setNidImage(img)
+  const handleOncickImagePopIp = (img1,img2) => {
+    setNidFront(img1)
+    setNidBack(img2)
     setNidPopUp(true);
   };
 // popup close
@@ -129,7 +132,7 @@ const SuplierComponent = observer(() => {
     setNidPopUp(!openNidPopUp);
   };
 
-
+console.log(nidImageFront,nidImageBack)
 
   // need to server pagination and remove this block
   const fetcher = (url, auth) =>
@@ -157,14 +160,14 @@ const SuplierComponent = observer(() => {
     { title: 'Phone', field: 'phone' },
     { title: 'Email', field: 'email' },
     { title: 'Address', field: 'address' },
-    { title: 'NID', render: (rowData) => (
-      <Tooltip title="Upload NID" aria-label="add" style={{cursor:"pointer"}}>
-      <Avatar alt='o'  variant="square"
-      src={`${webUrl}/uploads/suppliers/${rowData.nid}`} 
-      onClick={()=>handleOpenUploadModal(rowData.id)}
+    // { title: 'NID', render: (rowData) => (
+    //   <Tooltip title="Upload NID" aria-label="add" style={{cursor:"pointer"}}>
+    //   <Avatar alt='o'  variant="square"
+    //   src={`${webUrl}/uploads/suppliers/${rowData.nid}`} 
+    //   onClick={()=>handleOpenUploadModal(rowData.id)}
       
-      />
-      </Tooltip>),  },
+    //   />
+    //   </Tooltip>),  },
     {
       title: 'Status',
       field: 'status',
@@ -284,8 +287,8 @@ const SuplierComponent = observer(() => {
                           <ListAltTwoToneIcon fontSize="small" color="white" />
                         </Button>
                       ),
-                      tooltip: 'Open NID',
-                      onClick: (event, rowData) => handleOncickImagePopIp(rowData.nid),
+                      tooltip: 'View NID',
+                      onClick: (event, rowData) => handleOncickImagePopIp(rowData?.nid_front, rowData?.nid_back),
                     },
                     {
                       icon: () => (
@@ -384,7 +387,7 @@ const SuplierComponent = observer(() => {
            
           </Dialog>
 
-          <Dialog onClose={handleCloseUpload} aria-labelledby="customized-dialog-title" open={openUploadModal}>
+          {/* <Dialog onClose={handleCloseUpload} aria-labelledby="customized-dialog-title" open={openUploadModal}>
             <DialogTitle id="customized-dialog-title" onClose={handleCloseUpload}>
               Upload NID
             </DialogTitle>
@@ -401,17 +404,23 @@ const SuplierComponent = observer(() => {
                 Cancel
               </Button>
             </DialogActions>
-          </Dialog>
+          </Dialog> */}
 
 
 
 
-          <Dialog onClose={handleNidPopUpClose} aria-labelledby="customized-dialog-title" open={openNidPopUp}>
+           <Dialog 
+           maxWidth="md"
+            onClose={handleNidPopUpClose} aria-labelledby="customized-dialog-title" open={openNidPopUp}>
             <DialogTitle id="customized-dialog-title" onClose={handleNidPopUpClose}>
                NID
             </DialogTitle>
             <DialogContent dividers>
-            <img  src={`${webUrl}/uploads/suppliers/${nidImage}`}  alt="mid" width="500" height="300"/>
+              <div style={{display:"flex" }}>
+              <img  src={`${webUrl}/uploads/suppliers/${nidImageFront}`}  alt="mid" style={{height:"300px",marginRight:"10px"}}/>
+              <img  src={`${webUrl}/uploads/suppliers/${nidImageBack}`}  alt="mid" style={{height:"300px"}}/>
+                </div>
+           
             
             </DialogContent>
             <DialogActions>

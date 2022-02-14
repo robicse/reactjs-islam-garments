@@ -172,7 +172,7 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
                               <MenuItem value="0">Inactive</MenuItem>
                             </Field>
                           </GridItem>
-
+{/* 
                                 <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
@@ -183,7 +183,7 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
                               label="Initil Balance"
                               name="initial_due"
                             />
-                          </GridItem>
+                          </GridItem> */}
                         </GridContainer>
 
                         <Button

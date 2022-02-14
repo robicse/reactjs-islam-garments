@@ -10,8 +10,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-
-
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 const dashboardRoutes = [
   {
@@ -92,6 +91,16 @@ const dashboardRoutes = [
       },
     ],
   },
+  // {
+  //   id: 8,
+  //   collapse: false,
+  //   path: '/product_search/list',
+  //   childPath: '/list',
+  //   name: 'Product Search',
+  //   permission: 'product_search_list',
+  //   icon: SearchIcon,
+  //   childs: [],
+  // },
   {
     id: 7,
     collapse: true,
@@ -139,16 +148,7 @@ const dashboardRoutes = [
     ],
   },
 
-  {
-    id: 8,
-    collapse: false,
-    path: '/product_search/list',
-    childPath: '/list',
-    name: 'Product Search',
-    permission: 'product_search_list',
-    icon: SearchIcon,
-    childs: [],
-  },
+
 
   {
     id: 9,
@@ -156,7 +156,7 @@ const dashboardRoutes = [
     path: '/warehouse_management',
     childPath: '/warehouse_stock',
     name: 'WH Management',
-    icon: LocalMallIcon,
+    icon: HouseIcon,
     childs: [
       {
         id: 1,
@@ -186,10 +186,19 @@ const dashboardRoutes = [
     path: '/store_management',
     childPath: '/store_stock',
     name: 'STR Management',
-    icon: LocalMallIcon,
+    icon: StoreIcon,
     childs: [
       {
         id: 1,
+        collapse: false,
+        path: '/store_management',
+        childPath: '/store_stock_in',
+        name: 'Stock In',
+        permission: 'store_stock_in',
+        icon: FunctionsIcon,
+      },
+      {
+        id: 2,
         collapse: false,
         path: '/store_management',
         childPath: '/store_stock',
@@ -249,7 +258,57 @@ const dashboardRoutes = [
     ],
   },
   {
-    id: 11,
+    id:11,
+    collapse: false,
+    path: '/staff/list',
+    childPath: '/list',
+    name: 'Staff',
+    permission: 'attendence',
+    icon: PeopleOutlineIcon,
+    childs: [],
+  },
+  {
+    id:12,
+    collapse: false,
+    path: '/attendence/list',
+    childPath: '/list',
+    name: 'Attendence',
+    permission: 'attendence',
+    icon: AccessTimeIcon,
+    childs: [],
+  },
+  {
+    id:13,
+    collapse: false,
+    path: '/expense_category/list',
+    childPath: '/list',
+    name: 'Expense Category',
+    permission: 'expense_category',
+    icon: AccessTimeIcon,
+    childs: [],
+  },
+
+  // {
+  //   id: 12,
+  //   collapse: true,
+  //   path: '/attendence',
+  //   name: 'Attendence',
+  //   icon: PeopleOutlineIcon,
+  //   childs: [
+  //     {
+  //       id: 1,
+  //       collapse: false,
+  //       path: '/staff',
+  //       childPath: '/list',
+  //       permission: 'role',
+  //       name: 'Attendence',
+  //       icon: PeopleOutlineIcon,
+  //     },
+  //   ],
+  // },
+
+  {
+    id: 13,
     collapse: true,
     path: '/pos_settings',
     name: 'POS Setting',

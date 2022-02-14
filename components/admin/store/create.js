@@ -31,6 +31,9 @@ const styles = {
     marginBottom: "3px",
     textDecoration: "none",
   },
+  submit: {
+    marginTop:"15px"
+  }
 };
 
 const useStyles = makeStyles(styles);
@@ -165,7 +168,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                               name="email"
                             />
                           </GridItem>
-                          <GridItem xs={12} sm={12} md={6}>
+                          <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -177,7 +180,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                             />
                           </GridItem>
 
-                          <GridItem xs={12} sm={12} md={6}>
+                          <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               type="text"
@@ -186,7 +189,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                               select
                               fullWidth
                               variant="outlined"
-                              helperText="Please select warehouse"
+                            
                               margin="normal"
                             >
                               {warehouse.map((data) => (
@@ -194,7 +197,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                               ))}
                             </Field>
                           </GridItem>
-                          <GridItem xs={12} sm={12} md={6}>
+                          <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               type="text"
@@ -203,7 +206,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                               select
                               fullWidth
                               variant="outlined"
-                              helperText="Please select status"
+                             
                               margin="normal"
                             >
                               <MenuItem value="1">Active</MenuItem>

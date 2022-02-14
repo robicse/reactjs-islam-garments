@@ -27,7 +27,6 @@ import AllApplicationErrorNotification from "../../utils/errorNotification";
 import Productstable from "../common_component/Productstable";
 import Calculation from "../common_component/calculation";
 
-
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -51,7 +50,7 @@ const styles = {
   },
 };
 const useStyles = makeStyles(styles);
-const Create = ({ endpoint }) => {
+const StoreStockIn = ({ endpoint }) => {
   const classes = useStyles();
   console.log(endpoint.warehouseActiveListUrl);
   const [openModal, setModalOpen] = React.useState(false);
@@ -307,20 +306,25 @@ const Create = ({ endpoint }) => {
             style={{ width: "100%" }}
           />
         </GridItem>
+
+
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
-            fullWidth={true}
             size="small"
+            fullWidth={true}
+            // value={selectedWarehouse}
             id="combo-box-demo"
-            // value={selectedSupplyer}
-            options={supplyerList}
+            options={warehouseList}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
-              <TextField {...params} label="Supplyer" variant="outlined" />
+              <TextField {...params} label="Warehouse" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedSupplyer(v.id)}
+            onChange={(e, v) => setSelectedWarehouse(v.id)}
           />
         </GridItem>
+
+        
+
 
         <GridItem
           xs={12}
@@ -340,13 +344,17 @@ const Create = ({ endpoint }) => {
             options={warehouseList}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
-              <TextField {...params} label="Warehouse" variant="outlined" />
+              <TextField {...params} label="Store" variant="outlined" />
             )}
             onChange={(e, v) => setSelectedWarehouse(v.id)}
           />
         </GridItem>
 
-        <GridItem xs={12} sm={12} md={12}>
+
+
+        
+
+        {/* <GridItem xs={12} sm={12} md={12}>
           <Typography variant="body1" style={{ padding: "10px" }}>
             {" "}
             product Select
@@ -417,7 +425,7 @@ const Create = ({ endpoint }) => {
             )}
             onChange={(e, v) => setSelectedSize(v.id)}
           />
-        </GridItem>
+        </GridItem> */}
 
         <GridItem xs={12} sm={12} md={12}>
           <Typography variant="h6" style={{ padding: "10px" }}>
@@ -427,7 +435,7 @@ const Create = ({ endpoint }) => {
         </GridItem>
 
         <GridItem xs={12} sm={12} md={12}>
-          <Productstable
+      <Productstable
             products={selectedProductList}
             handdleproductRemove={handdleproductRemove}
             handdleQuantityChange={handdleQuantityChange}
@@ -462,7 +470,7 @@ const Create = ({ endpoint }) => {
           </GridItem>
         </GridItem>
 
-        <GridItem xs={12} sm={12} md={12} style={{ textAlign: "center" }}>
+        <GridItem xs={12} sm={12} md={12} style={{ textAlign: "center",marginTop:"5px" }}>
           <Button
             variant="contained"
             color="primary"
@@ -478,4 +486,4 @@ const Create = ({ endpoint }) => {
   );
 };
 
-export default Create;
+export default StoreStockIn;

@@ -140,7 +140,7 @@ const Create = ({ token, endpoint, modal, mutate }) => {
                               name="email"
                             />
                           </GridItem>
-                          <GridItem xs={12} sm={12} md={6}>
+                          <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -151,7 +151,7 @@ const Create = ({ token, endpoint, modal, mutate }) => {
                               name="address"
                             />
                           </GridItem>
-                          <GridItem xs={12} sm={12} md={6}>
+                          <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               type="text"

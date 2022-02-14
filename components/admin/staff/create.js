@@ -1,19 +1,23 @@
 import React from "react";
+// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+// core components
 import GridItem from "components/Grid/GridItem.js";
-import cogoToast from "cogo-toast";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
+import { Autocomplete } from 'formik-material-ui-lab';
+import MuiTextField from '@material-ui/core/TextField';
 import CardBody from "components/Card/CardBody.js";
-import { Formik, Field } from "formik";
+import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-material-ui";
 import { Button, MenuItem } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 import { baseUrl } from "../../../const/api";
-import axios from "axios";
 import { useAsyncEffect } from "use-async-effect";
-import AllApplicationErrorNotification from "../../utils/errorNotification";
+import axios from "axios";
 
 const styles = {
   cardCategoryWhite: {
@@ -35,44 +39,48 @@ const styles = {
 };
 
 const useStyles = makeStyles(styles);
-
-const Create = ({ token, modal, endpoint, mutate, user }) => {
+ 
+const StaffCreate = ({ token, modal, endpoint, mutate }) => {
   const classes = useStyles();
 
-  const [roles, setRoles] = React.useState([]);
+  const [store, setStore] = React.useState(null);
   const [warehouse, setWarehouse] = React.useState([]);
-  const [store, setStore] = React.useState([]);
-  let ware = `${baseUrl}/warehouse_list`;
-  let stor = `${baseUrl}/store_list`;
-  let rol = `${baseUrl}/roles`;
+  const [warehouse_id, setWarehouseId] = React.useState(null);
+  let stores = `${baseUrl}/store_list`;
+  let warehouses = `${baseUrl}/warehouse_list`;
+
+
   useAsyncEffect(async (isMounted) => {
     await axios
       .all([
-        axios.get(ware, {
-          headers: { Authorization: "Bearer " + token },
+        axios.get(stores, {
+          headers: { Authorization: 'Bearer ' + token },
         }),
-        axios.get(stor, {
-          headers: { Authorization: "Bearer " + token },
-        }),
-        axios.get(rol, {
-          headers: { Authorization: "Bearer " + token },
+        axios.get(warehouses, {
+          headers: { Authorization: 'Bearer ' + token },
         }),
       ])
       .then(
         axios.spread((...responses) => {
+          if (!isMounted()) return;
           const responseOneB = responses[0];
           const responseTwoU = responses[1];
-          const responseTwoR = responses[2];
-          setWarehouse(responseOneB.data.data);
-          setStore(responseTwoU.data.data);
-          setRoles(responseTwoR.data.data);
+          setStore(responseOneB.data.data);
+          setWarehouse(responseTwoU.data.data);
+          setWarehouseId(responseTwoU.data.data[0].id);
+
         })
       )
       .catch((errors) => {
         console.error(errors);
+        setLoad(false);
       });
   }, []);
 
+
+
+
+ 
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
@@ -81,74 +89,92 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
             <CardBody>
               <Formik
                 initialValues={{
-                  roles: "",
                   name: "",
-                  password: "",
-                  confirm_password: "",
-                  phone: "",
                   email: "",
-                  warehouse: "",
-                  store: user.store.id ? user.store.id : "",
+                  phone: "",
+                  gender: "",
+                  date_of_birth: "",
+                  marital_status: "",
+                  present_address: "",
+                  permanent_address: "",
                   status: "1",
+                  blood_group:"",
+                  national_id:"",
+                  warehouse_id: "",
+                  store_id:"",
                 }}
                 validate={(values) => {
                   const errors = {};
-                  if (!values.phone) {
-                    errors.phone = "Required";
-                  } else if (values.phone.length != 11) {
-                    errors.phone = "Invalid Phone Number";
-                  }
-                  if (!values.roles) {
-                    errors.roles = "Required";
-                  }
+                  
                   if (!values.name) {
                     errors.name = "Required";
                   }
-                  if (!values.status) {
-                    errors.status = "Required";
+                  if (!values.phone) {
+                    errors.phone = "Required";
                   }
-                  if (!values.password) {
-                    errors.password = "Required";
-                  } else if (values.password.length < 5) {
-                    errors.password = "Minimum length 6";
+                   if (!values.gender) {
+                    errors.gender = "Required";
                   }
-                  if (!values.confirm_password) {
-                    errors.confirm_password = "Required";
-                  } else if (values.confirm_password != values.password) {
-                    errors.confirm_password = "Password does not match";
+
+                  if (!values.marital_status) {
+                    errors.marital_status = "Required";
                   }
+                  if (!values.date_of_birth) {
+                    errors.date_of_birth = "Required";
+                  }
+                  
+                  
+                  
+                  if (!values.present_address) {
+                    errors.present_address = "Required";
+                  }
+
+                        
+                  if (!values.permanent_address) {
+                    errors.permanent_address = "Required";
+                  }
+
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+                   
+
+                  if(!values.warehouse_id){
+                    setSubmitting(false);
+                    return alert('Please Select Warehouse')
+                }
+
                   setTimeout(() => {
                     Axios.post(
                       `${baseUrl}/${endpoint}`,
                       {
-                        roles: values.roles,
                         name: values.name,
-                        phone: values.phone,
                         email: values.email,
+                        phone: values.phone,
+                        gender: values.gender,
+                        date_of_birth: values.date_of_birth,
+            
+                        marital_status: values.marital_status,
+                        present_address: values.present_address,
+                        permanent_address: values.permanent_address,
                         status: values.status,
-                        password: values.password,
-                        confirm_password: values.confirm_password,
-                        warehouse_id: values.warehouse,
-                        store_id: values.store,
+                        blood_group:values.blood_group,
+                        national_id:values.national_id,
+                        warehouse_id: values.warehouse_id,
+                        store_id: values.store_id ? values.store_id.id : null,
                       },
                       {
                         headers: { Authorization: "Bearer " + token },
                       }
                     )
                       .then((res) => {
-                        cogoToast.success("Create Success", {
-                          position: "top-right",
-                          bar: { size: "10px" },
-                        });
+                      
                         setSubmitting(false);
                         mutate();
                         modal(false);
                       })
                       .catch(function (error) {
-                        AllApplicationErrorNotification(error?.response?.data);
+               
                         setSubmitting(false);
                       });
                   });
@@ -159,6 +185,59 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                     <div className={classes.paper}>
                       <form className={classes.form} noValidate>
                         <GridContainer>
+
+
+
+
+                          <GridItem xs={12} sm={12} md={4}>
+                          <Field
+                                component={TextField}
+                                type="text"
+                                name="warehouse_id"
+                                // value={warehouse_id}
+                                select
+                                label="Warehouse"
+                                variant="outlined"
+                                fullWidth
+                             
+                                margin="normal"
+                                InputLabelProps={{
+                                  shrink: true,
+                                }}>
+                                {warehouse.map((option) => (
+                                  <MenuItem
+                                    key={option.id}
+                                    value={option.id}
+                                    onChange={() => setWarehouseId(option.id)}>
+                                    {option.name}
+                                  </MenuItem>
+                                ))}
+                              </Field>
+                          </GridItem>
+                          {/* <GridItem xs={12} sm={12} md={1}>
+                            Or
+                            </GridItem> */}
+
+                          <GridItem xs={12} sm={12} md={4}>
+                        <Field
+                                name="store_id"
+                                component={Autocomplete}
+                                options={store || []}
+                                getOptionLabel={(option) => option.store_name}
+                                renderInput={(params) => (
+                                  <MuiTextField
+                                    {...params}
+                                    label="Store"
+                                    variant="outlined"
+                                    fullWidth
+                                 
+                                    margin="normal"
+                                  />
+                                )}
+                              />
+                          </GridItem>
+
+
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
@@ -170,17 +249,20 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                               name="name"
                             />
                           </GridItem>
+
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
-                              name="phone"
-                              type="text"
-                              label="Phone"
                               variant="outlined"
                               margin="normal"
                               fullWidth
+                           type="tel"
+                              label="Phone"
+                              name="phone"
                             />
                           </GridItem>
+
+
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
@@ -192,73 +274,86 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                               name="email"
                             />
                           </GridItem>
-                     
-
+                       
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               type="text"
-                              name="roles"
-                              label="Role"
+                              name="gender"
+                              label="Gender"
                               select
                               fullWidth
                               variant="outlined"
-                              helperText="Please select roles"
+                            
                               margin="normal"
                             >
-                              {roles.map((role) => (
-                                <MenuItem value={role.name}>
-                                  {role.name}
-                                </MenuItem>
-                              ))}
+                              <MenuItem value="Male">Male</MenuItem>
+                              <MenuItem value="Female">Female</MenuItem>
+                              <MenuItem value="Third Gender">Third Gender</MenuItem>
                             </Field>
                           </GridItem>
+
+
+                          <GridItem xs={12} sm={12} md={4}>
+                          <Field
+                              component={TextField}
+                              type="text"
+                              name="blood_group"
+                              label="Blood Group"
+                              select
+                              fullWidth
+                              variant="outlined"
+                           
+                              margin="normal"
+                            >
+                              <MenuItem value="O+">O+</MenuItem>
+                              <MenuItem value="O-">O-</MenuItem>
+                              <MenuItem value="A+">A+</MenuItem>
+                              <MenuItem value="A-">A-</MenuItem>
+                              <MenuItem value="B+">B+</MenuItem>
+                              <MenuItem value="B-">B-</MenuItem>
+                              <MenuItem value="AB+">AB+</MenuItem>
+                              <MenuItem value="AB-">AB-</MenuItem>
+                            </Field>
+                          </GridItem>
+
 
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
-                              type="text"
-                              name="warehouse"
-                              label="Warehouse"
-                              select
-                              fullWidth
                               variant="outlined"
-                              helperText="Please select warehouse"
                               margin="normal"
-                            >
-                              {warehouse.map((w) => (
-                                <MenuItem value={w.id}>{w.name}</MenuItem>
-                              ))}
-                            </Field>
+                              fullWidth
+                              type="date"
+                              // label="Date of Birth"
+                              name="date_of_birth"
+                             
+                            />
                           </GridItem>
+                          {/* <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="text"
+                              label="National NUmber"
+                              name="national_id"
+                            />
+                          </GridItem> */}
+
+   
+
 
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
                               type="text"
-                              name="store"
-                              label="Store"
-                              select
-                              fullWidth
-                              variant="outlined"
-                              helperText="Please select store"
-                              margin="normal"
-                            >
-                              {store.map((s) => (
-                                <MenuItem value={s.id}>{s.store_name}</MenuItem>
-                              ))}
-                            </Field>
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                              type="password"
-                              label="Password"
-                              name="password"
-                              helperText="Minimum Length 6"
+                              label="Present Address"
+                              name="present_address"
                             />
                           </GridItem>
                           <GridItem xs={12} sm={12} md={4}>
@@ -267,11 +362,16 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                               variant="outlined"
                               margin="normal"
                               fullWidth
-                              type="password"
-                              label="Confirm Password"
-                              name="confirm_password"
+                              type="text"
+                              label="Parmanent Address"
+                              name="permanent_address"
                             />
                           </GridItem>
+                        
+
+                  
+
+                       
 
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
@@ -282,7 +382,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                               select
                               fullWidth
                               variant="outlined"
-                              helperText="Please select status"
+                           
                               margin="normal"
                             >
                               <MenuItem value="1">Active</MenuItem>
@@ -311,6 +411,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                 )}
               </Formik>
             </CardBody>
+
           </Card>
         </GridItem>
       </GridContainer>
@@ -318,4 +419,6 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
   );
 };
 
-export default Create;
+// UserProfile.layout = Admin;
+
+export default StaffCreate;

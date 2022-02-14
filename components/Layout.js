@@ -147,14 +147,31 @@ export const Layout = observer(({ children }) => {
 
 
 
+ 
+
   const handleClickList = (path, collapse) => {
-    if (collapse) {
-      setOpenList(path);
-    } else {
-      setOpenList(path);
-      router.push(path);
+
+    if(collapse){
+      if(openList == path){
+        return setOpenList(null)
+       }else{
+         setOpenList(path);
+       }
+    }else{
+          setOpenList(path);
+          router.push(path);
     }
   };
+
+  // const handleClickList = (path, collapse) => {
+  //   console.log(path, collapse)
+  //   if (collapse) {
+  //     setOpenList(path);
+  //   } else {
+  //     setOpenList(path);
+  //     router.push(path);
+  //   }
+  // };
 
   const logout = () => {
     user.logOut();

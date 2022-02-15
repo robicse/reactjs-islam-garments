@@ -2,7 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "components/Grid/GridItem.js";
-import cogoToast from 'cogo-toast';
+import cogoToast from "cogo-toast";
+import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
@@ -20,12 +21,15 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
 import Slide from "@material-ui/core/Slide";
 import { Box, Grid, Chip } from "@material-ui/core";
 import DeleteForeverTwoToneIcon from "@material-ui/icons/DeleteForeverTwoTone";
 import CreateWholesaleCustomer from "../../components/admin/whole_sale_customer/create";
 import EditWholesaleCustomer from "../../components/admin/whole_sale_customer/edit";
-import { baseUrl } from "../../const/api";
+import { baseUrl, webUrl } from "../../const/api";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import MaterialTable from "material-table";
@@ -76,8 +80,6 @@ const endpoint = {
   delete: "customer_delete",
 };
 
-
-
 const TableList = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
@@ -88,10 +90,9 @@ const TableList = observer(() => {
   const [editData, setEditData] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [openNidPopUp, setNidPopUp] = useState(false);
 
-
-
-
+  const [imageList, setImageList] = useState(null);
 
   const handleClickOpenCreate = () => {
     setOpenCreateModal(true);
@@ -102,7 +103,6 @@ const TableList = observer(() => {
   const handleCloseEdit = () => {
     setOpenEditModal(false);
   };
-
 
   // handle edit
   const handleEdit = (row) => {
@@ -127,6 +127,17 @@ const TableList = observer(() => {
       return null;
     }
     handleClickOpenCreate(true);
+  };
+
+  // popup open
+
+  const handleOncickImagePopIp = (nid1, nid2, image, bankDetailsImage) => {
+    setImageList({ nid1, nid2, image, bankDetailsImage });
+    setNidPopUp(true);
+  };
+  // popup close
+  const handleNidPopUpClose = () => {
+    setNidPopUp(!openNidPopUp);
   };
 
   // handle Delette
@@ -159,8 +170,6 @@ const TableList = observer(() => {
     }
   };
 
-
-
   const columns = [
     { title: "Name", field: "name" },
     { title: "Code", field: "code" },
@@ -192,7 +201,6 @@ const TableList = observer(() => {
                 <Grid container item xs={3} spacing={3} direction="column">
                   <Box p={2}>
                     <h4 className={classes.cardTitleWhite}>{title} List</h4>
-                   
                   </Box>
                 </Grid>
                 <Grid
@@ -220,40 +228,55 @@ const TableList = observer(() => {
                 title="LIST"
                 columns={columns}
                 tableRef={tableRef}
-
-                data={query =>
+                data={(query) =>
                   new Promise((resolve, reject) => {
-                   console.log(query)
+                    console.log(query);
                     let url = `${baseUrl}/${endpoint.list}?`;
                     //searching
                     if (query.search) {
-                      url += `search=${query.search}`
+                      url += `search=${query.search}`;
                     }
-                                //sorting 
+                    //sorting
                     if (query.orderBy) {
-                      url += `&sort=${query.orderBy.field}&order_by=${query.orderDirection}`
+                      url += `&sort=${query.orderBy.field}&order_by=${query.orderDirection}`;
                     }
-                          
-                    url += `&page=${query.page + 1}`
-                    fetch(url,{
-                          method: "post",
-                          headers: { Authorization: "Bearer " + user.auth_token },
-                        }
-                      ).then(resp => resp.json()).then(resp => {
-                      console.log(resp)
-                      resolve({
-                            data: resp.data,
-                            page: resp?.meta?.current_page - 1,
-                            totalCount: resp?.meta?.total,
-                      });
+
+                    url += `&page=${query.page + 1}`;
+                    fetch(url, {
+                      method: "post",
+                      headers: { Authorization: "Bearer " + user.auth_token },
                     })
-        
+                      .then((resp) => resp.json())
+                      .then((resp) => {
+                        console.log(resp);
+                        resolve({
+                          data: resp.data,
+                          page: resp?.meta?.current_page - 1,
+                          totalCount: resp?.meta?.total,
+                        });
+                      });
                   })
                 }
-
-
-
                 actions={[
+                  {
+                    icon: () => (
+                      <Button
+                        fullWidth={true}
+                        variant="contained"
+                        color="primary"
+                      >
+                        <ListAltTwoToneIcon fontSize="small" color="white" />
+                      </Button>
+                    ),
+                    tooltip: "View NID",
+                    onClick: (event, rowData) =>
+                      handleOncickImagePopIp(
+                        rowData?.nid_front,
+                        rowData?.nid_back,
+                        rowData?.image,
+                        rowData?.bank_detail_image
+                      ),
+                  },
                   {
                     icon: () => (
                       <Button
@@ -268,7 +291,6 @@ const TableList = observer(() => {
                     onClick: (event, rowData) => handleEdit(rowData),
                   },
 
-                
                   (rowData) => ({
                     icon: () => (
                       <Button
@@ -299,18 +321,21 @@ const TableList = observer(() => {
                   actionsColumnIndex: -1,
 
                   pageSize: 12,
-                  pageSizeOptions:[12],
-         
+                  pageSizeOptions: [12],
 
                   padding: "dense",
                 }}
-
-           
+                detailPanel={(rowData) => {
+                  return (
+                    <div style={{ padding: "3px", textAlign: "justify" }}>
+                      {rowData.note ? rowData.note : "No Description"}
+                    </div>
+                  );
+                }}
+                onRowClick={(event, rowData, togglePanel) => togglePanel()}
               />
             </CardBody>
           </Card>
-
-     
 
           <Dialog
             fullScreen
@@ -369,9 +394,51 @@ const TableList = observer(() => {
               endpoint={endpoint}
             />
           </Dialog>
+
+          <Dialog
+            onClose={handleNidPopUpClose}
+            aria-labelledby="customized-dialog-title"
+            open={openNidPopUp}
+          >
+            <DialogTitle
+              id="customized-dialog-title"
+              onClose={handleNidPopUpClose}
+            >
+              Image
+            </DialogTitle>
+            <DialogContent dividers>
+              <div style={{ display: "flex" }}>
+                <img
+                  src={`${webUrl}/uploads/suppliers/${imageList?.nid1}`}
+                  alt="mid"
+                  style={{ height: "300px", marginRight: "10px" }}
+                />
+                <img
+                  src={`${webUrl}/uploads/suppliers/${imageList?.nid2}`}
+                  alt="mid"
+                  style={{ height: "300px", marginRight: "10px" }}
+                />
+                <img
+                  src={`${webUrl}/uploads/suppliers/${imageList?.image}`}
+                  alt="mid"
+                  style={{ height: "300px", marginRight: "10px" }}
+                />
+                <img
+                  src={`${webUrl}/uploads/suppliers/${imageList?.bankDetailsImage}`}
+                  alt="mid"
+                  style={{ height: "300px", marginRight: "10px" }}
+                />
+              </div>
+              <div></div>
+            </DialogContent>
+            <DialogActions>
+              <Button autoFocus onClick={handleNidPopUpClose} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
         </GridItem>
       </GridContainer>
-
     </Gurd>
   );
 });

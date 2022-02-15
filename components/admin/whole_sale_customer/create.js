@@ -5,7 +5,7 @@ import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field,useField } from "formik";
 import { TextField } from "formik-material-ui";
 import Grid from "@material-ui/core/Grid";
 import { Button, MenuItem } from "@material-ui/core";
@@ -31,12 +31,39 @@ const styles = {
     marginBottom: "3px",
     textDecoration: "none",
   },
+  submit:{
+    marginTop:"25px"
+  }
 };
 
 const useStyles = makeStyles(styles);
-
+ 
 function CreateParty({ token, modal, mutate, endpoint}) {
   const classes = useStyles();
+  const [nidFront, setNidFront] = React.useState(null);
+  const [nidBack, setNidBack] = React.useState(null);
+  const [image, setImage] = React.useState(null);
+  const [bank_detail_image, setBank_detail_image] = React.useState(null);
+
+  const MyTextArea = ({ ...props }) => {
+    const [field, meta] = useField(props);
+    return (
+      <>
+        {/* <label htmlFor={props.id || props.name}>{label}</label> */}
+        <textarea
+          className="text-area"
+          rows="4"
+          cols="69"
+          {...field}
+          {...props}
+        />
+        {meta.touched && meta.error ? (
+          <div className="error">{meta.error}</div>
+        ) : null}
+      </>
+    );
+  };
+
 
   return (
     <div>
@@ -52,6 +79,7 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                   address: "",
                   status: "1",
                   initial_due: 0,
+                  note:""
                 }}
                 validate={(values) => {
                   const errors = {};
@@ -73,6 +101,37 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                   return errors;
                 }} 
                 onSubmit={(values, { setSubmitting }) => {
+
+                  if (!nidFront) {
+                    setSubmitting(false);
+                    return cogoToast.warn("Please Upload NID Front Image", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                  }
+                  if (!nidBack) {
+                    setSubmitting(false);
+                    return cogoToast.warn("Please Upload NID Back Image", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                  }
+                  if (!image) {
+                    setSubmitting(false);
+                    return cogoToast.warn("Please Upload Supplier Image", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                  }
+
+                  if (!bank_detail_image) {
+                    setSubmitting(false);
+                    return cogoToast.warn("Please Upload Bank Details Image", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                  }
+
                   setTimeout(() => {
                     Axios.post(
                       `${baseUrl}/${endpoint.create}`,
@@ -83,7 +142,11 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                         email: values.email,
                         address: values.address,
                         status: values.status,
-                        initial_due: values.initial_due
+                        initial_due: values.initial_due,
+                        nid_front: nidFront,
+                        nid_back: nidBack,
+                        image: image,
+                        bank_detail_image: bank_detail_image,
                       },
                       {
                         headers: { Authorization: "Bearer " + token },
@@ -173,7 +236,7 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                           </GridItem>
 
 
-                            {/* <GridItem xs={12} sm={12} md={4}>
+                            <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -183,7 +246,82 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                               label="Initil Balance"
                               name="initial_due"
                             />
-                          </GridItem>  */}
+                          </GridItem> 
+
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              // label="Image"
+                              name="nid1"
+                              helperText="NID Front Page"
+                              onChange={(e) => {
+                                setNidFront(e.target.files[0]);
+                              }}
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              helperText="NID Back Page"
+                              // label="Image"
+                              name="nid2"
+                              onChange={(e) => {
+                                setNidBack(e.target.files[0]);
+                              }}
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              helperText="Supplier"
+                              // label="Image"
+                              name="image_supp"
+                              onChange={(e) => {
+                                setImage(e.target.files[0]);
+                              }}
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              helperText="Bank Details Image"
+                              // label="Image"
+                              name="bank"
+                              onChange={(e) => {
+                                setBank_detail_image(e.target.files[0]);
+                              }}
+                            />
+                          </GridItem>
+
+                       
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <MyTextArea
+                              name="note"
+                              rows="6"
+                              placeholder="Type Description."
+                            />
+                          </GridItem>
 
                        
                         </GridContainer>

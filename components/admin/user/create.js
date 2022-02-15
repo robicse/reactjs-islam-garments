@@ -88,7 +88,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                   phone: "",
                   email: "",
                   warehouse: "",
-                  store: user.store.id ? user.store.id : "",
+                  store: "",
                   status: "1",
                 }}
                 validate={(values) => {
@@ -120,6 +120,12 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+
+                  if (!values.warehouse && !values.store) {
+                    setSubmitting(false);
+                    return cogoToast.warn('Please Select Warehouse or Store',{position: 'top-right', bar:{size: '10px'}});
+                  }
+
                   setTimeout(() => {
                     Axios.post(
                       `${baseUrl}/${endpoint}`,

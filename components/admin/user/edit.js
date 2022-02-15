@@ -111,6 +111,14 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+
+
+                  if (!values.warehouse && !values.store) {
+                    setSubmitting(false);
+                    return cogoToast.warn('Please Select Warehouse or Store',{position: 'top-right', bar:{size: '10px'}});
+                  }
+
+
                   setTimeout(() => {
                     Axios.post(
                       `${baseUrl}/${endpoint}`,
@@ -267,7 +275,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               <MenuItem value="0">Inactive</MenuItem>
                             </Field>
                           </GridItem>
-                          <GridItem xs={12} sm={12} md={6}>
+                          {/* <GridItem xs={12} sm={12} md={6}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -289,7 +297,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               label="Confirm Password"
                               name="confirm_password"
                             />
-                          </GridItem>
+                          </GridItem> */}
                         </GridContainer>
                         <Button
                           fullWidth

@@ -139,6 +139,15 @@ const dashboardRoutes = [
       {
         id: 3,
         collapse: false,
+        path: '/product_sub_unit',
+        childPath: '/list',
+        name: 'Product Sub Unit',
+        permission: 'product_sub_unit',
+        icon: FunctionsIcon,
+      },
+      {
+        id: 4,
+        collapse: false,
         path: '/product_management',
         childPath: '/list',
         name: 'Product List',

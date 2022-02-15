@@ -66,6 +66,8 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                   product_size_id: editData.size_id,
                   product_code: editData.product_code,
                   purchase_price: editData.purchase_price,
+                  color: editData.color,
+                  design: editData.design,
                   note: editData.note,
               
                 }}
@@ -87,6 +89,8 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                     product_id: values.id,
                     product_code: values.product_code,
                     purchase_price: values.purchase_price,
+                    color: values.color,
+                    design: values.design,
                     note: values.note,
                     image: image,
                   };
@@ -124,19 +128,19 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                     <div className={classes.paper}>
                       <form className={classes.form} noValidate>
                         <GridContainer>
-                          <GridItem xs={12} sm={12} md={3}>
+                          <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               name="product_code"
                               type="text"
-                              label="Item Code"
+                              label="Product Code"
                               variant="outlined"
                               margin="normal"
                               fullWidth
                             />
                           </GridItem>
 
-                          <GridItem xs={12} sm={12} md={2}>
+                          <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -145,6 +149,30 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               type="tel"
                               label="Price"
                               name="purchase_price"
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              name="color"
+                              type="text"
+                              label="Color"
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              name="design"
+                              type="text"
+                              label="Design"
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
                             />
                           </GridItem>
 
@@ -160,7 +188,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                             />
                           </GridItem>
 
-                          <GridItem xs={12} sm={4} md={3}>
+                          <GridItem xs={12} sm={4} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"

@@ -171,6 +171,8 @@ const uploadImageHnadle= (img) => {
                   category_name: "",
                   item_code: "",
                   purchase_price: "",
+                  color: "",
+                  design: "",
                   note: "",
                   status: "1",
                 }}
@@ -240,6 +242,8 @@ const uploadImageHnadle= (img) => {
                       selling_price:  values.purchase_price,
                       whole_sale_price: values.purchase_price,
                       status: values.status,
+                      color: values.color,
+                      design: values.design,
                       note: values.note,
                       vat_status: '0',
                       vat_percentage:'0',
@@ -325,7 +329,6 @@ const uploadImageHnadle= (img) => {
                       
                      </GridItem>
 
-
                           <GridItem xs={12} sm={4} md={3}>
                          
                               <Field
@@ -346,8 +349,6 @@ const uploadImageHnadle= (img) => {
                               />
                            
                           </GridItem>
-
-
 
                           <GridItem xs={12} sm={4} md={3}>
                         
@@ -370,16 +371,12 @@ const uploadImageHnadle= (img) => {
                          
                           </GridItem>
 
-
-
-
-
                           <GridItem xs={12} sm={4} md={3}>
                             <Field
                               component={TextField}
                               name="item_code"
                               type="text"
-                              label="Item Code"
+                              label="Product Code"
                               variant="outlined"
                               margin="normal"
                               fullWidth
@@ -395,6 +392,30 @@ const uploadImageHnadle= (img) => {
                                type="tel"
                               label="Price"
                               name="purchase_price"
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              name="color"
+                              type="text"
+                              label="Color"
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              name="design"
+                              type="text"
+                              label="Design"
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
                             />
                           </GridItem>
 

@@ -37,12 +37,15 @@ const Details = ({ endpoint, modal,editData }) => {
 
   useAsyncEffect(async (isMounted) => {
     const body = {
-      product_purchase_id: editData.id
+      product_purchase_id: editData?.id
     };
+
+    let data = new FormData();
+    data.append("product_purchase_id", JSON.stringify(editData?.id));
     try {
       const result = await axios.post(
         endpoint.warehouseProductdetailsUrl,
-        body,
+        data,
         endpoint.headers
       );
       setProduct(result?.data?.data);
@@ -68,11 +71,7 @@ const Details = ({ endpoint, modal,editData }) => {
       title: "Quantity",
       field: "qty",
     },
-    // {
-    //   title: "Sub Total",
-    //   field: "sub_total",
-    //   render: (rowData) => rowData.sub_total + "tk",
-    // },
+                                                                                   
   ];
 
   return (

@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 });
 const InvoicePosPurchase = React.forwardRef(({ inv, invoiceProduct }, ref) => {
   const classes = useStyles();
-
+  console.log(inv, invoiceProduct )
 //   const [date, setDate] = useState([1, 2, 3]);
 //   const [time, setTime] = useState([1, 2]);
 //   useEffect(() => {
@@ -50,11 +50,11 @@ const InvoicePosPurchase = React.forwardRef(({ inv, invoiceProduct }, ref) => {
             >
               <Typography variant="body1" align="center">
                 Invoice No: 
-                {/* {convertFristCharcapital(inv.invoice_no)} */}
+                {convertFristCharcapital(inv?.invoice_no)}
               </Typography>
               <Typography variant="body1" align="center">
                 Date: 
-                {/* {dateFormatWithoutTime(inv.purchase_date_time)} */}
+                {dateFormatWithoutTime(inv.purchase_date_time)}
               </Typography>
               <Typography variant="body1" align="center">
                 Time: 
@@ -74,24 +74,24 @@ const InvoicePosPurchase = React.forwardRef(({ inv, invoiceProduct }, ref) => {
               align="left"
             >
               Supplier Name: 
-              {/* {invoiceProduct?.supplier_details?.supplier_name} */}
+              {inv?.supplier_name}
             </Typography>
-            <Typography
-              // style={{ paddingLeft: "7px" }}
+            {/* <Typography
+            
               variant="body1"
               align="left"
             >
               Supplier Phone:
-               {/* {invoiceProduct?.supplier_details?.supplier_phone} */}
+               {inv?.supplier_details?.supplier_phone}
             </Typography>
             <Typography
-              // style={{ paddingLeft: "7px" }}
+          
               variant="body1"
               align="left"
             >
               Supplier Address:{" "}
-              {/* {invoiceProduct?.supplier_details?.supplier_address} */}
-            </Typography>
+              {invoiceProduct?.supplier_details?.supplier_address}
+            </Typography> */}
           </Box>
           <Box pl={3} pr={2} py={2}>
             <Table
@@ -114,7 +114,7 @@ const InvoicePosPurchase = React.forwardRef(({ inv, invoiceProduct }, ref) => {
 
               <TableBody>
                 {invoiceProduct &&
-                  invoiceProduct?.product_whole_purchase_details?.map(
+                  invoiceProduct?.map(
                     (prd, index) => (
                       <TableRow>
                         <TableCell component="th" scope="row">
@@ -131,9 +131,9 @@ const InvoicePosPurchase = React.forwardRef(({ inv, invoiceProduct }, ref) => {
                         <TableCell align="right">
                           {prd.product_unit_name}
                         </TableCell>
-                        <TableCell align="right">{prd.price}</TableCell>
+                        <TableCell align="right">{prd.purchase_price}</TableCell>
                         <TableCell align="right">
-                          {prd.price * prd.qty}
+                          {prd.purchase_price * prd.qty}
                         </TableCell>
                       </TableRow>
                     )
@@ -144,7 +144,7 @@ const InvoicePosPurchase = React.forwardRef(({ inv, invoiceProduct }, ref) => {
                     Sub Total
                   </TableCell>
                   <TableCell align="right">
-                      {/* {inv?.sub_total} */}
+                      {inv?.sub_total_amount}
                       </TableCell>
                 </TableRow>
                 <TableRow>
@@ -152,7 +152,7 @@ const InvoicePosPurchase = React.forwardRef(({ inv, invoiceProduct }, ref) => {
                     Discount
                   </TableCell>
                   <TableCell align="right">
-                      {/* {inv.discount_amount} */}
+                      {inv.discount_amount}
                       </TableCell>
                 </TableRow>
 
@@ -161,7 +161,7 @@ const InvoicePosPurchase = React.forwardRef(({ inv, invoiceProduct }, ref) => {
                     Grand Total
                   </TableCell>
                   <TableCell align="right">
-                      {/* {inv.total_amount} */}
+                      {inv.grand_total_amount}
                       </TableCell>
                 </TableRow>
               </TableBody>
@@ -170,7 +170,7 @@ const InvoicePosPurchase = React.forwardRef(({ inv, invoiceProduct }, ref) => {
             <Box mt={2}>
               <Typography variants="body1" style={{ fontWeight: "bold" }}>
                 In Words: 
-                {/* {curencyNumbertoWordTwo(inv.total_amount)}. */}
+                {curencyNumbertoWordTwo(inv.grand_total_amount)}.
               </Typography>
             </Box>
             <Box mt={7}>

@@ -54,7 +54,7 @@ const styles = {
   }
 };
 const useStyles = makeStyles(styles);
-const Create = ({ endpoint }) => {
+const Create = ({ endpoint,modal,handleRefress }) => {
   const classes = useStyles();
   console.log(endpoint.warehouseActiveListUrl);
   const [openModal, setModalOpen] = React.useState(false);
@@ -299,6 +299,8 @@ const Create = ({ endpoint }) => {
       const submitResponse = await axios.post(endpoint.stockInAPi,data,endpoint.FrpmDataheaders);
       console.log(submitResponse)
       setButtonLoading(false);
+      modal(false);
+      handleRefress()
     } catch (error) {
       AllApplicationErrorNotification(error);
       setButtonLoading(false);

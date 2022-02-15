@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   toolba2: {
-     backgroundColor:"#800080",
+    //  backgroundColor:"#800080",
     //  boxShadow:"50px 1px #888888",
     display: 'flex',
     alignItems: 'center',

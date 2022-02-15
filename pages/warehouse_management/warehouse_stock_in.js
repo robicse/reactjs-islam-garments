@@ -32,7 +32,7 @@ import { useReactToPrint } from "react-to-print";
 // custom component
 import StockInComponent from 'components/admin/warehouse_management/StockIn';
 import Details from "components/admin/warehouse_management/productDetails";
-import StockInPrint from "components/admin/warehouse_management/productDetails";
+import StockInPrint from "components/admin/warehouse_management/InvoicePrint";
 // utils component
 import { convertFristCharcapital } from "helper/getMonthToNumber";
 import {dateFormatWithTime} from 'helper/dateFormat';
@@ -164,12 +164,19 @@ const endpoint = {
         }
       )
       .then((res) => {
-        setInvoiceproduct(res.data.response);
+        setInvoiceproduct(res.data?.data);
         setInvoicedata(row)
+
+        // setTimeout(()=>{
+          handlePrintInvoice()
+        // },3000)
+    
+        console.log(res.data.data,row)
       });
-    if (handlePrintInvoice) {
-      handlePrintInvoice();
-    }
+
+    // if (handlePrint) {
+    //   handlePrintInvoice();
+    // }
   };
  
 
@@ -192,17 +199,17 @@ const endpoint = {
       };
     
       
-
+console.log(StockInPrint)
   return (
     // <Gurd subject={subject}>
     <div>
-      {/* <div style={{ display: "none" }}>
+      <div style={{ display: "none" }}>
         <StockInPrint
           ref={componentRef}
           inv={invoiceData}
           invoiceProduct={invoiceProduct}
         />
-      </div> */}
+      </div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -255,31 +262,24 @@ const endpoint = {
                           headers: { Authorization: "Bearer " + user.auth_token },
                         }
                       ).then(resp => resp.json()).then(resp => {
-
-
-  if (resp.data) {
-    resolve({
-      data: resp.data || [],
-      page: resp?.meta?.current_page - 1 || 0,
-      totalCount: resp?.meta?.total || 0,
-});
-  }else{
-    resolve({
-      data:[],
-      page:  0,
-      totalCount:0,
-});
-  }
-        
-                  
-                   
+                          if (resp.data) {
+                            resolve({
+                              data: resp.data || [],
+                              page: resp?.meta?.current_page - 1 || 0,
+                              totalCount: resp?.meta?.total || 0,
+                        });
+                          }else{
+                            resolve({
+                              data:[],
+                              page:  0,
+                              totalCount:0,
+                        });
+                          }
                     })
         
                   })
                 }
 
-
-            
                 actions={[
                   {
                     icon: () => (
@@ -292,7 +292,7 @@ const endpoint = {
                       </Button>
                     ),
                     tooltip: "Print",
-                    // onClick: (event, rowData) => handlePrint(rowData),
+                    onClick: (event, rowData) => handlePrint(rowData),
                   },
 
                   {

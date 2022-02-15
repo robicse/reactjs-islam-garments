@@ -50,11 +50,12 @@ const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove })
                         {products.length && products?.map((product, index) => (
                             <TableRow>
                                 <TableCell align="center">{index + 1}</TableCell>
-                                <TableCell style={{textAlign:"center"}}>
+                                <TableCell align="center">
                                 <Avatar  alt='O' 
+                                //  style={{padingLeft:"15px"}}
                                 variant="square"
                                 src="" 
-                    //  src={`${webUrl}/uploads/products/${rowData.image}`} 
+                                 src={`${webUrl}/uploads/products/${product.image}`} 
     
       />
 

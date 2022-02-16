@@ -415,23 +415,23 @@ const TableList = observer(() => {
             <DialogContent dividers>
               <div style={{ display: "flex" }}>
                 <img
-                  src={`${webUrl}/uploads/suppliers/${imageList?.nid1}`}
-                  alt="mid"
+                  src={`${webUrl}/uploads/customers/${imageList?.nid1}`}
+                  alt="nid front"
                   style={{ height: "300px", marginRight: "10px" }}
                 />
                 <img
-                  src={`${webUrl}/uploads/suppliers/${imageList?.nid2}`}
-                  alt="mid"
+                  src={`${webUrl}/uploads/customers/${imageList?.nid2}`}
+                  alt="nid back"
                   style={{ height: "300px", marginRight: "10px" }}
                 />
                 <img
-                  src={`${webUrl}/uploads/suppliers/${imageList?.image}`}
-                  alt="mid"
+                  src={`${webUrl}/uploads/customers/${imageList?.image}`}
+                  alt="image"
                   style={{ height: "300px", marginRight: "10px" }}
                 />
                 <img
-                  src={`${webUrl}/uploads/suppliers/${imageList?.bankDetailsImage}`}
-                  alt="mid"
+                  src={`${webUrl}/uploads/customers/${imageList?.bankDetailsImage}`}
+                  alt="bank details image"
                   style={{ height: "300px", marginRight: "10px" }}
                 />
               </div>

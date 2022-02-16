@@ -5,7 +5,7 @@ import GridItem from 'components/Grid/GridItem.js';
 import GridContainer from 'components/Grid/GridContainer.js';
 import Card from 'components/Card/Card.js';
 import CardBody from 'components/Card/CardBody.js';
-import { Formik, Form, Field,useField } from 'formik';
+import { Formik, Form, Field, useField } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { Button, MenuItem } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -34,7 +34,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-function Edit({ token, modal, editData, mutate,endpoint}) {
+function Edit({ token, modal, editData, mutate }) {
 
   const classes = useStyles();
   const [nidFront, setNidFront] = React.useState(null);
@@ -60,6 +60,9 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
       </>
     );
   };
+
+
+console.log(nidFront,nidBack,image,bank_detail_image)
 
 
 
@@ -101,24 +104,34 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+                  console.log(values)
+                  const body = { customer_id: values.customer_id,
+                    name: values.name,
+                    phone: values.phone,
+                    email: values.email,
+                    customer_type: 'Whole Sale',
+                    address: values.address,
+                    status: values.status,
+                    initial_due: values.initial_due,
+                    note:values.note,
+                    nid_front: nidFront,
+                    nid_back: nidBack,
+                    image: image,
+                    bank_detail_image: bank_detail_image,
+                  }
+
+                  const formData = new FormData();
+                    Object.keys(body).forEach((key) =>
+                      formData.append(key, body[key])
+                    );
+
                   setTimeout(() => {
                     Axios.post(
-                      `${baseUrl}/${endpoint.edit}`,
-                      { customer_id: values.customer_id,
-                        name: values.name,
-                        phone: values.phone,
-                        email: values.email,
-                        customer_type: 'Whole Sale',
-                        address: values.address,
-                        status: values.status,
-                        initial_due: values.initial_due,
-                        nid_front: nidFront,
-                        nid_back: nidBack,
-                        image: image,
-                        bank_detail_image: bank_detail_image,
-                      },
+                      `${baseUrl}/customer_update`,
+                      formData,
                       {
                         headers: { Authorization: "Bearer " + token },
+                        "Content-type": "multipart/form-data",
                       }
                     )
                       .then((res) => {
@@ -290,68 +303,6 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
                               placeholder="Type Description."
                             />
                           </GridItem>
-
-                          {/* <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                              type="text"
-                              label="Name"
-                              name="name"
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              name="phone"
-                              type="text"
-                              label="Phone"
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                              type="email"
-                              label="Email"
-                              name="email"
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                              type="text"
-                              label="Address"
-                              name="address"
-                            />
-                          </GridItem>
-
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              type="text"
-                              name="status"
-                              label="Status"
-                              select
-                              fullWidth
-                              variant="outlined"
-                              helperText="Please select status"
-                              margin="normal"
-                            >
-                              <MenuItem value="1">Active</MenuItem>
-                              <MenuItem value="0">Inactive</MenuItem>
-                            </Field>
-                          </GridItem> */}
 
                         </GridContainer>
 

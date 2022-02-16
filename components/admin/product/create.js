@@ -118,12 +118,13 @@ const Create = ({ token, modal,endpoint, mutate }) => {
       });
   }, []);
 
-const handleDuplicateProduct = async(type,product_category_id, product_unit_id, product_size_id)=>{
+const handleDuplicateProduct = async(type,product_category_id, product_unit_id, product_size_id, product_code)=>{
   const body = {
     type,
     product_category_id,
     product_unit_id,
     product_size_id,
+    product_code
   }
 
   try {
@@ -200,8 +201,8 @@ const uploadImageHnadle= (img) => {
               
 
 
-                  if (values.type_name && values.category_name && values.unit_name && values.size_name) {
-                    const functionResult =   handleDuplicateProduct(values.type_name,values?.category_name?.id,values?.unit_name.id,values?.size_name.id)
+                  if (values.type_name && values.category_name && values.unit_name && values.size_name && values.item_code) {
+                    const functionResult =   handleDuplicateProduct(values.type_name,values?.category_name?.id,values?.unit_name.id,values?.size_name.id,values?.item_code)
                      
                   
                   }

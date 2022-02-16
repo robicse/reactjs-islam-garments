@@ -44,7 +44,7 @@ function CreateParty({ token, modal, mutate }) {
   const [image, setImage] = React.useState(null);
   const [bank_detail_image, setBank_detail_image] = React.useState(null);
 
-
+  console.log('nidFront', nidFront)
   const MyTextArea = ({ ...props }) => {
     const [field, meta] = useField(props);
     return (

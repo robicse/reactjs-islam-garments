@@ -64,7 +64,6 @@ function CreateParty({ token, modal, mutate, endpoint}) {
     );
   };
 
-
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
@@ -79,7 +78,8 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                   address: "",
                   status: "1",
                   initial_due: 0,
-                  note:""
+                  note:"",
+                
                 }}
                 validate={(values) => {
                   const errors = {};
@@ -131,41 +131,56 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                       bar: { size: "10px" },
                     });
                   }
+  
+                  const body = {
+                    name: values.name,
+                    phone: values.phone,
+                    email: values.email,
+                    address: values.address,
+                    status: values.status,
+                    nid_front: nidFront,
+                    nid_back: nidBack,
+                    image: image,
+                    bank_detail_image: bank_detail_image,
+                    note: values.note,
+                    initial_due:values.initial_due,
+                    nid_front: nidFront,
+                    nid_back: nidBack,
+                    image: image,
+                    bank_detail_image: bank_detail_image,
+                  };
+
+                  const formData = new FormData();
+                    Object.keys(body).forEach((key) =>
+                      formData.append(key, body[key])
+                    );
 
                   setTimeout(() => {
                     Axios.post(
-                      `${baseUrl}/${endpoint.create}`,
+                      `${baseUrl}/${endpoint.create}`, 
+                      formData, 
                       {
-                      
-                        name: values.name,
-                        phone: values.phone,
-                        email: values.email,
-                        address: values.address,
-                        status: values.status,
-                        initial_due: values.initial_due,
-                        nid_front: nidFront,
-                        nid_back: nidBack,
-                        image: image,
-                        bank_detail_image: bank_detail_image,
+                      headers: {
+                        Authorization: "Bearer " + token,
+                        "Content-type": "multipart/form-data",
                       },
-                      {
-                        headers: { Authorization: "Bearer " + token },
-                      }
-                    )
-                      .then((res) => {
-                        console.log(res);
-                        setSubmitting(false);
-                        mutate();
-                        modal(false);
-                        cogoToast.success('Create Success',{position: 'top-right', bar:{size: '10px'}})
-                      })
-                      .catch(function (error) {
-                        console.log(error);
-                        AllApplicationErrorNotification(error?.response?.data)
- 
-                        setSubmitting(false);
-                      });
+                    })
+                    .then((res) => {
+                      console.log(res);
+                      setSubmitting(false);
+                      mutate();
+                      modal(false);
+                      cogoToast.success('Create Success',{position: 'top-right', bar:{size: '10px'}})
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                      AllApplicationErrorNotification(error?.response?.data)
+
+                      setSubmitting(false);
+                    });
                   });
+
+
                 }}
               >
                 {({ submitForm, isSubmitting }) => (

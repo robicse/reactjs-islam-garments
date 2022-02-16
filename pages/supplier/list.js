@@ -402,22 +402,22 @@ const SuplierComponent = observer(() => {
             <div style={{ display: "flex" }}>
               <img
                 src={`${webUrl}/uploads/suppliers/${imageList?.nid1}`}
-                alt="mid"
+                alt="nid front"
                 style={{ height: "300px", marginRight: "10px" }}
               />
               <img
                 src={`${webUrl}/uploads/suppliers/${imageList?.nid2}`}
-                alt="mid"
+                alt="nid back"
                 style={{ height: "300px", marginRight: "10px" }}
               />
               <img
                 src={`${webUrl}/uploads/suppliers/${imageList?.image}`}
-                alt="mid"
+                alt="image"
                 style={{ height: "300px", marginRight: "10px" }}
               />
               <img
                 src={`${webUrl}/uploads/suppliers/${imageList?.bankDetailsImage}`}
-                alt="mid"
+                alt="bank details image"
                 style={{ height: "300px", marginRight: "10px" }}
               />
             </div>

@@ -149,6 +149,7 @@ const TableList = observer(() => {
       title: "Product Code",
       field: "product_code",
     },
+    { title: "Name", field: "name" },
     { title: "Price", field: "purchase_price" },
     { title: "Color", field: "color" },
     { title: "Design", field: "design" },

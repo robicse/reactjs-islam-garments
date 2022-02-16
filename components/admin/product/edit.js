@@ -64,7 +64,8 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                   product_category_id: editData.category_id,
                   product_unit_id: editData.unit_id,
                   product_size_id: editData.size_id,
-                  product_code: editData.product_code,
+                  //product_code: editData.product_code,
+                  name: editData.name,
                   purchase_price: editData.purchase_price,
                   color: editData.color,
                   design: editData.design,
@@ -73,9 +74,9 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                 }}
                 validate={(values) => {
                   const errors = {};
-                  if (!values.product_code) {
-                    errors.item_code = "Required";
-                  }
+                  // if (!values.product_code) {
+                  //   errors.item_code = "Required";
+                  // }
 
                      
                   if (!values.purchase_price) {
@@ -87,7 +88,8 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                 onSubmit={(values, { setSubmitting }) => {
                   const body = {
                     product_id: values.id,
-                    product_code: values.product_code,
+                    // product_code: values.product_code,
+                    //name: values.name,
                     purchase_price: values.purchase_price,
                     color: values.color,
                     design: values.design,
@@ -131,6 +133,19 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
+                              name="name"
+                              type="text"
+                              // label="Name"
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              disabled
+                            />
+                          </GridItem>
+
+                          {/* <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
                               name="product_code"
                               type="text"
                               label="Product Code"
@@ -138,7 +153,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               margin="normal"
                               fullWidth
                             />
-                          </GridItem>
+                          </GridItem> */}
 
                           <GridItem xs={12} sm={12} md={4}>
                             <Field

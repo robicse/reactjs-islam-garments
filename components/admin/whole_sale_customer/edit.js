@@ -5,7 +5,7 @@ import GridItem from 'components/Grid/GridItem.js';
 import GridContainer from 'components/Grid/GridContainer.js';
 import Card from 'components/Card/Card.js';
 import CardBody from 'components/Card/CardBody.js';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field,useField } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { Button, MenuItem } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -37,6 +37,30 @@ const useStyles = makeStyles(styles);
 function Edit({ token, modal, editData, mutate,endpoint}) {
 
   const classes = useStyles();
+  const [nidFront, setNidFront] = React.useState(null);
+  const [nidBack, setNidBack] = React.useState(null);
+  const [image, setImage] = React.useState(null);
+  const [bank_detail_image, setBank_detail_image] = React.useState(null);
+
+  const MyTextArea = ({ ...props }) => {
+    const [field, meta] = useField(props);
+    return (
+      <>
+        {/* <label htmlFor={props.id || props.name}>{label}</label> */}
+        <textarea
+          className="text-area"
+          rows="4"
+          cols="69"
+          {...field}
+          {...props}
+        />
+        {meta.touched && meta.error ? (
+          <div className="error">{meta.error}</div>
+        ) : null}
+      </>
+    );
+  };
+
 
 
   return (
@@ -55,6 +79,7 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
                   address: editData?.address,
                   status: editData?.status,
                   initial_due: editData?.initial_due,
+                  note:editData?.note,
                 }}
                 validate={(values) => {
                   const errors = {};
@@ -86,7 +111,11 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
                         customer_type: 'Whole Sale',
                         address: values.address,
                         status: values.status,
-                         initial_due: values.initial_due,
+                        initial_due: values.initial_due,
+                        nid_front: nidFront,
+                        nid_back: nidBack,
+                        image: image,
+                        bank_detail_image: bank_detail_image,
                       },
                       {
                         headers: { Authorization: "Bearer " + token },
@@ -111,7 +140,8 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
                     <div className={classes.paper}>
                       <form className={classes.form} noValidate>
                         <GridContainer>
-                          <GridItem xs={12} sm={12} md={4}>
+
+                        <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -172,8 +202,9 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
                               <MenuItem value="0">Inactive</MenuItem>
                             </Field>
                           </GridItem>
-{/* 
-                                <GridItem xs={12} sm={12} md={4}>
+
+
+                            <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -183,7 +214,145 @@ function Edit({ token, modal, editData, mutate,endpoint}) {
                               label="Initil Balance"
                               name="initial_due"
                             />
+                          </GridItem> 
+
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              // label="Image"
+                              name="nid1"
+                              helperText="NID Front Page"
+                              onChange={(e) => {
+                                setNidFront(e.target.files[0]);
+                              }}
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              helperText="NID Back Page"
+                              // label="Image"
+                              name="nid2"
+                              onChange={(e) => {
+                                setNidBack(e.target.files[0]);
+                              }}
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              helperText="Supplier"
+                              // label="Image"
+                              name="image_supp"
+                              onChange={(e) => {
+                                setImage(e.target.files[0]);
+                              }}
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              helperText="Bank Details Image"
+                              // label="Image"
+                              name="bank"
+                              onChange={(e) => {
+                                setBank_detail_image(e.target.files[0]);
+                              }}
+                            />
+                          </GridItem>
+
+                       
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <MyTextArea
+                              name="note"
+                              rows="6"
+                              placeholder="Type Description."
+                            />
+                          </GridItem>
+
+                          {/* <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="text"
+                              label="Name"
+                              name="name"
+                            />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              name="phone"
+                              type="text"
+                              label="Phone"
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                            />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="email"
+                              label="Email"
+                              name="email"
+                            />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="text"
+                              label="Address"
+                              name="address"
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              type="text"
+                              name="status"
+                              label="Status"
+                              select
+                              fullWidth
+                              variant="outlined"
+                              helperText="Please select status"
+                              margin="normal"
+                            >
+                              <MenuItem value="1">Active</MenuItem>
+                              <MenuItem value="0">Inactive</MenuItem>
+                            </Field>
                           </GridItem> */}
+
                         </GridContainer>
 
                         <Button

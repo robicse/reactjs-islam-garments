@@ -36,7 +36,7 @@ import StockInPrint from "components/admin/common_component/invoicePrint";
 // utils component
 import { convertFristCharcapital } from "helper/getMonthToNumber";
 import { dateFormatWithTime } from "helper/dateFormat";
-
+ 
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -167,8 +167,10 @@ const WarehouseStockIn = observer(() => {
         data,
         endpoint.headers
       )
+      setPrintData(result.data);
       setDefaultPrintData(row);
-      setPrintData(result);
+    
+      // setPrintData(result);
      
    } catch (error) {
      console.log(error)
@@ -177,13 +179,13 @@ const WarehouseStockIn = observer(() => {
   };
 
 
-
   useEffect(()=>{
-    if(printData){
+    if(printData && defaultprintData){
+      console.log(printData)
       handlePrintInvoice()
     }
 
-  },[printData])
+  },[printData,defaultprintData])
 
 
   const handlePrintInvoice = useReactToPrint({

@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect} from "react";
 import cogoToast from 'cogo-toast';
 import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,7 +31,7 @@ import { useReactToPrint } from "react-to-print";
 // custom component
 import StockInComponent from 'components/admin/store_management/stock_in';
 import Details from "components/admin/common_component/details";
-import StockInPrint from "components/admin/warehouse_management/productDetails";
+import StockInPrint from "components/admin/common_component/invoicePrint";
 // utils component
 import { convertFristCharcapital } from "helper/getMonthToNumber";
 import {dateFormatWithTime} from 'helper/dateFormat';
@@ -103,13 +103,14 @@ const endpoint = {
   paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
   stockInListAPI: `${baseUrl}/stock_transfer_list_with_search`,
   ProductdetailsUrl:`${baseUrl}/stock_transfer_details`,
-  headers: { headers: { Authorization: "Bearer " + user.details.token }}
+  headers: { headers: { Authorization: "Bearer " + user.details.token }},
+  printUrl: `${baseUrl}/stock_transfer_details_print`,
 };
 
   const [openCreateModal, setOpenCreateModal] = useState(false);;
   const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [invoiceData, setInvoicedata] = useState(null)
-  const [invoiceProduct, setInvoiceproduct] = useState(null);
+  const [defaultprintData, setDefaultPrintData] = useState(null);
+  const [printData, setPrintData] = useState(null);
   const [editData, setEditData] = useState(null);
 
   const handleClickOpenCreate = () => {
@@ -143,26 +144,40 @@ const endpoint = {
 
 
   const componentRef = React.useRef(null);
+
+
   const handlePrint = async (row) => {
-    await axios
-      .post(
-        `${baseUrl}/product_purchase_details`,
-        {
-          product_purchase_id: row.id,
-        },
-        {
-          headers: { Authorization: "Bearer " + user.auth_token },
-        }
-      )
-      .then((res) => {
-        setInvoiceproduct(res.data.response);
-        setInvoicedata(row)
-      });
-    if (handlePrintInvoice) {
-      handlePrintInvoice();
+
+    try {
+     let data = new FormData();
+     data.append('stock_transfer_id', JSON.stringify(row.id));
+      const result = await axios.post(
+         endpoint.printUrl,
+         data,
+         endpoint.headers
+       )
+       console.log(result)
+       setPrintData(result.data);
+       // console.log(result)
+       setDefaultPrintData(row);
+       // setPrintData(result);
+      
+    } catch (error) {
+      console.log(error)
+      
     }
-  };
+   };
  
+   useEffect(()=>{
+    if(printData && defaultprintData){
+      console.log(printData)
+      handlePrintInvoice()
+    }
+
+  },[printData,defaultprintData])
+
+   
+
 
   const handlePrintInvoice = useReactToPrint({
     content: () => componentRef.current,
@@ -187,13 +202,14 @@ const endpoint = {
   return (
     // <Gurd subject={subject}>
     <div>
-      {/* <div style={{ display: "none" }}>
+      <div style={{ display: "none" }}>
         <StockInPrint
-          ref={componentRef}
-          inv={invoiceData}
-          invoiceProduct={invoiceProduct}
+            ref={componentRef}
+            defaultprintData={defaultprintData}
+            printData={printData}
+            invoiceTitle="Store Stock In"
         />
-      </div> */}
+      </div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -271,7 +287,7 @@ const endpoint = {
                       </Button>
                     ),
                     tooltip: "Print",
-                    // onClick: (event, rowData) => handlePrint(rowData),
+                    onClick: (event, rowData) => handlePrint(rowData),
                   },
 
                   {

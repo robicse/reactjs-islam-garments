@@ -23,10 +23,9 @@ const useStyles = makeStyles({
 });
 const InvoicePrint = React.forwardRef(
   ({ defaultprintData, printData, invoiceTitle }, ref) => {
-
-   console.log(defaultprintData, printData, invoiceTitle)
+    console.log(defaultprintData, printData, invoiceTitle);
     const classes = useStyles();
- 
+
     //   const [date, setDate] = useState([1, 2, 3]);
     //   const [time, setTime] = useState([1, 2]);
     //   useEffect(() => {
@@ -38,7 +37,6 @@ const InvoicePrint = React.forwardRef(
       <div ref={ref}>
         {defaultprintData && (
           <Grid container direction="column">
-     
             <Box
               style={{
                 textAlign: "center",
@@ -70,24 +68,150 @@ const InvoicePrint = React.forwardRef(
                   {/* {`${time[1]}`} */}
                 </Typography>
               </Grid>
-              <Typography
-                style={{ fontWeight: "bold", marginTop: "6px" }}
-                variant="body1"
-                align="center"
-              >
-                {invoiceTitle}
-              </Typography>
-              <Typography
-                // style={{ paddingLeft: "7px" }}
-                variant="body1"
-                align="left"
-              >
-                Supplier Name:
-                {defaultprintData?.supplier_name}
-              </Typography>
-      
             </Box>
-            <Box pl={3} pr={2} py={2}>
+{/* 
+             <Box pl={3} pr={2}>
+              <Grid container spacing={1} direction="row">
+                <Grid item xs={6}>
+                  {invoiceTitle == "Warehouse Stock In" && (
+                    <div>
+                      <Typography
+                        // style={{ paddingLeft: "7px" }}
+                        variant="body1"
+                        align="left"
+                      >
+                        Supplier Name:
+                        {printData?.info?.supplier_name}
+                      </Typography>
+                      <Typography variant="body1" align="left">
+                        Supplier Phone:
+                        {printData?.info?.supplier_phone}
+                      </Typography>
+                      <Typography variant="body1" align="left">
+                        Supplier Address: {printData?.info?.supplier_address}
+                      </Typography>
+                    </div>
+                  )}
+
+                  {invoiceTitle == "Store Stock In" && (
+                    <div>
+                      <Typography
+                        // style={{ paddingLeft: "7px" }}
+                        variant="body1"
+                        align="left"
+                      >
+                        Warehouse Name:
+                        {printData?.info?.warehouse_name}
+                      </Typography>
+                      <Typography variant="body1" align="left">
+                        warehouse Phone:
+                        {printData?.info?.warehouse_phone}
+                      </Typography>
+                      <Typography variant="body1" align="left">
+                        Warehouse Address: {printData?.info?.warehouse_address}
+                      </Typography>
+                    </div>
+                  )}
+                </Grid>
+
+                <Grid item xs={6}>
+                  {invoiceTitle == "Store Stock In" && (
+                    <div>
+                      <Typography
+                        // style={{ paddingLeft: "7px" }}
+                        variant="body1"
+                        align="left"
+                      >
+                        Store Name:
+                        {printData?.info?.stores_name}
+                      </Typography>
+                      <Typography variant="body1" align="left">
+                        Store Phone:
+                        {printData?.info?.stores_phone}
+                      </Typography>
+                      <Typography variant="body1" align="left">
+                        Store Address: {printData?.info?.stores_address}
+                      </Typography>
+                    </div>
+                  )}
+                </Grid>
+              </Grid>
+            </Box>  */}
+
+
+
+
+             <Box pl={3} pr={2}>
+              <Grid container spacing={1} direction="row">
+                <Grid item xs={6}>
+                  {invoiceTitle == "Warehouse Stock In" && (
+                    <>
+                      <Typography
+                        align="left"
+                      >
+                        Supplier Name:
+                        {printData?.info?.supplier_name}
+                      </Typography>
+                      <Typography  align="left">
+                        Supplier Phone:
+                        {printData?.info?.supplier_phone}
+                      </Typography>
+
+                    
+
+                      <Typography  align="left">
+                        Supplier Address: {printData?.info?.supplier_address}
+                      </Typography> 
+                    </>
+                  )}
+
+                  {invoiceTitle == "Store Stock In" && (
+                    <div>
+                      <Typography
+                        // style={{ paddingLeft: "7px" }}
+                        // variant="body1"
+                        align="left"
+                      >
+                        Warehouse Name:
+                        {printData?.info?.warehouse_name}
+                      </Typography>
+                      <Typography  align="left">
+                        warehouse Phone:
+                        {printData?.info?.warehouse_phone}
+                      </Typography>
+                      <Typography  align="left">
+                        Warehouse Address: {printData?.info?.warehouse_address}
+                      </Typography>
+                    </div>
+                  )}
+                </Grid>
+
+                <Grid item xs={6}>
+                  {invoiceTitle == "Store Stock In" && (
+                    <div>
+                      <Typography
+                        // style={{ paddingLeft: "7px" }}
+                        // variant="body1"
+                        align="left"
+                      >
+                        Store Name:
+                        {printData?.info?.stores_name}
+                      </Typography>
+                      <Typography  align="left">
+                        Store Phone:
+                        {printData?.info?.stores_phone}
+                      </Typography>
+                      <Typography align="left">
+                        Store Address: {printData?.info?.stores_address}
+                      </Typography>
+                    </div>
+                  )}
+                </Grid>
+              </Grid>
+            </Box> 
+
+
+            <Box pl={3} pr={2} py={2} mt={-10}>
               <Table
                 aria-label="simple table"
                 size="small"
@@ -107,8 +231,8 @@ const InvoicePrint = React.forwardRef(
                 </TableHead>
 
                 <TableBody>
-                  {!printData &&
-                    invoiceProduct?.map((prd, index) => (
+                  {!!printData?.data &&
+                    printData?.data?.map((prd, index) => (
                       <TableRow>
                         <TableCell component="th" scope="row">
                           {index + 1}
@@ -137,21 +261,8 @@ const InvoicePrint = React.forwardRef(
                     <TableCell align="right" colSpan={5}>
                       Sub Total
                     </TableCell>
-                    <TableCell align="right">{defaultprintData?.sub_total_amount}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={5} align="right">
-                      Discount
-                    </TableCell>
-                    <TableCell align="right">{defaultprintData.discount_amount}</TableCell>
-                  </TableRow>
-
-                  <TableRow>
-                    <TableCell colSpan={5} align="right">
-                      Grand Total
-                    </TableCell>
                     <TableCell align="right">
-                      {defaultprintData.grand_total_amount}
+                      {defaultprintData?.sub_total_amount}
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -160,7 +271,7 @@ const InvoicePrint = React.forwardRef(
               <Box mt={2}>
                 <Typography variants="body1" style={{ fontWeight: "bold" }}>
                   In Words:
-                  {curencyNumbertoWordTwo(defaultprintData.grand_total_amount)}.
+                  {curencyNumbertoWordTwo(defaultprintData?.grand_total_amount)}.
                 </Typography>
               </Box>
               <Box mt={7}>

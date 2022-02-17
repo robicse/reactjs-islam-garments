@@ -15,6 +15,7 @@ import ShoppingCartRoundedIcon from '@material-ui/icons/ShoppingCartRounded';
 import { useAsyncEffect } from 'use-async-effect';
 import Gurd from 'components/guard/Gurd';
 import { useRouter } from 'next/router';
+import useSWR from "swr";
  
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,34 +39,34 @@ const Dashboard = observer(() => {
   const classes = useStyles();
   const theme = useTheme();
   const { user } = useRootStore();
-  const [totalSupplier, setTotalSupplier] = useState(0);
-  const [totalCustomer, setTotalCustomer] = useState(0);
-  const [totalStaff, setTotalStaff] = useState(0);
+  // const [totalSupplier, setTotalSupplier] = useState(0);
+  // const [totalCustomer, setTotalCustomer] = useState(0);
+  // const [totalStaff, setTotalStaff] = useState(0);
 
 
-  const endpoint = {
-    totalSupplierurl: `${baseUrl}/total_supplier`,
-    totalCustomerUrl: `${baseUrl}/total_customer`,
-    totalStafUrl: `${baseUrl}/total_staff`,
-    headers: { headers: { 
-      Authorization: "Bearer " + user.details.token,
-      'Content-type': 'application/javascript'
+  // const endpoint = {
+  //   totalSupplierurl: `${baseUrl}/total_supplier`,
+  //   totalCustomerUrl: `${baseUrl}/total_customer`,
+  //   totalStafUrl: `${baseUrl}/total_staff`,
+  //   headers: { headers: { 
+  //     Authorization: "Bearer " + user.details.token,
+  //     'Content-type': 'application/javascript'
     
     
-    }},
+  //   }},
  
-  };
+  // };
 
 // fetch data
-  const fetchfunction = async(totalSupplierurl) => {
-    try {
-      const todSale = await axios.get(totalSupplierurl,endpoint.headers)
-       return todSale
-    } catch (error) {
-      console.log(error);
-    }
+  // const fetchfunction = async(totalSupplierurl) => {
+  //   try {
+  //     const todSale = await axios.get(totalSupplierurl,endpoint.headers)
+  //      return todSale
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
   
-  }
+  // }
 
 
   // laod data
@@ -78,6 +79,18 @@ const Dashboard = observer(() => {
 //   setTotalStaff(totalStaffRes)
 // },[])
 
+const fetcher = (url, auth) =>
+axios
+  .get(url, {
+    headers: { Authorization: "Bearer " + auth },
+  })
+  .then((res) => res.data);
+
+const url = `${baseUrl}/dashboard_count_information`;
+const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
+// console.log('data',data)
+// console.log('dataresponse',data?.response?.storeTotalCurrentStock)
+
 
 
 
@@ -89,7 +102,6 @@ const Dashboard = observer(() => {
       <Gurd subject={subject}>
         <Grid container direction="row" justify="space-evenly" spacing={3}>
 
-        
           <Grid item xs={12} md={3}>
               <Card className={classes.root} style={{ cursor: 'pointer' }}>
                 <Grid container direction="row">
@@ -99,44 +111,7 @@ const Dashboard = observer(() => {
                         component="h5"
                         variant="h5"
                         style={{ fontWeight: '700', color: '#ffffff' }}>
-                        1000
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
-                        Total Staff
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center">
-                    <PeopleIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
-                    />
-                  </Grid>
-                </Grid>
-              </Card>
-          </Grid>
-
-
-
-          <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: '700', color: '#ffffff' }}>
-                        100000
+                        {data?.response?.totalSupplier}
                       </Typography>
                       <Typography
                         variant="subtitle1"
@@ -173,13 +148,49 @@ const Dashboard = observer(() => {
                         component="h5"
                         variant="h5"
                         style={{ fontWeight: '700', color: '#ffffff' }}>
-                        100000
+                        {data?.response?.totalCustomer}
                       </Typography>
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
                         style={{ color: 'rgb(255, 169, 4)' }}>
                         Total Customer
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <PeopleIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
+
+
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.totalStaff}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        Total Staff
                       </Typography>
                     </CardContent>
                   </Grid>
@@ -208,13 +219,121 @@ const Dashboard = observer(() => {
                         component="h5"
                         variant="h5"
                         style={{ fontWeight: '700', color: '#ffffff' }}>
-                        100000
+                        {data?.response?.warehouseTotalCurrentStock}
                       </Typography>
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
                         style={{ color: 'rgb(255, 169, 4)' }}>
-                        Total Products
+                        Warehouse Stock
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <ShoppingCartRoundedIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
+
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.warehouseTotalCurrentStockAmount}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        Ware Amount
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <ShoppingCartRoundedIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
+
+
+
+
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.storeTotalCurrentStock}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        Store Stock
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <ShoppingCartRoundedIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
+
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.storeTotalCurrentStockAmount}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        Store Amount
                       </Typography>
                     </CardContent>
                   </Grid>
@@ -244,82 +363,7 @@ const Dashboard = observer(() => {
                         component="h5"
                         variant="h5"
                         style={{ fontWeight: '700', color: '#ffffff' }}>
-                        100000
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
-                        Today Sale
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center">
-                    <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
-                    />
-                  </Grid>
-                </Grid>
-              </Card>
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: '700', color: '#ffffff' }}>
-                        100000
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
-                    Total Sale
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center">
-                    <MoneyIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
-                    />
-                  </Grid>
-                </Grid>
-              </Card>
-          </Grid>
-
-
-
-
-
-
-          <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: '700', color: '#ffffff' }}>
-                        100000
+                        {data?.response?.todayPurchase}
                       </Typography>
                       <Typography
                         variant="subtitle1"
@@ -356,7 +400,7 @@ const Dashboard = observer(() => {
                         component="h5"
                         variant="h5"
                         style={{ fontWeight: '700', color: '#ffffff' }}>
-                        100000
+                        {data?.response?.totalPurchase}
                       </Typography>
                       <Typography
                         variant="subtitle1"
@@ -383,7 +427,75 @@ const Dashboard = observer(() => {
           </Grid>
 
        
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.todaySale}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        Today Sale
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <ShoppingCartRoundedIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
 
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.totalSale}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                    Total Sale
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <MoneyIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
 
 
                       

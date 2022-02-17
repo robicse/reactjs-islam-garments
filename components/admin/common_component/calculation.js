@@ -91,7 +91,56 @@ const ClaculationComponent = ({
 
   return (
     <div>
-      <Grid container spacing={1} direction="row">
+
+       <Grid container spacing={1} direction="row">
+       <Grid item xs={8}>
+
+         </Grid>
+
+       <Grid item xs={2}>
+          <TextField
+            margin="normal"
+            variant="outlined"
+            size="small"
+            type="text"
+            select
+            name="discount_type"
+            label="Payment Type"
+            value={paymentType}
+            helperText="Please select payment type"
+            onChange={(e) => setPaymentType(e.target.value)}
+          >
+             <MenuItem value="1">Cash</MenuItem>
+            <MenuItem value="2">Credit</MenuItem>
+          </TextField>
+        </Grid>
+        <Grid item xs={2}>
+          <TextField
+            margin="normal"
+            variant="outlined"
+            size="small"
+            type="number"
+            label="Sub Total"
+            value={parseFloat(subTotal)}
+            InputProps={{
+              className: classes.multilineColor,
+              readOnly: true,
+            }}
+          />
+        </Grid>
+
+  
+            
+    
+
+
+        
+      
+      </Grid>
+
+
+
+      {/* <Grid container spacing={1} direction="row">
         <Grid item xs={2}>
           <TextField
             margin="normal"
@@ -201,7 +250,7 @@ const ClaculationComponent = ({
             }}
           />
         </Grid>
-      </Grid>
+      </Grid> */}
     </div>
   );
 };

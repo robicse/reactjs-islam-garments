@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import cogoToast from 'cogo-toast';
+import cogoToast from "cogo-toast";
 import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
 import { makeStyles } from "@material-ui/core/styles";
 // import TextField from "@material-ui/core/TextField";
@@ -30,13 +30,12 @@ import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
 import tableIcons from "components/table_icon/icon";
 import { useReactToPrint } from "react-to-print";
 // custom component
-import StockInComponent from 'components/admin/warehouse_management/StockIn';
-import Details from "components/admin/warehouse_management/productDetails";
-import StockInPrint from "components/admin/warehouse_management/InvoicePrint";
+import StockInComponent from "components/admin/warehouse_management/StockIn";
+import Details from "components/admin/common_component/details";
+import StockInPrint from "components/admin/common_component/invoicePrint";
 // utils component
 import { convertFristCharcapital } from "helper/getMonthToNumber";
-import {dateFormatWithTime} from 'helper/dateFormat';
-
+import { dateFormatWithTime } from "helper/dateFormat";
 
 const styles = {
   cardCategoryWhite: {
@@ -74,7 +73,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = "Warehouse Stock In";
-const subject = "Warehouse Stock";
 
 
 const WarehouseStockIn = observer(() => {
@@ -85,40 +83,42 @@ const WarehouseStockIn = observer(() => {
     tableRef.current && tableRef.current.onQueryChange();
   };
 
+  const endpoint = {
+    title: "Warehouse Stock",
+    subject: "Warehouse Stock",
+    warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
+    supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
+    sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
+    unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
+    categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
+    stockInAPi: `${baseUrl}/product_purchase_create`,
+    stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
+    deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
+    stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
+    productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
+    productsearchForStockIn: `${baseUrl}/product_list_with_search`,
+    paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
+    stockInListAPI: `${baseUrl}/product_purchase_list_pagination_with_search`,
+    ProductdetailsUrl: `${baseUrl}/product_purchase_details`,
+    printUrl: `${baseUrl}/product_purchase_details_print`,
+    headers: {
+      headers: {
+        Authorization: "Bearer " + user.details.token,
+        "Content-type": "application/javascript",
+      },
+    },
+    FrpmDataheaders: {
+      headers: {
+        Authorization: "Bearer " + user.details.token,
+        "Content-type": "multipart/form-data",
+      },
+    },
+  };
 
-const endpoint = {
-  title:"Warehouse Stock",
-  subject: "Warehouse Stock",
-  warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
-  supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
-  sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
-  unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
-  categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
-  stockInAPi: `${baseUrl}/product_purchase_create`,
-  stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
-  deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
-  stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
-  productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
-  paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
-  stockInListAPI: `${baseUrl}/product_purchase_list_pagination_with_search`,
-  warehouseProductdetailsUrl:`${baseUrl}/product_purchase_details`,
-  headers: { headers: { 
-    Authorization: "Bearer " + user.details.token,
-    'Content-type': 'application/javascript'
-  
-  
-  }},
-  FrpmDataheaders: { headers: 
-    { 
-      'Authorization': "Bearer " + user.details.token,
-      'Content-type': 'multipart/form-data'
- }}
-};
-
-  const [openCreateModal, setOpenCreateModal] = useState(false);;
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [invoiceData, setInvoicedata] = useState(null)
-  const [invoiceProduct, setInvoiceproduct] = useState(null);
+  const [defaultprintData, setDefaultPrintData] = useState(null);
+  const [printData, setPrintData] = useState(null);
   const [editData, setEditData] = useState(null);
 
   const handleClickOpenCreate = () => {
@@ -137,77 +137,80 @@ const endpoint = {
     setOpenDetailModal(true);
   };
 
-
   const columns = [
-    { title: "Invoice No",   render: (rowData) => convertFristCharcapital(rowData.invoice_no)},
+    {
+      title: "Invoice No",
+      render: (rowData) => convertFristCharcapital(rowData.invoice_no),
+    },
     { title: "Warehouse Name", field: "warehouse_name" },
     { title: "Supplier Name", field: "supplier_name" },
     { title: "User Name", field: "user_name" },
-    { title: "Purchase Date Time", field: "purchase_date_time",render: (rowData) => dateFormatWithTime(rowData.purchase_date_time)},
+    {
+      title: "Purchase Date Time",
+      field: "purchase_date_time",
+      render: (rowData) => dateFormatWithTime(rowData.purchase_date_time),
+    },
     {
       title: "Grand total",
       field: "grand_total_amount",
     },
   ];
 
-
   const componentRef = React.useRef(null);
   const handlePrint = async (row) => {
-    await axios
-      .post(
-        `${baseUrl}/product_purchase_details`,
-        {
-          product_purchase_id: row.id,
-        },
-        {
-          headers: { Authorization: "Bearer " + user.auth_token },
-        }
+
+   try {
+    let data = new FormData();
+    data.append('product_purchase_id', JSON.stringify(row.id));
+     const result = await axios.post(
+        endpoint.printUrl,
+        data,
+        endpoint.headers
       )
-      .then((res) => {
-        setInvoiceproduct(res.data?.data);
-        setInvoicedata(row)
-
-        // setTimeout(()=>{
-          handlePrintInvoice()
-        // },3000)
-    
-        console.log(res.data.data,row)
-      });
-
-    // if (handlePrint) {
-    //   handlePrintInvoice();
-    // }
+      setDefaultPrintData(row);
+      setPrintData(result);
+     
+   } catch (error) {
+     console.log(error)
+     
+   }
   };
- 
+
+
+
+  useEffect(()=>{
+    if(printData){
+      handlePrintInvoice()
+    }
+
+  },[printData])
+
 
   const handlePrintInvoice = useReactToPrint({
     content: () => componentRef.current,
   });
 
+  // handle create
+  const handleCreate = () => {
+    // if (!user.can("Create", subject)) {
+    //   cogoToast.error("You don't  have Create permission!", {
+    //     position: "top-right",
+    //     bar: { size: "10px" },
+    //   });
+    //   return null;
+    // }
+    handleClickOpenCreate(true);
+  };
 
-    
-      // handle create
-      const handleCreate = () => {
-        // if (!user.can("Create", subject)) {
-        //   cogoToast.error("You don't  have Create permission!", {
-        //     position: "top-right",
-        //     bar: { size: "10px" },
-        //   });
-        //   return null;
-        // }
-        handleClickOpenCreate(true);
-      };
-    
-      
-console.log(StockInPrint)
   return (
     // <Gurd subject={subject}>
     <div>
       <div style={{ display: "none" }}>
         <StockInPrint
           ref={componentRef}
-          inv={invoiceData}
-          invoiceProduct={invoiceProduct}
+          defaultprintData={defaultprintData}
+          printData={printData}
+          invoiceTitle="Warehouse Stock In"
         />
       </div>
       <GridContainer>
@@ -218,7 +221,6 @@ console.log(StockInPrint)
                 <Grid container item xs={6} spacing={3} direction="column">
                   <Box p={2}>
                     <h4 className={classes.cardTitleWhite}>{title} List</h4>
-                   
                   </Box>
                 </Grid>
                 <Grid
@@ -246,40 +248,37 @@ console.log(StockInPrint)
                 title="List"
                 columns={columns}
                 tableRef={tableRef}
-
-                data={query =>
+                data={(query) =>
                   new Promise((resolve, reject) => {
-                   
                     let url = `${endpoint.stockInListAPI}?`;
                     //searching
                     if (query.search) {
-                      url += `search=${query.search}`
+                      url += `search=${query.search}`;
                     }
-                  
-                    url += `&page=${query.page + 1}`
-                    fetch(url,{
-                          method: "post",
-                          headers: { Authorization: "Bearer " + user.auth_token },
-                        }
-                      ).then(resp => resp.json()).then(resp => {
-                          if (resp.data) {
-                            resolve({
-                              data: resp.data || [],
-                              page: resp?.meta?.current_page - 1 || 0,
-                              totalCount: resp?.meta?.total || 0,
-                        });
-                          }else{
-                            resolve({
-                              data:[],
-                              page:  0,
-                              totalCount:0,
-                        });
-                          }
+
+                    url += `&page=${query.page + 1}`;
+                    fetch(url, {
+                      method: "post",
+                      headers: { Authorization: "Bearer " + user.auth_token },
                     })
-        
+                      .then((resp) => resp.json())
+                      .then((resp) => {
+                        if (resp.data) {
+                          resolve({
+                            data: resp.data || [],
+                            page: resp?.meta?.current_page - 1 || 0,
+                            totalCount: resp?.meta?.total || 0,
+                          });
+                        } else {
+                          resolve({
+                            data: [],
+                            page: 0,
+                            totalCount: 0,
+                          });
+                        }
+                      });
                   })
                 }
-
                 actions={[
                   {
                     icon: () => (
@@ -308,8 +307,6 @@ console.log(StockInPrint)
                     tooltip: "Show Products",
                     onClick: (event, rowData) => handleDetails(rowData),
                   },
-               
-
 
                   {
                     icon: RefreshIcon,
@@ -320,12 +317,11 @@ console.log(StockInPrint)
                 ]}
                 options={{
                   actionsColumnIndex: -1,
-    
+
                   pageSize: 12,
                   pageSizeOptions: [12],
                   padding: "dense",
                 }}
-               
               />
             </CardBody>
           </Card>
@@ -334,14 +330,16 @@ console.log(StockInPrint)
             fullScreen
             open={openCreateModal}
             onClose={handleCloseCreate}
-            TransitionComponent={Transition}>
-            <AppBar style={{ position: 'relative' }}>
+            TransitionComponent={Transition}
+          >
+            <AppBar style={{ position: "relative" }}>
               <Toolbar>
                 <IconButton
                   edge="start"
                   color="inherit"
                   onClick={handleCloseCreate}
-                  aria-label="close">
+                  aria-label="close"
+                >
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ flex: 1 }}>
@@ -355,9 +353,6 @@ console.log(StockInPrint)
               handleRefress={handleRefress}
             />
           </Dialog>
-
-
-
 
           <Dialog
             open={openDetailModal}
@@ -383,17 +378,20 @@ console.log(StockInPrint)
             </AppBar>
             <Details
               modal={setOpenDetailModal}
+              id={editData?.id}
               endpoint={endpoint}
-              editData={editData}
+              //  editData={editData}
+              idType="product_purchase_id"
+
+              // modal={setOpenDetailModal}
+              // endpoint={endpoint}
+              // editData={editData}
             />
           </Dialog>
-
-
-
         </GridItem>
       </GridContainer>
 
-    {/* </Gurd> */}
+      {/* </Gurd> */}
     </div>
   );
 });

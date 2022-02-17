@@ -38,34 +38,45 @@ const Dashboard = observer(() => {
   const classes = useStyles();
   const theme = useTheme();
   const { user } = useRootStore();
-
-  const [load, setLoad] = useState(false);
-
-
-
-
-  const urlTodaySale = `${baseUrl}/today_sale`;
+  const [totalSupplier, setTotalSupplier] = useState(0);
+  const [totalCustomer, setTotalCustomer] = useState(0);
+  const [totalStaff, setTotalStaff] = useState(0);
 
 
-
-const fetchTotalPurchase = async() => {
-  try {
-    const todSale = await axios.get(urlTodaySale, {
-      headers: { Authorization: 'Bearer ' + user.auth_token },
-    });
-
-    console.log(todSale);
-    // setTodaySale(todSale.data.response);
+  const endpoint = {
+    totalSupplierurl: `${baseUrl}/total_supplier`,
+    totalCustomerUrl: `${baseUrl}/total_customer`,
+    totalStafUrl: `${baseUrl}/total_staff`,
+    headers: { headers: { 
+      Authorization: "Bearer " + user.details.token,
+      'Content-type': 'application/javascript'
     
-  } catch (error) {
-    console.log(error);
+    
+    }},
+ 
+  };
+
+// fetch data
+  const fetchfunction = async(totalSupplierurl) => {
+    try {
+      const todSale = await axios.get(totalSupplierurl,endpoint.headers)
+       return todSale
+    } catch (error) {
+      console.log(error);
+    }
+  
   }
 
-}
 
-useEffect(()=>{
-  fetchTotalPurchase()
-},[])
+  // laod data
+// useEffect(()=>{
+//   const  totalSupplierRes = fetchfunction(endpoint.totalSupplierurl)
+//   const  totalCustomerRes = fetchfunction(endpoint.totalCustomerUrl)
+//   const  totalStaffRes = fetchfunction(endpoint.totalStafUrl)
+//   setTotalSupplier(totalSupplierRes)
+//   setTotalCustomer(totalCustomerRes)
+//   setTotalStaff(totalStaffRes)
+// },[])
 
 
 

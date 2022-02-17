@@ -81,7 +81,7 @@ const endpoint = {
   title:"Store Stock",
   subject: "Store Stock",
   activeStorelistApi: `${baseUrl}/store_active_list`,
-  stockListApi: `${baseUrl}/store_stock_list_pagination_with_search`,
+  stockListApi: `${baseUrl}/store_current_stock_by_id`,
   stockInAPi: `${baseUrl}/store_stock_in`,
   stockInEditAPi: `${baseUrl}/store_stock_in_edit`,
   deleteAPi: `${baseUrl}/store_stock_in_delete`,
@@ -95,7 +95,8 @@ const endpoint = {
 const storeListFetch = async()=>{
     try {
       const response =  await axios.get(endpoint.activeStorelistApi,endpoint.headers);
-      setStoreList([])
+      console.log(response)
+      setStoreList(response?.data?.data)
     } catch (error) {
         AllApplicationErrorNotification(error?.response?.data);
     }
@@ -109,8 +110,9 @@ React.useEffect(()=>{
 
 
   const columns = [
+    { title: "Store Name", field: "store_name" },
     {
-      title: "Store Name",
+      title: "Product Name",
       field: "product_name",
       render: (rowData) => (
         <Typography variant="subtitle2" style={{ width: "250px" }}>
@@ -118,10 +120,10 @@ React.useEffect(()=>{
         </Typography>
       ),
     },
-    { title: "Unit", field: "unit_name" },
-    { title: "Size", field: "size_name" },
+    { title: "Unit", field: "product_unit_name" },
+    { title: "Size", field: "product_size_name" },
     { title: "Price", field: "purchase_price" },
-    { title: "Product Code", field: "item_code" },
+    { title: "Product Code", field: "product_code" },
     { title: "Current Stock", field: "current_stock" },
     
   ];
@@ -171,7 +173,7 @@ React.useEffect(()=>{
                 {
                   storeList.map((store) => (
                     <MenuItem key={store.id} value={store.id}>
-                      {store.name}
+                      {store.store_name}
                     </MenuItem>
                   ))}
               </Select>
@@ -203,11 +205,27 @@ React.useEffect(()=>{
                       }
 
                       url += `&page=${query.page + 1}`;
-                      url += "&warehouse_id=" + storeId;
+                      url += "&store_id=" + storeId;
                       fetch(url, requestOptions)
                         .then((resp) => resp.json())
                         .then((resp) => {
-                          resolve({
+
+                          if (resp.data) {
+                            resolve({
+                              data: resp?.data?.data,
+                              page:
+                                resp?.current_page - 1,
+                               totalCount:
+                               resp?.data?.total,
+                            });
+                          }else{
+                            resolve({
+                              data:[],
+                              page:  0,
+                              totalCount:0,
+                        });
+                          }
+                          // resolve({
                             // data: resp?.response?.store_current_stock_list
                             //   ?.data,
                             // page:
@@ -215,7 +233,7 @@ React.useEffect(()=>{
                             //     ?.current_page - 1,
                             // totalCount:
                             //   resp?.response?.store_current_stock_list?.total,
-                          });
+                          // });
                         });
                     })
                   }

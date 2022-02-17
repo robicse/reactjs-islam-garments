@@ -30,7 +30,7 @@ import tableIcons from "components/table_icon/icon";
 import { useReactToPrint } from "react-to-print";
 // custom component
 import StockInComponent from 'components/admin/store_management/stock_in';
-import Details from "components/admin/warehouse_management/productDetails";
+import Details from "components/admin/common_component/details";
 import StockInPrint from "components/admin/warehouse_management/productDetails";
 // utils component
 import { convertFristCharcapital } from "helper/getMonthToNumber";
@@ -94,14 +94,15 @@ const endpoint = {
   sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
   unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
   categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
-  stockInAPi: `${baseUrl}/product_purchase_create`,
+  stockInAPi: `${baseUrl}/warehouse_to_store_stock_create`,
   stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
   deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
   stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
   productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
+  productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
   paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
-  stockInListAPI: `${baseUrl}/product_purchase_list_pagination_with_search`,
-  warehouseProductdetailsUrl:`${baseUrl}/product_purchase_details`,
+  stockInListAPI: `${baseUrl}/stock_transfer_list_with_search`,
+  ProductdetailsUrl:`${baseUrl}/stock_transfer_details`,
   headers: { headers: { Authorization: "Bearer " + user.details.token }}
 };
 
@@ -131,11 +132,11 @@ const endpoint = {
   const columns = [
     { title: "Invoice No",   render: (rowData) => convertFristCharcapital(rowData.invoice_no)},
     { title: "Warehouse Name", field: "warehouse_name" },
-    { title: "Supplier Name", field: "supplier_name" },
+    { title: "Store Name", field: "store_name" },
     { title: "User Name", field: "user_name" },
-    { title: "Purchase Date Time", field: "purchase_date_time",render: (rowData) => dateFormatWithTime(rowData.purchase_date_time)},
+    { title: "Transfer Date Time", field: "created_at",render: (rowData) => dateFormatWithTime(rowData.created_at)},
     {
-      title: "Grand total",
+      title: "Grand Total",
       field: "grand_total_amount",
     },
   ];
@@ -247,9 +248,9 @@ const endpoint = {
                       ).then(resp => resp.json()).then(resp => {
             
                       resolve({
-                            data: resp.data,
-                            page: resp?.meta?.current_page - 1,
-                            totalCount: resp?.meta?.total,
+                            data: resp.data?.data,
+                            page: resp?.data?.current_page - 1,
+                            totalCount: resp?.data?.total,
                       });
                     })
         
@@ -361,8 +362,10 @@ const endpoint = {
             </AppBar>
             <Details
               modal={setOpenDetailModal}
+              id={editData?.id}
               endpoint={endpoint}
               editData={editData}
+              idType="stock_transfer_id"
             />
           </Dialog>
 
@@ -370,8 +373,6 @@ const endpoint = {
 
         </GridItem>
       </GridContainer>
-
-    {/* </Gurd> */}
     </div>
   );
 });

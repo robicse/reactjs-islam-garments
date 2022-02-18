@@ -16,6 +16,7 @@ import { useAsyncEffect } from 'use-async-effect';
 import Gurd from 'components/guard/Gurd';
 import { useRouter } from 'next/router';
 import useSWR from "swr";
+import InfoTable from 'components/dashboardCountInformation/infoTable'
  
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -498,7 +499,9 @@ const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
           </Grid>
 
 
-                      
+          <Grid item xs={12} md={12}>
+            <InfoTable warehouseWiseInformation={data?.response?.warehouseWiseInformation} storeWiseInformation={data?.response?.storeWiseInformation} />
+          </Grid>      
          
         </Grid>
       </Gurd>

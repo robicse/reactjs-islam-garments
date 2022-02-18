@@ -91,6 +91,7 @@ const url = `${baseUrl}/dashboard_count_information`;
 const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
 // console.log('data',data)
 // console.log('dataresponse',data?.response?.storeTotalCurrentStock)
+console.log('role',user?.details?.role)
 
 
 
@@ -103,6 +104,9 @@ const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
       <Gurd subject={subject}>
         <Grid container direction="row" justify="space-evenly" spacing={3}>
 
+
+
+          { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
               <Card className={classes.root} style={{ cursor: 'pointer' }}>
                 <Grid container direction="row">
@@ -137,9 +141,9 @@ const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
                 </Grid>
               </Card>
           </Grid>
+          ) : ''}
 
-
-
+          { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
               <Card className={classes.root} style={{ cursor: 'pointer' }}>
                 <Grid container direction="row">
@@ -174,8 +178,9 @@ const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
                 </Grid>
               </Card>
           </Grid>
+          ) : ''}
 
-
+          { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
               <Card className={classes.root} style={{ cursor: 'pointer' }}>
                 <Grid container direction="row">
@@ -210,151 +215,9 @@ const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
                 </Grid>
               </Card>
           </Grid>
+          ) : ''}
 
-          <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: '700', color: '#ffffff' }}>
-                        {data?.response?.warehouseTotalCurrentStock}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
-                        Warehouse Stock
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center">
-                    <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
-                    />
-                  </Grid>
-                </Grid>
-              </Card>
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: '700', color: '#ffffff' }}>
-                        {data?.response?.warehouseTotalCurrentStockAmount}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
-                        Ware Amount
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center">
-                    <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
-                    />
-                  </Grid>
-                </Grid>
-              </Card>
-          </Grid>
-
-
-
-
-          <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: '700', color: '#ffffff' }}>
-                        {data?.response?.storeTotalCurrentStock}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
-                        Store Stock
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center">
-                    <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
-                    />
-                  </Grid>
-                </Grid>
-              </Card>
-          </Grid>
-
-          <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: '700', color: '#ffffff' }}>
-                        {data?.response?.storeTotalCurrentStockAmount}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
-                        Store Amount
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center">
-                    <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
-                    />
-                  </Grid>
-                </Grid>
-              </Card>
-          </Grid>
-
-
+          { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
               <Card className={classes.root} style={{ cursor: 'pointer' }}>
                 <Grid container direction="row">
@@ -389,9 +252,9 @@ const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
                 </Grid>
               </Card>
           </Grid>
-
+          ) : ''}
        
-
+          { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
               <Card className={classes.root} style={{ cursor: 'pointer' }}>
                 <Grid container direction="row">
@@ -426,8 +289,157 @@ const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
                 </Grid>
               </Card>
           </Grid>
+          ) : ''}
 
-       
+          { user?.details?.role === 'Super Admin' ? (
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.warehouseTotalCurrentStock}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        Warehouse Stock
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <ShoppingCartRoundedIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
+          ) : ''}
+
+          { user?.details?.role === 'Super Admin' ? (
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.warehouseTotalCurrentStockAmount}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        Ware Amount
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <ShoppingCartRoundedIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
+          ) : ''}
+
+          { user?.details?.role === 'Super Admin' ? (
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.storeTotalCurrentStock}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        Store Stock
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <ShoppingCartRoundedIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
+          ) : ''}
+
+          { user?.details?.role === 'Super Admin' ? (
+          <Grid item xs={12} md={3}>
+              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+                <Grid container direction="row">
+                  <Grid item xs={8} md={8}>
+                    <CardContent>
+                      <Typography
+                        component="h5"
+                        variant="h5"
+                        style={{ fontWeight: '700', color: '#ffffff' }}>
+                        {data?.response?.storeTotalCurrentStockAmount}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        color="textSecondary"
+                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        Store Amount
+                      </Typography>
+                    </CardContent>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={4}
+                    md={4}
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="center">
+                    <ShoppingCartRoundedIcon
+                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
+          </Grid>
+          ) : ''}
+
+          { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
               <Card className={classes.root} style={{ cursor: 'pointer' }}>
                 <Grid container direction="row">
@@ -462,7 +474,9 @@ const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
                 </Grid>
               </Card>
           </Grid>
+          ) : ''}
 
+          { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
               <Card className={classes.root} style={{ cursor: 'pointer' }}>
                 <Grid container direction="row">
@@ -497,7 +511,7 @@ const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
                 </Grid>
               </Card>
           </Grid>
-
+          ) : ''}
 
           <Grid item xs={12} md={12}>
             <InfoTable warehouseWiseInformation={data?.response?.warehouseWiseInformation} storeWiseInformation={data?.response?.storeWiseInformation} />

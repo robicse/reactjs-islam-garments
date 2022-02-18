@@ -205,7 +205,7 @@ const TableList = observer(() => {
                   icons={tableIcons}
                   title="List"
                   columns={columns}
-                  data={data.response.expense_category}
+                  data={data.data}
                   actions={[
                     {
                       icon: () => (

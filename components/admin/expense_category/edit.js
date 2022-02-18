@@ -147,7 +147,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                                 component={TextField}
                                 type="text"
                                 name="name"
-                                label="Voucher Name"
+                                label="Expense Category Name"
                                 fullWidth
                                 variant="outlined"
                                 margin="normal"

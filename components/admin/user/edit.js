@@ -44,7 +44,11 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
   const [roles, setRoles] = React.useState([]);
   const [warehouse, setWarehouse] = React.useState([]);
   const [store, setStore] = React.useState([]);
-  // const [type, setType] = React.useState(editData.user_for);
+
+
+  const [userFor, setUserFor] = React.useState(editData.user_for);
+
+  console.log(userFor)
   let ware = `${baseUrl}/warehouse_list`;
   let stor = `${baseUrl}/store_list`;
   let rol = `${baseUrl}/roles`;
@@ -143,7 +147,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                         name: values.name,
                         phone: values.phone,
                         email: values.email,
-                        user_for: values.user_for,
+                        user_for: userFor,
                         status: values.status,
                         password: values.password,
                         confirm_password: values.confirm_password,
@@ -243,21 +247,21 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                                   component={TextField}
                                   type="text"
                                   name="user_for"
-                                  // value={type}
+                                  value={userFor}
                                   label="User For"
                                   select
                                   fullWidth
                                   variant="outlined"
                                   helperText="Please select Store"
                                   margin="normal"
-                                  // onChange={(e) => setType(e.target.value)}
+                                  onChange={(e) => setUserFor(e.target.value)}
                                   helperText="Please select one"
                                 >
                                   <MenuItem value="Warehouse">Warehouse</MenuItem>
                                   <MenuItem value="Store">Store</MenuItem>
                                 </Field>
                               </GridItem>
-                              {values.user_for == "Warehouse" ? (
+                              {userFor == "Warehouse" ? (
                                 <>
                                   <GridItem xs={12} sm={12} md={6}>
                                     <Field

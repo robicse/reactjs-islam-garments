@@ -120,6 +120,7 @@ const TableList = observer(() => {
     { title: "Role", field: "role" },
     { title: "Phone", field: "phone" },
     { title: "Email", field: "email" },
+    { title: "User For", field: "user_for" },
 
     {
       title: "Warehouse Name",

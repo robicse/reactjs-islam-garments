@@ -42,6 +42,10 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
   const [roles, setRoles] = React.useState([]);
   const [warehouse, setWarehouse] = React.useState([]);
   const [store, setStore] = React.useState([]);
+
+  const [userFor, setUserFor] = React.useState([]);
+  console.log(userFor)
+
   let ware = `${baseUrl}/warehouse_list`;
   let stor = `${baseUrl}/store_list`;
   let rol = `${baseUrl}/roles`;
@@ -134,6 +138,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                         name: values.name,
                         phone: values.phone,
                         email: values.email,
+                        user_for: userFor,
                         status: values.status,
                         password: values.password,
                         confirm_password: values.confirm_password,
@@ -220,6 +225,29 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                             </Field>
                           </GridItem>
 
+                          
+                          <GridItem xs={12} sm={12} md={4}>
+                                <Field
+                                  component={TextField}
+                                  type="text"
+                                  name="user_for"
+                                  value={userFor}
+                                  label="User For"
+                                  select
+                                  fullWidth
+                                  variant="outlined"
+                                  helperText="Please select Store"
+                                  margin="normal"
+                                  onChange={(e) => setUserFor(e.target.value)}
+                                  helperText="Please select one"
+                                >
+                                  <MenuItem value="Warehouse">Warehouse</MenuItem>
+                                  <MenuItem value="Store">Store</MenuItem>
+                                </Field>
+                              </GridItem>
+
+                          {userFor == "Warehouse" ? (
+                            <>
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
@@ -238,6 +266,10 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                             </Field>
                           </GridItem>
 
+                          </>
+                              ) : (
+                                <>
+
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
@@ -255,6 +287,10 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                               ))}
                             </Field>
                           </GridItem>
+
+                          </>
+                              )}
+
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}

@@ -105,6 +105,7 @@ const TableList = observer(() => {
     delete: "product_delete",
     sizesUrl: `${baseUrl}/product_size_list`,
     unitUrl: `${baseUrl}/product_unit_list`,
+    subunitUrl: `${baseUrl}/product_sub_unit_list`,
     categoryUrl: `${baseUrl}/product_category_list`,
     productDuplicateSearchUrl: `${baseUrl}/check_exists_product`,
     headers: { headers: { Authorization: "Bearer " + user.details.token }}

@@ -43,7 +43,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
   const [warehouse, setWarehouse] = React.useState([]);
   const [store, setStore] = React.useState([]);
 
-  const [userFor, setUserFor] = React.useState([]);
+  const [userFor, setUserFor] = React.useState("Store");
   console.log(userFor)
 
   let ware = `${baseUrl}/warehouse_list`;
@@ -110,6 +110,9 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                   }
                   if (!values.status) {
                     errors.status = "Required";
+                  }
+                  if (!values.user_for) {
+                    errors.user_for = "Required";
                   }
                   if (!values.password) {
                     errors.password = "Required";

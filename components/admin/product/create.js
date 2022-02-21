@@ -88,9 +88,13 @@ const Create = ({ token, modal,endpoint, mutate }) => {
 
   const [sizeList, setSizeList] = React.useState([]);
   const [unitList, setUnitList] = React.useState([]);
+  const [subunitList, setSubUnitList] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
 
   const [image, setImage] = React.useState(null);
+
+  console.log('unitList',unitList)
+  // alert(subunitList);
   
 
   useAsyncEffect(async (isMounted) => {
@@ -98,6 +102,7 @@ const Create = ({ token, modal,endpoint, mutate }) => {
       .all([
         axios.get(endpoint.sizesUrl, endpoint.headers),
         axios.get(endpoint.unitUrl,endpoint.headers),
+        axios.get(endpoint.subunitUrl,endpoint.headers),
         axios.get(endpoint.categoryUrl,endpoint.headers),
       ])
       .then(
@@ -105,9 +110,11 @@ const Create = ({ token, modal,endpoint, mutate }) => {
           if (!isMounted()) return;
           const responseOneB = responses[0];
           const responseTwoU = responses[1];
-          const responseThree = responses[2];
+          const responseTwoSU = responses[2];
+          const responseThree = responses[3];
           setSizeList(responseOneB.data.data);
           setUnitList(responseTwoU.data.data);
+          setSubUnitList(responseTwoSU.data.data);
           setCategoryList(responseThree.data.data);
           // setLoad(true);
         })
@@ -168,6 +175,7 @@ const uploadImageHnadle= (img) => {
                 initialValues={{
                   type_name: "",
                   unit_name: "",
+                  sub_unit_name: "",
                   size_name: "",
                   category_name: "",
                   item_code: "",
@@ -237,6 +245,7 @@ const uploadImageHnadle= (img) => {
                       type:values.type_name,
                       product_category_id: values.category_name.id,
                       product_unit_id: values.unit_name.id,
+                      product_sub_unit_id: values.sub_unit_name.id,
                       product_size_id: values.size_name.id,
                       product_code: values.item_code,
                       purchase_price: values.purchase_price,
@@ -337,10 +346,32 @@ const uploadImageHnadle= (img) => {
                                 component={Autocomplete}
                                 options={unitList}
                                 getOptionLabel={(option) => option.name}
+                                onChange={(e) => setUnitList(e.target.value)}
                                 renderInput={(params) => (
                                   <MuiTextField
                                     {...params}
                                     label="Unit"
+                                    variant="outlined"
+                                    fullWidth
+                                    // helperText="Please select unit"
+                                    margin="normal"
+                                  />
+                                )}
+                              />
+                           
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                         
+                              <Field
+                                name="sub_unit_name"
+                                component={Autocomplete}
+                                options={subunitList}
+                                getOptionLabel={(option) => option.name}
+                                renderInput={(params) => (
+                                  <MuiTextField
+                                    {...params}
+                                    label="Sub Unit"
                                     variant="outlined"
                                     fullWidth
                                     // helperText="Please select unit"

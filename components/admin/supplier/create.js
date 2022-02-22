@@ -73,6 +73,7 @@ function CreateParty({ token, modal, mutate }) {
                 initialValues={{
                   type: "supplier",
                   name: "",
+                  shop_name: "",
                   phone: "",
                   email: "",
                   address: "",
@@ -136,6 +137,7 @@ function CreateParty({ token, modal, mutate }) {
                   const body = {
                     type: values.type,
                     name: values.name,
+                    shop_name: values.shop_name,
                     phone: values.phone,
                     email: values.email,
                     address: values.address,
@@ -191,6 +193,17 @@ function CreateParty({ token, modal, mutate }) {
                               type="text"
                               label="Name"
                               name="name"
+                            />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="text"
+                              label="Shop Name"
+                              name="shop_name"
                             />
                           </GridItem>
                           <GridItem xs={12} sm={12} md={4}>

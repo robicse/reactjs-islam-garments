@@ -110,7 +110,8 @@ const TableList = observer(() => {
   const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
 
   const columns = [
-    { title: "Name", field: "name" },
+    { title: "Unit Name", field: "unit_name" },
+    { title: "Sub Unit Name", field: "sub_unit_name" },
     {
       title: "Status",
       field: "status",

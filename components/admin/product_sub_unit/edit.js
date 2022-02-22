@@ -49,7 +49,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
             <CardBody>
               <Formik
                 initialValues={{
-                  name: editData.name,
+                  name: editData.sub_unit_name,
                   status: editData.status,
                 }}
                 validate={(values) => {

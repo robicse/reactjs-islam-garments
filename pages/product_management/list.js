@@ -131,10 +131,17 @@ const TableList = observer(() => {
 
   const columns = [
 
-    { title: 'Image', render: (rowData) => (
+    { title: 'Front Image', render: (rowData) => (
 
       <Avatar alt='o'  variant="square"
-      src={`${webUrl}/uploads/products/${rowData?.image}`} 
+      src={`${webUrl}/uploads/products/${rowData?.front_image}`} 
+      
+      />
+    )},
+    { title: 'Back Image', render: (rowData) => (
+
+      <Avatar alt='o'  variant="square"
+      src={`${webUrl}/uploads/products/${rowData?.back_image}`} 
       
       />
     )},
@@ -145,6 +152,7 @@ const TableList = observer(() => {
       field: "category_name",
     },
     { title: "Unit", field: "unit_name" },
+    { title: "Sub Unit", field: "sub_unit_name" },
     { title: "Size", field: "size_name" },
     {
       title: "Product Code",
@@ -359,7 +367,7 @@ const TableList = observer(() => {
                         </Button>
                       ),
                       tooltip: 'Open Image',
-                      onClick: (event, rowData) => handleImagePopup(rowData.image),
+                      onClick: (event, rowData) => handleImagePopup({img1:rowData.front_image, img2:rowData.front_image}),
                     },
                     {
                       icon: () => (
@@ -483,8 +491,8 @@ const TableList = observer(() => {
               product Image
             </DialogTitle>
             <DialogContent dividers>
-            <img  src={`${webUrl}/uploads/products/${productImage}`}  alt="mid" width="500" height="300"/>
-            
+            <img  src={`${webUrl}/uploads/products/${productImage?.img1}`}  alt="mid" width="500" height="300"/>
+            <img  src={`${webUrl}/uploads/products/${productImage?.img2}`}  alt="mid" width="500" height="300"/>
             </DialogContent>
             <DialogActions>
               <Button autoFocus onClick={handleImagePopUpClose} color="primary">

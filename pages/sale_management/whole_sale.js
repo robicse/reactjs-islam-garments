@@ -1,12 +1,12 @@
-
 import React from "react";
-import { useState } from "react";
-import MaterialTable from "material-table";
+import { useState,useEffect} from "react";
 import cogoToast from 'cogo-toast';
-import tableIcons from "components/table_icon/icon";
+import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
 import { makeStyles } from "@material-ui/core/styles";
+import CloseIcon from "@material-ui/icons/Close";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
@@ -14,33 +14,28 @@ import Gurd from "../../components/guard/Gurd";
 import axios from "axios";
 import { useRootStore } from "../../models/root-store-provider";
 import { observer } from "mobx-react-lite";
+import MaterialTable from "material-table";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
-import Link from "next/link";
-
-import {
-  Box,
-  Grid,
-} from "@material-ui/core";
+import { Box, Chip, Grid } from "@material-ui/core";
 import { baseUrl } from "../../const/api";
-// import Edit from "../../components/admin/product_pos_sale/edit";
-// import Create from "../../components/admin/product_pos_sale/create";
-// import Details from "../../components/admin/product_pos_sale/details";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import { useReactToPrint } from "react-to-print";
-// import PossaleInvoicePrint from "components/admin/product_pos_sale/possaleinvoicePrint";
-import useStatePromise from "hooks/use-state-promise";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
-import { convertFristCharcapital } from "../../helper/getMonthToNumber";
-import { dateFormatWithTime } from 'helper/dateFormat'
+import tableIcons from "components/table_icon/icon";
+import { useReactToPrint } from "react-to-print";
+// custom component
+import StockOutPOS from 'components/admin/sale_management/whole_sale/whole_sale_create';
+import Details from "components/admin/common_component/details";
+import StockInPrint from "components/admin/common_component/invoicePrint";
+// utils component
+import { convertFristCharcapital } from "helper/getMonthToNumber";
+import {dateFormatWithTime} from 'helper/dateFormat';
+
 
 const styles = {
   cardCategoryWhite: {
@@ -70,23 +65,6 @@ const styles = {
       lineHeight: "1",
     },
   },
-  searchRoot: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    width: 400,
-  },
-  input: {
-    marginLeft: 3,
-    flex: 1,
-  },
-  iconButton: {
-    padding: 10,
-  },
-  divider: {
-    height: 28,
-    margin: 4,
-  },
 };
 
 const useStyles = makeStyles(styles);
@@ -94,16 +72,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const title = "Stock Out (Whole)";
-const subject = "product_pos_sale";
-const endpoint = {
-  list: "product_pos_sale_list",
-  create: "product_pos_sale_create",
-  edit: "product_pos_sale_edit",
-  delete: "product_pos_sale_delete",
-};
+const title = "Stock Out (POS)";
+const subject = "Store Stock";
 
-const ProductWholeSale = observer(() => {
+
+const wholesaleList = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
   const tableRef = React.createRef();
@@ -112,17 +85,35 @@ const ProductWholeSale = observer(() => {
   };
 
 
-  const [editData, setEditData] = useState(null);
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState(false);
-  const [openWarning, setOpenWarning] = useState(false);
+const endpoint = {
+  title:"Stock Out (POS)",
+  subject: "Store Stock",
+  warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
+  supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
+  storeActiveListUrl:`${baseUrl}/store_active_list`,
+  sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
+  unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
+  categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
+  wholeSaleStockOutAPi: `${baseUrl}/product_whole_sale_create`,
+  stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
+  deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
+  stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
+  productFindForStockOutFromStore: `${baseUrl}/product_info_for_stock_in`,
+  productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
+  paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
+  stockInListAPI: `${baseUrl}/stock_transfer_list_with_search`,
+  ProductdetailsUrl:`${baseUrl}/stock_transfer_details`,
+  headers: { headers: { Authorization: "Bearer " + user.details.token }},
+  printUrl: `${baseUrl}/stock_transfer_details_print`,
+  subUnitActiveListUrl:`${baseUrl}/product_sub_unit_list`,
+  wholeSaleCustomerActiveListUrl: `${baseUrl}/whole_sale_customer_active_list`,
+};
+
+  const [openCreateModal, setOpenCreateModal] = useState(false);;
   const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [invoiceData, setInvoicedata, setInvoicedataPromise] =
-    useStatePromise(null);
-  const [invoiceProduct, setInvoiceproduct] = useState(null);
-
-
- 
+  const [defaultprintData, setDefaultPrintData] = useState(null);
+  const [printData, setPrintData] = useState(null);
+  const [editData, setEditData] = useState(null);
 
   const handleClickOpenCreate = () => {
     setOpenCreateModal(true);
@@ -131,154 +122,137 @@ const ProductWholeSale = observer(() => {
     setOpenCreateModal(false);
   };
 
-
-  const handleCloseEdit = () => {
-    setOpenEditModal(false);
-  };
-
-
-  const handleCloseDetail = () => {
+  const handleCloseDetails = () => {
     setOpenDetailModal(false);
   };
 
-
-  const handleEdit = (row) => {
-    if (!user.can("edit", subject)) {
-      cogoToast.warn("You don't have permission!",{position: 'top-right', bar:{size: '10px'}});
-      return null;
-    }
-    //console.log(row);
+  const handleDetails = (row) => {
     setEditData(row);
-    setOpenEditModal(true);
+    setOpenDetailModal(true);
   };
-  const handleCreate = () => {
-    if (!user.can("create", subject)) {
-      cogoToast.warn("You don't have permission!",{position: 'top-right', bar:{size: '10px'}});
-      return null;
-    }
-    handleClickOpenCreate(true);
-  };
-  // const handleDetail = (row) => {
-  //   setEditData(row);
-  //   setOpenDetailModal(true);
-  // };
-
-
-
 
 
   const columns = [
-    { title: "Invoice No", render: (rowData) => convertFristCharcapital(rowData.invoice_no)},
-    { title: "Customer Name", field: "customer_name" },
-    { title: "Total Amount", field: "total_amount" },
-    { title: "Sale Date Time", field: "sale_date_time", render: (rowData) => dateFormatWithTime(rowData.sale_date_time)},
-    {title: "Seller Name",field: "user_name"},
-    {title: "Warehouse Name",field: "store_name"},
+    { title: "Invoice No",   render: (rowData) => convertFristCharcapital(rowData.invoice_no)},
+    { title: "Warehouse Name", field: "warehouse_name" },
+    { title: "Store Name", field: "store_name" },
+    { title: "User Name", field: "user_name" },
+    { title: "Transfer Date Time", field: "created_at",render: (rowData) => dateFormatWithTime(rowData.created_at)},
+    {
+      title: "Grand Total",
+      field: "grand_total_amount",
+    },
   ];
 
-  
-
-  // const handleDelete = async (row_id) => {
-  //   if (!user.can("delete", subject)) {
-  //     setOpenWarning(true);
-  //     return null;
-  //   }
-  //   const dlt = await axios.post(
-  //     `${baseUrl}/${endpoint.delete}`,
-  //     {
-  //       product_sale_id: row_id,
-  //     },
-  //     {
-  //       headers: { Authorization: "Bearer " + user.auth_token },
-  //     }
-  //   );
-  //   paginateProducts();
-  // };
 
   const componentRef = React.useRef(null);
+
+
   const handlePrint = async (row) => {
-    await axios
-      .post(
-        `${baseUrl}/product_pos_sale_details`,
-        {
-          product_sale_id: row.id,
-        },
-        {
-          headers: { Authorization: "Bearer " + user.auth_token },
-        }
-      )
-      .then((res) => {
-        const state = setInvoicedataPromise(row).then(() => {
-          console.log("running promise");
-        });
-        setInvoiceproduct(res.data.data);
-      });
-    if (handlePrintInvoice) {
-      handlePrintInvoice();
+
+    try {
+     let data = new FormData();
+     data.append('stock_transfer_id', JSON.stringify(row.id));
+      const result = await axios.post(
+         endpoint.printUrl,
+         data,
+         endpoint.headers
+       )
+       console.log(result)
+       setPrintData(result.data);
+       // console.log(result)
+       setDefaultPrintData(row);
+       // setPrintData(result);
+      
+    } catch (error) {
+      console.log(error)
+      
     }
-  };
+   };
+ 
+   useEffect(()=>{
+    if(printData && defaultprintData){
+      console.log(printData)
+      handlePrintInvoice()
+    }
+
+  },[printData,defaultprintData])
+
+   
+
+
   const handlePrintInvoice = useReactToPrint({
     content: () => componentRef.current,
   });
 
 
-
-
+    
+      // handle create
+      const handleCreate = () => {
+        // if (!user.can("Create", subject)) {
+        //   cogoToast.error("You don't  have Create permission!", {
+        //     position: "top-right",
+        //     bar: { size: "10px" },
+        //   });
+        //   return null;
+        // }
+        handleClickOpenCreate(true);
+      };
+    
+      
 
   return (
     // <Gurd subject={subject}>
     <div>
-      {/* <div style={{ display: "none" }}>
-        <PossaleInvoicePrint
-          ref={componentRef}
-          inv={invoiceData}
-          invoiceProduct={invoiceProduct}
+      <div style={{ display: "none" }}>
+        <StockInPrint
+            ref={componentRef}
+            defaultprintData={defaultprintData}
+            printData={printData}
+            invoiceTitle="Store Stock In"
         />
-      </div> */}
+      </div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="primary">
-              <Box py={1}>
-                <Grid container spacing={1}>
-                  <Grid container item xs={6} spacing={3} direction="column">
-                    <Box p={1}>
-                      <h4 className={classes.cardTitleWhite}>{title} List</h4>
-                     
-                    </Box>
-                  </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={6}
-                    spacing={3}
-                    direction="row"
-                    justify="flex-end"
-                    alignItems="center"
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleCreate}
-                    >
-                      Create {title}
-                    </Button>
-                  </Grid>
+              <Grid container spacing={1}>
+                <Grid container item xs={6} spacing={3} direction="column">
+                  <Box p={2}>
+                    <h4 className={classes.cardTitleWhite}>{title} List</h4>
+                   
+                  </Box>
                 </Grid>
-              </Box>
+                <Grid
+                  container
+                  item
+                  xs={6}
+                  spacing={3}
+                  direction="row"
+                  justify="flex-end"
+                  alignItems="center"
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleCreate}
+                  >
+                    Create {title}
+                  </Button>
+                </Grid>
+              </Grid>
             </CardHeader>
             <CardBody>
-
-            <MaterialTable
+              <MaterialTable
                 icons={tableIcons}
                 title="List"
-                tableRef={tableRef}
                 columns={columns}
+                tableRef={tableRef}
 
                 data={query =>
                   new Promise((resolve, reject) => {
                    
-                    let url = `${baseUrl}/product_pos_sale_list_pagination_with_search?`
+                    let url = `${endpoint.stockInListAPI}?`;
                     //searching
                     if (query.search) {
                       url += `search=${query.search}`
@@ -286,16 +260,15 @@ const ProductWholeSale = observer(() => {
                   
                     url += `&page=${query.page + 1}`
                     fetch(url,{
-                          method: "POST",
+                          method: "post",
                           headers: { Authorization: "Bearer " + user.auth_token },
                         }
                       ).then(resp => resp.json()).then(resp => {
-         
-                        
+            
                       resolve({
-                            data: resp?.data,
-                            page:  resp?.meta?.current_page - 1,
-                            totalCount: resp?.meta?.total,
+                            data: resp.data?.data,
+                            page: resp?.data?.current_page - 1,
+                            totalCount: resp?.data?.total,
                       });
                     })
         
@@ -303,36 +276,38 @@ const ProductWholeSale = observer(() => {
                 }
 
 
-
+            
                 actions={[
-                  {
-                    icon: () => (
-                      <Button
-                        fullWidth={true}
-                        variant="contained"
-                        color="primary"
-                      >
-                        <PrintTwoToneIcon fontSize="small" color="white" />
-                      </Button>
-                    ),
-                    tooltip: "Print",
-                    // onClick: (event, rowData) => handlePrint(rowData, false),
-                  },
+                  // {
+                  //   icon: () => (
+                  //     <Button
+                  //       fullWidth={true}
+                  //       variant="contained"
+                  //       color="primary"
+                  //     >
+                  //       <PrintTwoToneIcon fontSize="small" color="white" />
+                  //     </Button>
+                  //   ),
+                  //   tooltip: "Print",
+                  //   onClick: (event, rowData) => handlePrint(rowData),
+                  // },
 
-                //   {
-                //     icon: () => (
-                //       <Button
-                //         fullWidth={true}
-                //         variant="contained"
-                //         color="primary"
-                //       >
-                //         <EditTwoToneIcon fontSize="small" color="white" />
-                //       </Button>
-                //     ),
-                //     tooltip: "Edit Sale",
-                //     onClick: (event, rowData) => handleEdit(rowData),
-                //   },
-      
+                  // {
+                  //   icon: () => (
+                  //     <Button
+                  //       fullWidth={true}
+                  //       variant="contained"
+                  //       color="primary"
+                  //     >
+                  //       <ListAltTwoToneIcon fontSize="small" color="white" />
+                  //     </Button>
+                  //   ),
+                  //   tooltip: "Show Products",
+                  //   onClick: (event, rowData) => handleDetails(rowData),
+                  // },
+               
+
+
                   {
                     icon: RefreshIcon,
                     tooltip: "Refresh Data",
@@ -342,95 +317,48 @@ const ProductWholeSale = observer(() => {
                 ]}
                 options={{
                   actionsColumnIndex: -1,
+    
                   pageSize: 12,
                   pageSizeOptions: [12],
                   padding: "dense",
-                  rowStyle: {
-                    fontSize: 17,
-                  },
                 }}
-
-      
+               
               />
-             
-            
-      
             </CardBody>
           </Card>
-          {/* <Dialog
+
+          <Dialog
             fullScreen
             open={openCreateModal}
             onClose={handleCloseCreate}
-            TransitionComponent={Transition}
-          >
-            <AppBar style={{ position: "relative" }}>
+            TransitionComponent={Transition}>
+            <AppBar style={{ position: 'relative' }}>
               <Toolbar>
                 <IconButton
                   edge="start"
                   color="inherit"
                   onClick={handleCloseCreate}
-                  aria-label="close"
-                >
+                  aria-label="close">
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ flex: 1 }}>
-                  Create {title}
+                  Stock Out (POS)
                 </Typography>
-                <Link href="/product_pos_sale/list">
-                  <a target="_blank">
-                    <Button variant="contained">Sale in new Tab</Button>
-                  </a>
-                </Link>
               </Toolbar>
             </AppBar>
-            <Create
-              token={user.auth_token}
+            <StockOutPOS
               modal={setOpenCreateModal}
-              endpoint={endpoint.create}
-              mutate={handleRefress}
-              handlePrint={handlePrint}
-              user={user}
+              endpoint={endpoint}
+              handleRefress={handleRefress}
             />
           </Dialog>
 
-          <Dialog
-            open={openEditModal}
-            onClose={handleCloseEdit}
-            TransitionComponent={Transition}
-            fullWidth={true}
-            maxWidth="lg"
-          >
-            <AppBar style={{ position: "relative" }}>
-              <Toolbar>
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  onClick={handleCloseEdit}
-                  aria-label="close"
-                >
-                  <CloseIcon />
-                </IconButton>
-                <Typography variant="h6" style={{ flex: 1 }}>
-                  Edit {title}
-                </Typography>
-                <Link href="/product_pos_sale/lis">
-                  <a target="_blank">
-                    <Button variant="contained">Sale in new Tab</Button>
-                  </a>
-                </Link>
-              </Toolbar>
-            </AppBar>
-            <Edit
-              token={user.auth_token}
-              modal={setOpenEditModal}
-              editData={editData}
-              endpoint={endpoint.edit}
-              mutate={handleRefress}
-            />
-          </Dialog>
+
+
+
           <Dialog
             open={openDetailModal}
-            onClose={handleCloseDetail}
+            onClose={handleCloseDetails}
             TransitionComponent={Transition}
             fullWidth={true}
             maxWidth="lg"
@@ -440,28 +368,31 @@ const ProductWholeSale = observer(() => {
                 <IconButton
                   edge="start"
                   color="inherit"
-                  onClick={handleCloseDetail}
+                  onClick={handleCloseDetails}
                   aria-label="close"
                 >
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ flex: 1 }}>
-                  Product details
+                Stock Out  Product details
                 </Typography>
               </Toolbar>
             </AppBar>
             <Details
-              token={user.auth_token}
               modal={setOpenDetailModal}
+              id={editData?.id}
+              endpoint={endpoint}
               editData={editData}
+              idType="stock_transfer_id"
             />
-          </Dialog> */}
+          </Dialog>
+
+
+
         </GridItem>
       </GridContainer>
-  
-      </div>
+    </div>
   );
 });
 
-export default ProductWholeSale;
-
+export default wholesaleList;

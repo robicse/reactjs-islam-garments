@@ -113,6 +113,7 @@ const WarehouseStockIn = observer(() => {
         "Content-type": "multipart/form-data",
       },
     },
+    subUnitActiveListUrl:`${baseUrl}/product_sub_unit_list`, 
   };
 
   const [openCreateModal, setOpenCreateModal] = useState(false);

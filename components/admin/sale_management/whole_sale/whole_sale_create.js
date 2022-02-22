@@ -6,22 +6,14 @@ import TextField from "@material-ui/core/TextField";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import cogoToast from "cogo-toast";
-import Grid from "@material-ui/core/Grid";
-import {
-  Box,
-  Button,
-  LinearProgress,
-  MenuItem,
-  Typography,
-  Select,
-} from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { useAsyncEffect } from "use-async-effect";
 import axios from "axios";
-import AllApplicationErrorNotification from "../../utils/errorNotification";
-import Productsearch from "../common_component/productsearch";
-import Productstable from "../common_component/Productstable";
-import Calculation from "../common_component/calculation";
-import ProductSelectByDropdown from "../common_component/productSelectByDropdown";
+import AllApplicationErrorNotification from "../../../utils/errorNotification";
+import Productsearch from "../../common_component/productsearch";
+import Productstable from "../../common_component/Productstable";
+import Calculation from "../../common_component/calculation";
+import ProductSelectByDropdown from "../../common_component/productSelectByDropdown";
 
 const styles = {
   cardCategoryWhite: {
@@ -44,14 +36,11 @@ const styles = {
     color: "#FFFFFF",
     backgroundColor: "blue",
   },
-  submit: {
-    marginTop: "15px",
-  },
 };
 const useStyles = makeStyles(styles);
-const Create = ({ endpoint, modal, handleRefress }) => {
+const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
-  console.log(handleRefress);
+console.log(endpoint, modal, handleRefress)
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
   const [paid, setPaid] = React.useState();
@@ -62,36 +51,35 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   const [paymentType, setPaymentType] = React.useState(1);
   const [discountParcent, setDiscountParcent] = React.useState(0);
   const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
+
   //initial load state
-  const [warehouseList, setWarehouseList] = React.useState([]);
-  const [supplyerList, setSupplyerList] = React.useState([]);
+  const [customerList, setCustomerList] = React.useState([]);
+  const [storeList, setStoreList] = React.useState([]);
 
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
-  const [selectedWarehouse, setSelectedWarehouse] = React.useState(null);
-  const [selectedSupplyer, setSelectedSupplyer] = React.useState(null);
+  const [selectedCustomer, setselectedCustomer] = React.useState(null);
+  const [selectedStore, setSelecteStore] = React.useState(null);
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   // selected prodict state
   const [selectedProductList, setSelectedProduct] = React.useState([]);
-  // product Type
-  const [productType, setProductType] = React.useState("Own");
 
-  // load warehouse and supplier
+  //loading when component run
   useAsyncEffect(async (isMounted) => {
     try {
-      const warehouseRes = await axios.get(
-        endpoint.warehouseActiveListUrl,
-        endpoint.headers
-      );
-      console.log(warehouseRes);
-      const supplyerRes = await axios.get(
-        endpoint.supplyerActiveListUrl,
+      const customerRes = await axios.get(
+        endpoint.wholeSaleCustomerActiveListUrl,
         endpoint.headers
       );
 
-      setWarehouseList(warehouseRes?.data?.data);
-      setSupplyerList(supplyerRes?.data?.data);
+      const storeRes = await axios.get(
+        endpoint.storeActiveListUrl,
+        endpoint.headers
+      );
+
+      setCustomerList(customerRes?.data?.data);
+      setStoreList(storeRes?.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -158,8 +146,15 @@ const Create = ({ endpoint, modal, handleRefress }) => {
       });
     }
 
-    if (!selectedSupplyer) {
-      return cogoToast.warn("Please Select Supplier", {
+    if (!selectedCustomer) {
+      return cogoToast.warn("Please Select customer", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
+
+    if (!selectedStore) {
+      return cogoToast.warn("Please Select Store", {
         position: "top-right",
         bar: { size: "10px" },
       });
@@ -174,9 +169,11 @@ const Create = ({ endpoint, modal, handleRefress }) => {
 
     const body = {
       date: selectedDate,
-      supplier_id: selectedSupplyer,
-      warehouse_id: selectedWarehouse,
+      customer_id: selectedCustomer,
+      store_id: selectedStore,
       products: JSON.stringify(selectedProductList),
+      miscellaneous_comment: "",
+      miscellaneous_charge: "",
       sub_total_amount: subTotal,
       discount_type: discountType,
       discount_percent: discountParcent,
@@ -199,14 +196,13 @@ const Create = ({ endpoint, modal, handleRefress }) => {
         bar: { size: "10px" },
       });
       const submitResponse = await axios.post(
-        endpoint.stockInAPi,
+        endpoint.wholeSaleStockOutAPi,
         data,
-        endpoint.FrpmDataheaders
+        endpoint.headers,
       );
-      handleRefress();
       setButtonLoading(false);
       modal(false);
-      // handleRefress();
+      handleRefress();
     } catch (error) {
       AllApplicationErrorNotification(error);
       setButtonLoading(false);
@@ -228,37 +224,21 @@ const Create = ({ endpoint, modal, handleRefress }) => {
           />
         </GridItem>
 
-        {/* <GridItem xs={12} sm={3} md={2}>
-        <Select
-        size="small"
-         id="standard-basic"
-         variant="outlined"
-          style={{ width: "100%",height:"72%"}}
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={productType}
-          onChange={(e)=>setProductType(e.target.value)}
-        >
-        <MenuItem  value="Own">Own</MenuItem>
-                              <MenuItem value="Buy">Buy</MenuItem>
-        </Select>
-       
-        </GridItem> */}
-
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
-            fullWidth={true}
             size="small"
+            fullWidth={true}
+            // value={selectedWarehouse}
             id="combo-box-demo"
-            // value={selectedSupplyer}
-            options={supplyerList}
-            getOptionLabel={(option) => option.name}
+            options={storeList}
+            getOptionLabel={(option) => option.store_name}
             renderInput={(params) => (
-              <TextField {...params} label="Supplyer" variant="outlined" />
+              <TextField {...params} label="Store" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedSupplyer(v.id)}
+            onChange={(e, v) => setSelecteStore(v.id)}
           />
         </GridItem>
+
 
         <GridItem
           xs={12}
@@ -269,38 +249,46 @@ const Create = ({ endpoint, modal, handleRefress }) => {
           <ArrowForwardIcon size="large" />
         </GridItem>
 
+    
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
             size="small"
             fullWidth={true}
             // value={selectedWarehouse}
             id="combo-box-demo"
-            options={warehouseList}
+            options={customerList}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
-              <TextField {...params} label="Warehouse" variant="outlined" />
+              <TextField {...params} label="Customer" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedWarehouse(v.id)}
+            onChange={(e, v) => setselectedCustomer(v.id)}
           />
         </GridItem>
-        {/* 
 
-        <GridItem xs={12} sm={3} md={3}>
+        {/* <GridItem xs={12} sm={3} md={3}>
           <div style={{ marginTop: "-8px" }}>
             <Productsearch
               searchUrl={endpoint.productsearchForStockIn}
               headerds={endpoint.headers}
               handleProductAdd={handleProductAdd}
-              searchBody={ {warehouse_id:selectedWarehouse} }
+              searchBody={{ store_id: selectedStore }}
+                warehouseIdRequired={false}
+              storeidRequired={true}
+               idRequired={true}
             />
           </div>
         </GridItem> */}
+
 
         <GridItem xs={12} sm={12} md={12}>
           <div style={{ marginTop: "15px" }}>
             <ProductSelectByDropdown
               endpoint={endpoint}
               handleProductAdd={handleProductAdd}
+              idRequired={true}
+            //   warehouseIdRequired={false}
+            //   storeidRequired={true}
+              searchBody={{ store_id: selectedStore }}
             />
           </div>
         </GridItem>
@@ -322,33 +310,35 @@ const Create = ({ endpoint, modal, handleRefress }) => {
           )}
         </GridItem>
 
-        <GridItem xs={12} sm={12} md={12}>
-          {selectedProductList.length > 0 && (
-            <Calculation
-              products={selectedProductList}
-              subTotal={subTotal}
-              setSubTotal={setSubTotal}
-              grand={grand}
-              setGrand={setGrand}
-              paid={paid}
-              setPaid={setPaid}
-              due={due}
-              setDue={setDue}
-              discountAmount={discountAmount}
-              setDiscountAmount={setDiscountAmount}
-              discountType={discountType}
-              setDiscountType={setDiscountType}
-              discountParcent={discountParcent}
-              setDiscountParcent={setDiscountParcent}
-              afterDiscountAmount={afterDiscountAmount}
-              setAfterDiscountAmount={setAfterDiscountAmount}
-              paymentType={paymentType}
-              setPaymentType={setPaymentType}
-            />
-          )}
-        </GridItem>
+      
+          <GridItem xs={12} sm={12} md={12}>
+            {selectedProductList.length > 0 && (
+              <Calculation
+                products={selectedProductList}
+                subTotal={subTotal}
+                setSubTotal={setSubTotal}
+                grand={grand}
+                setGrand={setGrand}
+                paid={paid}
+                setPaid={setPaid}
+                due={due}
+                setDue={setDue}
+                discountAmount={discountAmount}
+                setDiscountAmount={setDiscountAmount}
+                discountType={discountType}
+                setDiscountType={setDiscountType}
+                discountParcent={discountParcent}
+                setDiscountParcent={setDiscountParcent}
+                afterDiscountAmount={afterDiscountAmount}
+                setAfterDiscountAmount={setAfterDiscountAmount}
+                paymentType={paymentType}
+                setPaymentType={setPaymentType}
+              />
+            )}
+          </GridItem>
+   
 
-        <GridItem
+          <GridItem
           xs={12}
           sm={12}
           md={12}
@@ -372,4 +362,4 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   );
 };
 
-export default Create;
+export default StockOutComponent;

@@ -13,6 +13,7 @@ import AllApplicationErrorNotification from "../../utils/errorNotification";
 import Productsearch from "../common_component/productsearch";
 import Productstable from "../common_component/Productstable";
 import Calculation from "../common_component/calculation";
+import ProductSelectByDropdown from "../common_component/productSelectByDropdown";
 
 const styles = {
   cardCategoryWhite: {
@@ -212,7 +213,7 @@ console.log(endpoint, modal, handleRefress)
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
-        <GridItem xs={12} sm={3} md={2}>
+        <GridItem xs={12} sm={3} md={3}>
           <TextField
             size="small"
             id="standard-basic"
@@ -263,7 +264,7 @@ console.log(endpoint, modal, handleRefress)
           />
         </GridItem>
 
-        <GridItem xs={12} sm={3} md={3}>
+        {/* <GridItem xs={12} sm={3} md={3}>
           <div style={{ marginTop: "-8px" }}>
             <Productsearch
               searchUrl={endpoint.productsearchForStockIn}
@@ -271,6 +272,20 @@ console.log(endpoint, modal, handleRefress)
               handleProductAdd={handleProductAdd}
               searchBody={{ warehouse_id: selectedWarehouse }}
               warehouseIdRequired={true}
+               idRequired={true}
+            />
+          </div>
+        </GridItem> */}
+
+
+        <GridItem xs={12} sm={12} md={12}>
+          <div style={{ marginTop: "15px" }}>
+            <ProductSelectByDropdown
+              endpoint={endpoint}
+              handleProductAdd={handleProductAdd}
+              warehouseIdRequired={true}
+              idRequired={true}
+              searchBody={{ warehouse_id: selectedWarehouse }}
             />
           </div>
         </GridItem>

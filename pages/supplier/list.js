@@ -142,6 +142,7 @@ const SuplierComponent = observer(() => {
         </Typography>
       ),
     },
+    { title: "Shop Name", field: "shop_name" },
     { title: "Code", field: "code" },
     { title: "Phone", field: "phone" },
     { title: "Email", field: "email" },

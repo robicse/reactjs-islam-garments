@@ -84,6 +84,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                 initialValues={{
                   supplier_id: editData?.id,
                   name: editData?.name,
+                  shop_name: editData?.shop_name,
                   phone: editData?.phone,
                   email: editData?.email,
                   address: editData?.address,
@@ -123,6 +124,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                   const body = {
                     supplier_id: values.supplier_id,
                     name: values.name,
+                    shop_name: values.shop_name,
                     phone: values.phone,
                     email: values.email,
                     address: values.address,
@@ -178,6 +180,17 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               type="text"
                               label="Name"
                               name="name"
+                            />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="text"
+                              label="Shop Name"
+                              name="shop_name"
                             />
                           </GridItem>
                           <GridItem xs={12} sm={12} md={4}>

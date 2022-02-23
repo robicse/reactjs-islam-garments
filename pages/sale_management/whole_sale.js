@@ -1,6 +1,6 @@
 import React from "react";
-import { useState,useEffect} from "react";
-import cogoToast from 'cogo-toast';
+import { useState, useEffect } from "react";
+import cogoToast from "cogo-toast";
 import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
@@ -29,13 +29,12 @@ import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
 import tableIcons from "components/table_icon/icon";
 import { useReactToPrint } from "react-to-print";
 // custom component
-import StockOutPOS from 'components/admin/sale_management/whole_sale/whole_sale_create';
+import StockOutPOS from "components/admin/sale_management/whole_sale/whole_sale_create";
 import Details from "components/admin/common_component/details";
-import StockInPrint from "components/admin/common_component/invoicePrint";
+import StockOutPrint from "components/admin/common_component/invoicePrint";
 // utils component
 import { convertFristCharcapital } from "helper/getMonthToNumber";
-import {dateFormatWithTime} from 'helper/dateFormat';
-
+import { dateFormatWithTime } from "helper/dateFormat";
 
 const styles = {
   cardCategoryWhite: {
@@ -75,7 +74,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const title = "Stock Out (POS)";
 const subject = "Store Stock";
 
-
 const wholesaleList = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
@@ -84,32 +82,32 @@ const wholesaleList = observer(() => {
     tableRef.current && tableRef.current.onQueryChange();
   };
 
+  const endpoint = {
+    title: "Stock Out (POS)",
+    subject: "Store Stock",
+    // warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
+    // supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
+    storeActiveListUrl: `${baseUrl}/store_active_list`,
+    sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
+    unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
+    categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
+    subUnitActiveListUrl: `${baseUrl}/product_sub_unit_list`,
+    wholeSaleCustomerActiveListUrl: `${baseUrl}/whole_sale_customer_active_list`,
+    paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
+    // stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
+    // deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
+    wholeSaleStockOutAPi: `${baseUrl}/product_whole_sale_create`,
+    // by dropdown
+    productFindForStockOutFromStore: `${baseUrl}/product_info_for_stock_in`,
+    //by search filed
+    productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
+    productWholeSaleListApi: `${baseUrl}/product_whole_sale_list_search`,
+    ProductdetailsUrl: `${baseUrl}/product_sale_details`,
+    printUrl: `${baseUrl}/product_sale_details_print`,
+    headers: { headers: { Authorization: "Bearer " + user.details.token } },
+  };
 
-const endpoint = {
-  title:"Stock Out (POS)",
-  subject: "Store Stock",
-  warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
-  supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
-  storeActiveListUrl:`${baseUrl}/store_active_list`,
-  sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
-  unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
-  categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
-  wholeSaleStockOutAPi: `${baseUrl}/product_whole_sale_create`,
-  stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
-  deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
-  stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
-  productFindForStockOutFromStore: `${baseUrl}/product_info_for_stock_in`,
-  productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
-  paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
-  stockInListAPI: `${baseUrl}/stock_transfer_list_with_search`,
-  ProductdetailsUrl:`${baseUrl}/stock_transfer_details`,
-  headers: { headers: { Authorization: "Bearer " + user.details.token }},
-  printUrl: `${baseUrl}/stock_transfer_details_print`,
-  subUnitActiveListUrl:`${baseUrl}/product_sub_unit_list`,
-  wholeSaleCustomerActiveListUrl: `${baseUrl}/whole_sale_customer_active_list`,
-};
-
-  const [openCreateModal, setOpenCreateModal] = useState(false);;
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [defaultprintData, setDefaultPrintData] = useState(null);
   const [printData, setPrintData] = useState(null);
@@ -131,85 +129,79 @@ const endpoint = {
     setOpenDetailModal(true);
   };
 
-
   const columns = [
-    { title: "Invoice No",   render: (rowData) => convertFristCharcapital(rowData.invoice_no)},
-    { title: "Warehouse Name", field: "warehouse_name" },
+    {
+      title: "Invoice No",
+      render: (rowData) => convertFristCharcapital(rowData.invoice_no),
+    },
     { title: "Store Name", field: "store_name" },
-    { title: "User Name", field: "user_name" },
-    { title: "Transfer Date Time", field: "created_at",render: (rowData) => dateFormatWithTime(rowData.created_at)},
+    { title: "Customer Name", field: "customer_name" },
+
+    { title: "Saller Name", field: "user_name" },
+    {
+      title: "Sale Date Time",
+      field: "sale_date_time",
+      render: (rowData) => dateFormatWithTime(rowData.sale_date_time),
+    },
     {
       title: "Grand Total",
       field: "grand_total_amount",
     },
   ];
 
-
   const componentRef = React.useRef(null);
 
-
   const handlePrint = async (row) => {
-
     try {
-     let data = new FormData();
-     data.append('stock_transfer_id', JSON.stringify(row.id));
+      let data = new FormData();
+      data.append("product_sale_id", JSON.stringify(row.id));
       const result = await axios.post(
-         endpoint.printUrl,
-         data,
-         endpoint.headers
-       )
-       console.log(result)
-       setPrintData(result.data);
-       // console.log(result)
-       setDefaultPrintData(row);
-       // setPrintData(result);
-      
+        endpoint.printUrl,
+        data,
+        endpoint.headers
+      );
+      console.log(result);
+      setPrintData(result.data);
+      // console.log(result)
+      setDefaultPrintData(row);
+      // setPrintData(result);
     } catch (error) {
-      console.log(error)
-      
+      console.log(error);
     }
-   };
- 
-   useEffect(()=>{
-    if(printData && defaultprintData){
-      console.log(printData)
-      handlePrintInvoice()
+  };
+
+  useEffect(() => {
+    if (printData && defaultprintData) {
+      console.log(printData);
+      handlePrintInvoice();
     }
-
-  },[printData,defaultprintData])
-
-   
-
+  }, [printData, defaultprintData]);
 
   const handlePrintInvoice = useReactToPrint({
     content: () => componentRef.current,
   });
 
-
-    
-      // handle create
-      const handleCreate = () => {
-        // if (!user.can("Create", subject)) {
-        //   cogoToast.error("You don't  have Create permission!", {
-        //     position: "top-right",
-        //     bar: { size: "10px" },
-        //   });
-        //   return null;
-        // }
-        handleClickOpenCreate(true);
-      };
-    
-      
+  // handle create
+  const handleCreate = () => {
+    // if (!user.can("Create", subject)) {
+    //   cogoToast.error("You don't  have Create permission!", {
+    //     position: "top-right",
+    //     bar: { size: "10px" },
+    //   });
+    //   return null;
+    // }
+    handleClickOpenCreate(true);
+  };
 
   return (
     // <Gurd subject={subject}>
     <div>
       <div style={{ display: "none" }}>
-        <StockInPrint
-            ref={componentRef}
-            defaultprintData={defaultprintData}
-            printData={printData}
-            invoiceTitle="Store Stock In"
+        <StockOutPrint
+          ref={componentRef}
+          defaultprintData={defaultprintData}
+          printData={printData}
+          invoiceTitle="Store Stock Out"
         />
       </div>
       <GridContainer>
@@ -220,7 +212,6 @@ const endpoint = {
                 <Grid container item xs={6} spacing={3} direction="column">
                   <Box p={2}>
                     <h4 className={classes.cardTitleWhite}>{title} List</h4>
-                   
                   </Box>
                 </Grid>
                 <Grid
@@ -248,65 +239,57 @@ const endpoint = {
                 title="List"
                 columns={columns}
                 tableRef={tableRef}
-
-                data={query =>
+                data={(query) =>
                   new Promise((resolve, reject) => {
-                   
-                    let url = `${endpoint.stockInListAPI}?`;
+                    let url = `${endpoint.productWholeSaleListApi}?`;
                     //searching
                     if (query.search) {
-                      url += `search=${query.search}`
+                      url += `search=${query.search}`;
                     }
-                  
-                    url += `&page=${query.page + 1}`
-                    fetch(url,{
-                          method: "post",
-                          headers: { Authorization: "Bearer " + user.auth_token },
-                        }
-                      ).then(resp => resp.json()).then(resp => {
-            
-                      resolve({
-                            data: resp.data?.data,
-                            page: resp?.data?.current_page - 1,
-                            totalCount: resp?.data?.total,
-                      });
+
+                    url += `&page=${query.page + 1}`;
+                    fetch(url, {
+                      method: "post",
+                      headers: { Authorization: "Bearer " + user.auth_token },
                     })
-        
+                      .then((resp) => resp.json())
+                      .then((resp) => {
+                        resolve({
+                          data: resp.data?.data,
+                          page: resp?.data?.current_page - 1,
+                          totalCount: resp?.data?.total,
+                        });
+                      });
                   })
                 }
-
-
-            
                 actions={[
-                  // {
-                  //   icon: () => (
-                  //     <Button
-                  //       fullWidth={true}
-                  //       variant="contained"
-                  //       color="primary"
-                  //     >
-                  //       <PrintTwoToneIcon fontSize="small" color="white" />
-                  //     </Button>
-                  //   ),
-                  //   tooltip: "Print",
-                  //   onClick: (event, rowData) => handlePrint(rowData),
-                  // },
+                  {
+                    icon: () => (
+                      <Button
+                        fullWidth={true}
+                        variant="contained"
+                        color="primary"
+                      >
+                        <PrintTwoToneIcon fontSize="small" color="white" />
+                      </Button>
+                    ),
+                    tooltip: "Print",
+                    onClick: (event, rowData) => handlePrint(rowData),
+                  },
 
-                  // {
-                  //   icon: () => (
-                  //     <Button
-                  //       fullWidth={true}
-                  //       variant="contained"
-                  //       color="primary"
-                  //     >
-                  //       <ListAltTwoToneIcon fontSize="small" color="white" />
-                  //     </Button>
-                  //   ),
-                  //   tooltip: "Show Products",
-                  //   onClick: (event, rowData) => handleDetails(rowData),
-                  // },
-               
-
+                  {
+                    icon: () => (
+                      <Button
+                        fullWidth={true}
+                        variant="contained"
+                        color="primary"
+                      >
+                        <ListAltTwoToneIcon fontSize="small" color="white" />
+                      </Button>
+                    ),
+                    tooltip: "Show Products",
+                    onClick: (event, rowData) => handleDetails(rowData),
+                  },
 
                   {
                     icon: RefreshIcon,
@@ -317,12 +300,11 @@ const endpoint = {
                 ]}
                 options={{
                   actionsColumnIndex: -1,
-    
+
                   pageSize: 12,
                   pageSizeOptions: [12],
                   padding: "dense",
                 }}
-               
               />
             </CardBody>
           </Card>
@@ -331,14 +313,16 @@ const endpoint = {
             fullScreen
             open={openCreateModal}
             onClose={handleCloseCreate}
-            TransitionComponent={Transition}>
-            <AppBar style={{ position: 'relative' }}>
+            TransitionComponent={Transition}
+          >
+            <AppBar style={{ position: "relative" }}>
               <Toolbar>
                 <IconButton
                   edge="start"
                   color="inherit"
                   onClick={handleCloseCreate}
-                  aria-label="close">
+                  aria-label="close"
+                >
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ flex: 1 }}>
@@ -352,9 +336,6 @@ const endpoint = {
               handleRefress={handleRefress}
             />
           </Dialog>
-
-
-
 
           <Dialog
             open={openDetailModal}
@@ -374,7 +355,7 @@ const endpoint = {
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ flex: 1 }}>
-                Stock Out  Product details
+                  Stock Out Product details
                 </Typography>
               </Toolbar>
             </AppBar>
@@ -383,12 +364,9 @@ const endpoint = {
               id={editData?.id}
               endpoint={endpoint}
               editData={editData}
-              idType="stock_transfer_id"
+              idType="product_sale_id"
             />
           </Dialog>
-
-
-
         </GridItem>
       </GridContainer>
     </div>

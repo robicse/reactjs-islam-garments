@@ -98,7 +98,7 @@ const endpoint = {
   stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
   deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
   stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
-  productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
+  productFintByDeopDownItemAPi: `${baseUrl}/product_info_for_stock_in`,
   productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
   paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
   stockInListAPI: `${baseUrl}/stock_transfer_list_with_search`,

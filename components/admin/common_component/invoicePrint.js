@@ -6,13 +6,13 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import InvoiceHeader from "components/header/InvoiceHeader";
 import { curencyNumbertoWordTwo } from "helper/currenctConvert";
 import {
   convertFristCharcapital,
   dateFormatIssueDate,
 } from "helper/getMonthToNumber";
 import { dateFormatWithoutTime } from "helper/dateFormat";
+import GridItem from "components/Grid/GridItem";
 
 const useStyles = makeStyles({
   table: {
@@ -26,192 +26,172 @@ const InvoicePrint = React.forwardRef(
     console.log(defaultprintData, printData, invoiceTitle);
     const classes = useStyles();
 
-    //   const [date, setDate] = useState([1, 2, 3]);
-    //   const [time, setTime] = useState([1, 2]);
-    //   useEffect(() => {
-    //     var time = inv ? inv.purchase_date_time.split(" ") : [1, 2];
-    //     setTime(time);
-    //   }, [inv, invoiceProduct]);
+    const stockOutRender = (renData) => {
+      const clienObj = {
+        name: renData?.customer_name,
+        phone: renData?.customer_phone,
+        address: renData?.customer_address,
+      };
+
+      const adminObj = {
+        name: renData?.store_name,
+        phone: renData?.store_phone,
+        address: renData?.store_address,
+      };
+      return (
+        <Grid container>
+          <GridItem xs="6" style={{ textAlign: "start" }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+              invoice To
+            </Typography>
+            <Typography variant="body2">{clienObj?.name}</Typography>
+            <Typography variant="body2">{clienObj?.phone}</Typography>
+            <Typography variant="body2">{clienObj?.address}</Typography>
+          </GridItem>
+
+          <GridItem xs="6" style={{ textAlign: "end" }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+              Pay To
+            </Typography>
+
+            <Typography variant="body2">{adminObj?.name}</Typography>
+            <Typography variant="body2">{adminObj?.phone}</Typography>
+            <Typography variant="body2">{adminObj?.address}</Typography>
+          </GridItem>
+        </Grid>
+      );
+    };
+
+    const stockInRender = (renData) => {
+      const clienObj = {
+        name: renData?.stores_name,
+        phone: renData?.stores_phone,
+        address: renData?.stores_address,
+      };
+
+      const adminObj = {
+        name: renData?.warehouse_name,
+        phone: renData?.warehouse_phone,
+        address: renData?.warehouse_address,
+      };
+      return (
+        <Grid container>
+          <GridItem xs="6" style={{ textAlign: "start" }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+              invoice To
+            </Typography>
+            <Typography variant="body2">{clienObj?.name}</Typography>
+            <Typography variant="body2">{clienObj?.phone}</Typography>
+            <Typography variant="body2">{clienObj?.address}</Typography>
+          </GridItem>
+
+          <GridItem xs="6" style={{ textAlign: "end" }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+              Pay To
+            </Typography>
+
+            <Typography variant="body2">{adminObj?.name}</Typography>
+            <Typography variant="body2">{adminObj?.phone}</Typography>
+            <Typography variant="body2">{adminObj?.address}</Typography>
+          </GridItem>
+        </Grid>
+      );
+    };
+
+    const stockInWarehouseRender = (renData) => {
+      const clienObj = {
+        name: renData?.warehouse_name,
+        phone: renData?.warehouse_phone,
+        address: renData?.supplier_address,
+      };
+
+      const adminObj = {
+        name: renData?.supplier_name,
+        phone: renData?.supplier_phone,
+        address: renData?.warehouse_address,
+      };
+      return (
+        <Grid container>
+          <GridItem xs="6" style={{ textAlign: "start" }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+              invoice To
+            </Typography>
+            <Typography variant="body2">{clienObj?.name}</Typography>
+            <Typography variant="body2">{clienObj?.phone}</Typography>
+            <Typography variant="body2">{clienObj?.address}</Typography>
+          </GridItem>
+
+          <GridItem xs="6" style={{ textAlign: "end" }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+              Pay To
+            </Typography>
+
+            <Typography variant="body2">{adminObj?.name}</Typography>
+            <Typography variant="body2">{adminObj?.phone}</Typography>
+            <Typography variant="body2">{adminObj?.address}</Typography>
+          </GridItem>
+        </Grid>
+      );
+    };
 
     return (
       <div ref={ref}>
         {defaultprintData && (
-          <Grid container direction="column">
-            <Box
+          <div style={{ margin: "15px" }}>
+            <Grid container>
+              <GridItem xs="6">
+                <Typography
+                  style={{ textAlign: "start", fontWeight: "bold" }}
+                  variant="h5"
+                >
+                  Islam Garments
+                </Typography>
+              </GridItem>
+              <GridItem xs="6">
+                <Typography
+                  style={{ textAlign: "end", fontWeight: "bold" }}
+                  variant="h5"
+                >
+                  {invoiceTitle}
+                </Typography>
+              </GridItem>
+            </Grid>
+
+            <Grid
+              container
               style={{
-                textAlign: "center",
                 marginTop: "10px",
-                marginBottom: "10px",
+                borderTop: "1px solid gray",
+                borderBottom: "1px solid gray",
+                paddingTop: "8px",
+                paddingBottom: "8px",
               }}
             >
-              <Typography variant="h2">Islam Garments</Typography>
-            </Box>
-
-            <Box pl={3} pr={2} mt={2} mb={2}>
-              <Grid
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="center"
-                style={{ backgroundColor: "#e6eff5", padding: "7px" }}
-              >
-                <Typography variant="body1" align="center">
-                  Invoice No:
-                  {convertFristCharcapital(defaultprintData?.invoice_no)}
-                </Typography>
-                <Typography variant="body1" align="center">
-                  Date:
+              <GridItem xs="6">
+                <Typography style={{ fontWeight: "bold" }} align="left">
+                  date:{" "}
                   {dateFormatWithoutTime(defaultprintData.purchase_date_time)}
                 </Typography>
-                <Typography variant="body1" align="center">
-                  Time:
-                  {/* {`${time[1]}`} */}
+              </GridItem>
+              <GridItem xs="6">
+                <Typography style={{ fontWeight: "bold" }} align="right">
+                  Invoice No:{" "}
+                  {convertFristCharcapital(defaultprintData?.invoice_no)}
                 </Typography>
-              </Grid>
+              </GridItem>
+            </Grid>
+
+            <Box mt={3}>
+              {invoiceTitle == "Store Stock Out" &&
+                stockOutRender(printData?.info)}
+              {invoiceTitle == "Store Stock In" &&
+                stockInRender(printData?.info)}
+
+              {invoiceTitle == "Warehouse Stock In" &&
+                stockInWarehouseRender(printData?.info)}
             </Box>
-{/* 
-             <Box pl={3} pr={2}>
-              <Grid container spacing={1} direction="row">
-                <Grid item xs={6}>
-                  {invoiceTitle == "Warehouse Stock In" && (
-                    <div>
-                      <Typography
-                        // style={{ paddingLeft: "7px" }}
-                        variant="body1"
-                        align="left"
-                      >
-                        Supplier Name:
-                        {printData?.info?.supplier_name}
-                      </Typography>
-                      <Typography variant="body1" align="left">
-                        Supplier Phone:
-                        {printData?.info?.supplier_phone}
-                      </Typography>
-                      <Typography variant="body1" align="left">
-                        Supplier Address: {printData?.info?.supplier_address}
-                      </Typography>
-                    </div>
-                  )}
 
-                  {invoiceTitle == "Store Stock In" && (
-                    <div>
-                      <Typography
-                        // style={{ paddingLeft: "7px" }}
-                        variant="body1"
-                        align="left"
-                      >
-                        Warehouse Name:
-                        {printData?.info?.warehouse_name}
-                      </Typography>
-                      <Typography variant="body1" align="left">
-                        warehouse Phone:
-                        {printData?.info?.warehouse_phone}
-                      </Typography>
-                      <Typography variant="body1" align="left">
-                        Warehouse Address: {printData?.info?.warehouse_address}
-                      </Typography>
-                    </div>
-                  )}
-                </Grid>
-
-                <Grid item xs={6}>
-                  {invoiceTitle == "Store Stock In" && (
-                    <div>
-                      <Typography
-                        // style={{ paddingLeft: "7px" }}
-                        variant="body1"
-                        align="left"
-                      >
-                        Store Name:
-                        {printData?.info?.stores_name}
-                      </Typography>
-                      <Typography variant="body1" align="left">
-                        Store Phone:
-                        {printData?.info?.stores_phone}
-                      </Typography>
-                      <Typography variant="body1" align="left">
-                        Store Address: {printData?.info?.stores_address}
-                      </Typography>
-                    </div>
-                  )}
-                </Grid>
-              </Grid>
-            </Box>  */}
-
-
-
-
-             <Box pl={3} pr={2}>
-              <Grid container spacing={1} direction="row">
-                <Grid item xs={6}>
-                  {invoiceTitle == "Warehouse Stock In" && (
-                    <>
-                      <Typography
-                        align="left"
-                      >
-                        Supplier Name:
-                        {printData?.info?.supplier_name}
-                      </Typography>
-                      <Typography  align="left">
-                        Supplier Phone:
-                        {printData?.info?.supplier_phone}
-                      </Typography>
-
-                    
-
-                      <Typography  align="left">
-                        Supplier Address: {printData?.info?.supplier_address}
-                      </Typography> 
-                    </>
-                  )}
-
-                  {invoiceTitle == "Store Stock In" && (
-                    <div>
-                      <Typography
-                        // style={{ paddingLeft: "7px" }}
-                        // variant="body1"
-                        align="left"
-                      >
-                        Warehouse Name:
-                        {printData?.info?.warehouse_name}
-                      </Typography>
-                      <Typography  align="left">
-                        warehouse Phone:
-                        {printData?.info?.warehouse_phone}
-                      </Typography>
-                      <Typography  align="left">
-                        Warehouse Address: {printData?.info?.warehouse_address}
-                      </Typography>
-                    </div>
-                  )}
-                </Grid>
-
-                <Grid item xs={6}>
-                  {invoiceTitle == "Store Stock In" && (
-                    <div>
-                      <Typography
-                        // style={{ paddingLeft: "7px" }}
-                        // variant="body1"
-                        align="left"
-                      >
-                        Store Name:
-                        {printData?.info?.stores_name}
-                      </Typography>
-                      <Typography  align="left">
-                        Store Phone:
-                        {printData?.info?.stores_phone}
-                      </Typography>
-                      <Typography align="left">
-                        Store Address: {printData?.info?.stores_address}
-                      </Typography>
-                    </div>
-                  )}
-                </Grid>
-              </Grid>
-            </Box> 
-
-
-            <Box pl={3} pr={2} py={2} mt={-10}>
+            <Box mt={4}>
               <Table
                 aria-label="simple table"
                 size="small"
@@ -267,56 +247,57 @@ const InvoicePrint = React.forwardRef(
                   </TableRow>
                 </TableBody>
               </Table>
-
-              <Box mt={2}>
-                <Typography variants="body1" style={{ fontWeight: "bold" }}>
-                  In Words:
-                  {curencyNumbertoWordTwo(defaultprintData?.grand_total_amount)}.
-                </Typography>
-              </Box>
-              <Box mt={7}>
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="center"
-                >
-                  <Box
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      align="left"
-                      style={{
-                        borderTop: "2px solid black",
-                      }}
-                    >
-                      Supplier's Signature
-                    </Typography>
-                  </Box>
-                  <Box
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      align="left"
-                      style={{
-                        borderTop: "2px solid black",
-                      }}
-                    >
-                      Admin Sigbature
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Box>
             </Box>
-          </Grid>
+
+            <Box mt={2}>
+              <Typography variants="body1" style={{ fontWeight: "bold" }}>
+                In Words:
+                {curencyNumbertoWordTwo(defaultprintData?.grand_total_amount)}.
+              </Typography>
+            </Box>
+
+            <Box mt={10}>
+              <Grid
+                container
+                direction="row"
+                justify="space-between"
+                alignItems="center"
+              >
+                <Box
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    align="left"
+                    style={{
+                      borderTop: "2px solid black",
+                    }}
+                  >
+                    Client Signature
+                  </Typography>
+                </Box>
+                <Box
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    align="left"
+                    style={{
+                      borderTop: "2px solid black",
+                    }}
+                  >
+                    Admin Signature
+                  </Typography>
+                </Box>
+              </Grid>
+            </Box>
+          </div>
         )}
       </div>
     );

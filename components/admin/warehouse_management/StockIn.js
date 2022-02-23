@@ -51,7 +51,7 @@ const styles = {
 const useStyles = makeStyles(styles);
 const Create = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
-  console.log(handleRefress);
+
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
   const [paid, setPaid] = React.useState();
@@ -216,7 +216,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
-        <GridItem xs={12} sm={3} md={3}>
+        <GridItem xs={12} sm={3} md={2}>
           <TextField
             size="small"
             id="standard-basic"
@@ -228,22 +228,6 @@ const Create = ({ endpoint, modal, handleRefress }) => {
           />
         </GridItem>
 
-        {/* <GridItem xs={12} sm={3} md={2}>
-        <Select
-        size="small"
-         id="standard-basic"
-         variant="outlined"
-          style={{ width: "100%",height:"72%"}}
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={productType}
-          onChange={(e)=>setProductType(e.target.value)}
-        >
-        <MenuItem  value="Own">Own</MenuItem>
-                              <MenuItem value="Buy">Buy</MenuItem>
-        </Select>
-       
-        </GridItem> */}
 
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
@@ -283,22 +267,23 @@ const Create = ({ endpoint, modal, handleRefress }) => {
             onChange={(e, v) => setSelectedWarehouse(v.id)}
           />
         </GridItem>
-        {/* 
-
+     
+{/* 
         <GridItem xs={12} sm={3} md={3}>
           <div style={{ marginTop: "-8px" }}>
             <Productsearch
-              searchUrl={endpoint.productsearchForStockIn}
+              searchUrl={endpoint.productsearchBysearchFiled}
               headerds={endpoint.headers}
               handleProductAdd={handleProductAdd}
               searchBody={ {warehouse_id:selectedWarehouse} }
             />
           </div>
-        </GridItem> */}
+        </GridItem>  */}
 
         <GridItem xs={12} sm={12} md={12}>
           <div style={{ marginTop: "15px" }}>
             <ProductSelectByDropdown
+            idRequired={false}
               endpoint={endpoint}
               handleProductAdd={handleProductAdd}
             />

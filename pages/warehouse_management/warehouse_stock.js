@@ -79,7 +79,7 @@ const WarehouseStock = observer(() => {
     // stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
     // deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
     // stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
-    // productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
+    // productFindForStockIn: `${baseUrl}/`,product_info_for_stock_in
     headers: { headers: { Authorization: "Bearer " + user.details.token } },
   };
 

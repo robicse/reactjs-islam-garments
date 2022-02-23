@@ -91,13 +91,17 @@ const WarehouseStockIn = observer(() => {
     sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
     unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
     categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
-    stockInAPi: `${baseUrl}/product_purchase_create`,
-    stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
-    deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
-    stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
-    productFindForStockIn: `${baseUrl}/product_info_for_stock_in`,
-    productsearchForStockIn: `${baseUrl}/product_list_with_search`,
+    subUnitActiveListUrl:`${baseUrl}/product_sub_unit_list`,
     paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
+
+    stockInAPi: `${baseUrl}/product_purchase_create`,
+    // stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
+    // deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
+    stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
+    
+    productFintByDeopDownItemAPi: `${baseUrl}/product_info_for_stock_in`,
+    warehouse_stock_in: `${baseUrl}/product_list_with_search`,
+
     stockInListAPI: `${baseUrl}/product_purchase_list_pagination_with_search`,
     ProductdetailsUrl: `${baseUrl}/product_purchase_details`,
     printUrl: `${baseUrl}/product_purchase_details_print`,
@@ -113,7 +117,7 @@ const WarehouseStockIn = observer(() => {
         "Content-type": "multipart/form-data",
       },
     },
-    subUnitActiveListUrl:`${baseUrl}/product_sub_unit_list`, 
+   
   };
 
   const [openCreateModal, setOpenCreateModal] = useState(false);

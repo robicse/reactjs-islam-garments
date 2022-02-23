@@ -17,20 +17,17 @@ import {
 } from "@material-ui/core";
 
 export default function SearchByDrpdown({
-  searchUrl,
   searchBody,
-  headerds,
   handleProductAdd,
   idRequired,
   endpoint,
 }) {
 
   console.log(
-       searchBody,
-    // headerds,
-    // handleProductAdd,
+    handleProductAdd,
     idRequired,
-    endpoint.productFindForStockOutFromStore,)
+    endpoint,
+     )
   const [sizeList, setSizeList] = React.useState([]);
   const [unitList, setUnitList] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
@@ -95,7 +92,7 @@ export default function SearchByDrpdown({
 
     try {
       const response = await axios.post(
-        endpoint.productFindForStockOutFromStore,
+        endpoint.productFintByDeopDownItemAPi,
         data,
         endpoint.headers
       );
@@ -114,7 +111,7 @@ export default function SearchByDrpdown({
   useEffect(() => {
 
       if(selectedUnit?.name == 'Pcs'){
-        setSelectedSubUnit(null)
+        setSelectedSubUnit("")
       }
     if (selectedType && selectedCategory && selectedUnit && selectedSize || selectedSubUnit) {
       productSearchHandle(

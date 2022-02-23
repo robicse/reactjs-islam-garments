@@ -13,7 +13,10 @@ export default function ProductName({
     handleProductAdd,
     warehouseIdRequired
 }) {
-
+console.log(searchUrl,
+  searchBody,
+  headerds,
+  handleProductAdd)
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const loading = open && options.length === 0;

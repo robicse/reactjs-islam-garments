@@ -75,7 +75,7 @@ const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove })
                                         id="standard-number"
                                         type="number"
                                         value={product?.qty}
-                                        onChange={(e) => handdleQuantityChange(product?.id, e.target.value)}
+                                        onChange={(e) => handdleQuantityChange(product?.id,product?.current_stock, e.target.value)}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}

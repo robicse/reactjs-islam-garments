@@ -98,7 +98,7 @@ const endpoint = {
   stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
   deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
   stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
-  productFintByDeopDownItemAPi: `${baseUrl}/product_info_for_stock_in`,
+  productFintByDeopDownItemAPi: `${baseUrl}/product_search_for_stock_transfer_by_warehouse_id`,
   productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
   paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
   stockInListAPI: `${baseUrl}/stock_transfer_list_with_search`,
@@ -136,7 +136,7 @@ const endpoint = {
     { title: "Warehouse Name", field: "warehouse_name" },
     { title: "Store Name", field: "store_name" },
     { title: "User Name", field: "user_name" },
-    { title: "Transfer Date Time", field: "created_at",render: (rowData) => dateFormatWithTime(rowData.created_at)},
+    { title: "Transfer Date Time", field: "date_time",render: (rowData) => dateFormatWithTime(rowData.date_time)},
     {
       title: "Grand Total",
       field: "grand_total_amount",

@@ -334,7 +334,7 @@ const TableList = observer(() => {
                         ).then(resp => resp.json()).then(resp => {
               
                         resolve({
-                              data: resp?.data?.data,
+                              data: resp?.data,
                               page: resp?.meta?.current_page - 1,
                               totalCount: resp?.meta?.total,
                         });

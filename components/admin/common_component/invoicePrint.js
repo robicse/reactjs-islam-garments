@@ -134,6 +134,8 @@ const InvoicePrint = React.forwardRef(
       );
     };
 
+
+ 
     return (
       <div ref={ref}>
         {defaultprintData && (
@@ -170,7 +172,7 @@ const InvoicePrint = React.forwardRef(
               <GridItem xs="6">
                 <Typography style={{ fontWeight: "bold" }} align="left">
                   date:{" "}
-                  {dateFormatWithoutTime(defaultprintData.purchase_date_time)}
+                  {dateFormatWithoutTime(defaultprintData.date_time)}
                 </Typography>
               </GridItem>
               <GridItem xs="6">

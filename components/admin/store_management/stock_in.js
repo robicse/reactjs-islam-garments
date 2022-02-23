@@ -122,7 +122,7 @@ console.log(endpoint, modal, handleRefress)
   };
 
   // handle quantity change
-  const handdleQuantityChange = (prodId, qty) => {
+  const handdleQuantityChange = (prodId,current_stock, qty) => {
     if (qty < 0) {
       return cogoToast.error("Enter Valid QTY", {
         position: "top-right",
@@ -130,6 +130,12 @@ console.log(endpoint, modal, handleRefress)
       });
     }
 
+    if (qty > current_stock) {
+      return cogoToast.error("Stock Not Match", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
     setSelectedProduct(
       selectedProductList.map((item) =>
         item.id === prodId ? { ...item, qty: qty } : item
@@ -196,14 +202,15 @@ console.log(endpoint, modal, handleRefress)
         position: "top-right",
         bar: { size: "10px" },
       });
-      const submitResponse = await axios.post(
+     await axios.post(
         endpoint.stockInAPi,
         data,
         endpoint.headers,
       );
+      handleRefress();
       setButtonLoading(false);
       modal(false);
-      handleRefress();
+    
     } catch (error) {
       AllApplicationErrorNotification(error);
       setButtonLoading(false);

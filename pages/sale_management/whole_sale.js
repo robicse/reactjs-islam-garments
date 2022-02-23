@@ -94,11 +94,9 @@ const wholesaleList = observer(() => {
     subUnitActiveListUrl: `${baseUrl}/product_sub_unit_list`,
     wholeSaleCustomerActiveListUrl: `${baseUrl}/whole_sale_customer_active_list`,
     paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
-    // stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
-    // deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
     wholeSaleStockOutAPi: `${baseUrl}/product_whole_sale_create`,
     // by dropdown
-    productFindForStockOutFromStore: `${baseUrl}/product_info_for_stock_in`,
+    productFintByDeopDownItemAPi: `${baseUrl}/product_search_for_sale_by_store_id`,
     //by search filed
     productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
     productWholeSaleListApi: `${baseUrl}/product_whole_sale_list_search`,
@@ -140,8 +138,8 @@ const wholesaleList = observer(() => {
     { title: "Saller Name", field: "user_name" },
     {
       title: "Sale Date Time",
-      field: "sale_date_time",
-      render: (rowData) => dateFormatWithTime(rowData.sale_date_time),
+      field: "date_time",
+      render: (rowData) => dateFormatWithTime(rowData.date_time),
     },
     {
       title: "Grand Total",
@@ -192,7 +190,7 @@ const wholesaleList = observer(() => {
     // }
     handleClickOpenCreate(true);
   };
-
+ 
   return (
     // <Gurd subject={subject}>
     <div>

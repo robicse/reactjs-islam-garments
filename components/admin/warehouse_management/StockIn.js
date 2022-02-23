@@ -134,7 +134,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   };
 
   // handle quantity change
-  const handdleQuantityChange = (prodId, qty) => {
+  const handdleQuantityChange = (prodId,current_stock, qty) => {
     if (qty < 0) {
       return cogoToast.error("Enter Valid QTY", {
         position: "top-right",
@@ -142,6 +142,12 @@ const Create = ({ endpoint, modal, handleRefress }) => {
       });
     }
 
+    // if (qty > current_stock) {
+    //   return cogoToast.error("Stock Not Match", {
+    //     position: "top-right",
+    //     bar: { size: "10px" },
+    //   });
+    // }
     setSelectedProduct(
       selectedProductList.map((item) =>
         item.id === prodId ? { ...item, qty: qty } : item
@@ -283,7 +289,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
         <GridItem xs={12} sm={12} md={12}>
           <div style={{ marginTop: "15px" }}>
             <ProductSelectByDropdown
-            idRequired={false}
+               idRequired={false}
               endpoint={endpoint}
               handleProductAdd={handleProductAdd}
             />

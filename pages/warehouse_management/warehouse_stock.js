@@ -70,16 +70,7 @@ const WarehouseStock = observer(() => {
     title: "Warehouse Stock",
     subject: "Warehouse Stock",
     warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
-    // supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
-    // sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
-    // unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
-    // categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
     stockListApi: `${baseUrl}/warehouse_current_stock_by_id`,
-    // stockInAPi: `${baseUrl}/warehouse_stock_in`,
-    // stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
-    // deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
-    // stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
-    // productFindForStockIn: `${baseUrl}/`,product_info_for_stock_in
     headers: { headers: { Authorization: "Bearer " + user.details.token } },
   };
 

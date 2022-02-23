@@ -23,11 +23,10 @@ export default function SearchByDrpdown({
   endpoint,
 }) {
 
-  console.log(
-    handleProductAdd,
-    idRequired,
-    endpoint,
-     )
+
+
+
+
   const [sizeList, setSizeList] = React.useState([]);
   const [unitList, setUnitList] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
@@ -75,8 +74,11 @@ export default function SearchByDrpdown({
     product_sub_unit_id
   ) => {
 
-    if(idRequired && !searchBody ) {
-      return cogoToast.warn('Please select warehouse/Store',{position: 'top-right', bar:{size: '10px'}});
+    
+    if(idRequired) {
+      if( Object.values(searchBody).includes(null)){
+        return cogoToast.warn('Please select Warehouse/Store',{position: 'top-right', bar:{size: '10px'}});
+      }
     }
     const body = {
       ...searchBody,
@@ -86,7 +88,7 @@ export default function SearchByDrpdown({
       product_size_id,
       product_sub_unit_id
     };
-
+    
     const data = new FormData();
     Object.keys(body).forEach((key) => data.append(key, body[key]));
 
@@ -96,9 +98,11 @@ export default function SearchByDrpdown({
         data,
         endpoint.headers
       );
-      handleProductAdd(response?.data?.data?.data[0]);
 
-      console.log(response?.data?.data?.data[0]);
+
+      handleProductAdd(response?.data?.data[0]);
+
+  
     } catch (error) {
       console.log(error);
       cogoToast.info("Product Not Found", {

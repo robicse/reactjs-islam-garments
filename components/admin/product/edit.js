@@ -45,11 +45,8 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
   console.log(mutate)
   const classes = useStyles();
 
-  const [image, setImage] = React.useState(null);
-
-  const uploadImageHnadle = (img) => {
-    setImage(img);
-  };
+  const [frontImage, setFrontImage] = React.useState(null);
+  const [backImage, setBackImag] = React.useState(null);
 
   return (
     <div>
@@ -94,7 +91,8 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                     color: values.color,
                     design: values.design,
                     note: values.note,
-                    image: image,
+                    front_image: frontImage,
+                    back_image: backImage,
                   };
 
                   const formData = new FormData();
@@ -191,15 +189,20 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                             />
                           </GridItem>
 
-                          <GridItem xs={12} sm={12} md={4}>
+                       
+
+                          <GridItem xs={12} sm={4} md={4}>
                             <Field
                               component={TextField}
                               variant="outlined"
                               margin="normal"
                               fullWidth
-                              type="text"
-                              label="Note"
-                              name="note"
+                              type="file"
+                              // label="Image"
+                              name="frontimage"
+                              onChange={(e) => {
+                                setFrontImage(e.target.files[0]);
+                              }}
                             />
                           </GridItem>
 
@@ -210,11 +213,22 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               margin="normal"
                               fullWidth
                               type="file"
-                              // label="Image"
-                              name="image"
+                              name="backimage"
                               onChange={(e) => {
-                                uploadImageHnadle(e.target.files[0]);
+                                setBackImag(e.target.files[0]);
                               }}
+                            />
+                          </GridItem>
+
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="text"
+                              label="Note"
+                              name="note"
                             />
                           </GridItem>
                         </GridContainer>

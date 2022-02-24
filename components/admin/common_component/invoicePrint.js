@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 });
 const InvoicePrint = React.forwardRef(
   ({ defaultprintData, printData, invoiceTitle }, ref) => {
-    console.log(defaultprintData, printData, invoiceTitle);
+
     const classes = useStyles();
 
     const stockOutRender = (renData) => {

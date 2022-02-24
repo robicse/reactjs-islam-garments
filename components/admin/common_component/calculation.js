@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import cogoToast from "cogo-toast";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Grid, MenuItem } from "@material-ui/core";
@@ -30,6 +31,10 @@ const ClaculationComponent = ({
   setAfterDiscountAmount,
   paymentType,
   setPaymentType,
+  paid,
+  setPaid,
+  due,
+  setDue,
 }) => {
   const classes = useStyles();
 
@@ -89,6 +94,16 @@ const ClaculationComponent = ({
     }
   };
 
+ // return cogoToast.warn('Please select Warehouse/Store',{position: 'top-right', bar:{size: '10px'}});
+  const handlePaidDue = (paidAmount) =>{
+       if(paidAmount < 0 ||  paidAmount > subTotal){
+         return cogoToast.warn('Please provide valid amount',{position: 'top-right', bar:{size: '10px'}});
+       }
+     
+       setPaid(paidAmount)
+       setDue(subTotal - paidAmount)
+
+  }
   return (
     <div>
 
@@ -128,6 +143,43 @@ const ClaculationComponent = ({
             }}
           />
         </Grid>
+
+        <Grid item xs={8}>
+
+        </Grid>
+        <Grid item xs={2}>
+      {  paymentType == '2' &&   <TextField
+            margin="normal"
+            variant="outlined"
+            size="small"
+            type="tel"
+            label="Paid"
+            // value={parseFloat(paid)}
+            InputProps={{
+              className: classes.multilineColor,
+              readOnly: false,
+            }}
+            onChange={(e)=>handlePaidDue(e.target.value)}
+          />
+}
+</Grid>
+<Grid item xs={2}>
+{  paymentType == '2' && 
+
+<TextField
+margin="normal"
+variant="outlined"
+size="small"
+type="number"
+label="Due"
+value={parseFloat(due)}
+InputProps={{
+  className: classes.multilineColor,
+  readOnly: true,
+}}
+/>
+  }
+</Grid>
 
   
             

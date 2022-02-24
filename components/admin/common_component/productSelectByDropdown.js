@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import cogoToast from "cogo-toast";
+import { baseUrl } from "const/api";
 import TextField from "@material-ui/core/TextField";
 import GridItem from "components/Grid/GridItem.js";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -31,12 +32,14 @@ export default function SearchByDrpdown({
   const [unitList, setUnitList] = React.useState([]);
   const [categoryList, setCategoryList] = React.useState([]);
   const [subunitList, setSubUnitList] = React.useState([]);
+  const [productCodeList, setProductCodeList] = React.useState([]);
 
   const [selectedType, setSelectedType] = React.useState(null);
   const [selectedSize, setSelectedSize] = React.useState(null);
   const [selectedUnit, setSelectedUnit] = React.useState(null);
   const [selectedCategory, setSelectedCategory] = React.useState(null);
   const [selectedSubUnit, setSelectedSubUnit] = React.useState(null);
+  const [selectedProductCode, setSelectedProductCode] = React.useState(null);
   
   useAsyncEffect(async (isMounted) => {
     try {
@@ -56,11 +59,17 @@ export default function SearchByDrpdown({
         endpoint.subUnitActiveListUrl,
         endpoint.headers
       );
+      const productCodeRes = await axios.post(
+        `${baseUrl}/product_code_list`,
+        {},
+        endpoint.headers
+      );
 
       setSizeList(sizeRes?.data?.data);
       setUnitList(unitRes?.data?.data);
       setCategoryList(categoryRes?.data?.data);
       setSubUnitList(subUnitRes?.data?.data);
+      setProductCodeList(productCodeRes?.data?.data)
     } catch (error) {
       console.log(error.response);
     }
@@ -71,7 +80,8 @@ export default function SearchByDrpdown({
     product_category_id,
     product_unit_id,
     product_size_id,
-    product_sub_unit_id
+    product_sub_unit_id,
+    productCode
   ) => {
 
     
@@ -86,7 +96,8 @@ export default function SearchByDrpdown({
       product_category_id,
       product_unit_id,
       product_size_id,
-      product_sub_unit_id
+      product_sub_unit_id,
+      product_code: productCode
     };
     
     const data = new FormData();
@@ -117,22 +128,23 @@ export default function SearchByDrpdown({
       if(selectedUnit?.name == 'Pcs'){
         setSelectedSubUnit("")
       }
-    if (selectedType && selectedCategory && selectedUnit && selectedSize || selectedSubUnit) {
+    if (selectedType && selectedCategory && selectedUnit && selectedSize && selectedProductCode ) {
       productSearchHandle(
         selectedType,
         selectedCategory,
         selectedUnit?.id,
         selectedSize,
-        selectedSubUnit
+        selectedSubUnit,
+        selectedProductCode
       );
     }
 
-  }, [selectedType, selectedCategory, selectedUnit, selectedSize,selectedSubUnit]);
+  }, [selectedType, selectedCategory, selectedUnit, selectedSize,selectedSubUnit, selectedProductCode]);
 
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={3} md={3}>
+        <GridItem xs={12} sm={3} md={2}>
           <Autocomplete
             size="small"
             fullWidth={true}
@@ -166,7 +178,7 @@ export default function SearchByDrpdown({
             renderInput={(params) => (
               <TextField {...params} label="Category" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedCategory(v.id)}
+            onChange={(e, v) => setSelectedCategory(v?.id)}
           />
         </GridItem>
 
@@ -185,7 +197,7 @@ export default function SearchByDrpdown({
         </GridItem>
 
         {selectedUnit?.name == "Bundle" && (
-          <GridItem xs={12} sm={3} md={2}>
+          <GridItem xs={12} sm={3} md={1}>
             <Autocomplete
               size="small"
               id="combo-box-demo"
@@ -195,7 +207,7 @@ export default function SearchByDrpdown({
               renderInput={(params) => (
                 <TextField {...params} label="Sub Unit" variant="outlined" />
               )}
-              onChange={(e, v) => setSelectedSubUnit(v.id)}
+              onChange={(e, v) => setSelectedSubUnit(v?.id)}
             />
           </GridItem>
         )}
@@ -210,7 +222,22 @@ export default function SearchByDrpdown({
             renderInput={(params) => (
               <TextField {...params} label="Product Size" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedSize(v.id)}
+            onChange={(e, v) => setSelectedSize(v?.id)}
+          />
+        </GridItem>
+
+
+        <GridItem xs={12} sm={3} md={2}>
+          <Autocomplete
+            size="small"
+            id="combo-box-demo"
+            options={productCodeList}
+            // value={selectedSize}
+            getOptionLabel={(option) => option.product_code}
+            renderInput={(params) => (
+              <TextField {...params} label="Product Code" variant="outlined" />
+            )}
+            onChange={(e, v) => setSelectedProductCode(v.product_code)}
           />
         </GridItem>
       </GridContainer>

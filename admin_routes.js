@@ -315,9 +315,27 @@ const dashboardRoutes = [
   //     },
   //   ],
   // },
+  {
+    id: 14,
+    collapse: true,
+    path: '/report',
+    name: 'Report',
+    icon: SettingsIcon,
+    childs: [
+      {
+        id: 1,
+        collapse: false,
+        path: '/report',
+        childPath: '/trial_balance',
+        permission: 'report',
+        name: 'Report',
+        icon: AccessibilityNewIcon,
+      },
+    ],
+  },
 
   {
-    id: 13,
+    id: 15,
     collapse: true,
     path: '/pos_settings',
     name: 'POS Setting',

@@ -33,6 +33,8 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 const drawerWidth = 240;
 
@@ -276,7 +278,7 @@ export const Layout = observer(({ children }) => {
      
                   {route.collapse && (
                     <Box>
-                      {openList == route.path ? <ExpandLess /> : <ExpandMore />}
+                      {openList == route.path ? <RemoveIcon />  :  <AddIcon />}
                     </Box>
                   )}
                 </ListItem>

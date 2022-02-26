@@ -135,6 +135,7 @@ const InvoicePrint = React.forwardRef(
     };
 
 
+
  
     return (
       <div ref={ref}>
@@ -191,6 +192,12 @@ const InvoicePrint = React.forwardRef(
 
               {invoiceTitle == "Warehouse Stock In" &&
                 stockInWarehouseRender(printData?.info)}
+
+
+{invoiceTitle == "Store Stock Request" &&
+                stockInRender(printData?.info)}
+
+
             </Box>
 
             <Box mt={4}>

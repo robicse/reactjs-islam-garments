@@ -15,13 +15,14 @@ const { user } = useRootStore();
 
     <div>
         { user?.details?.role === 'Super Admin' ? (
-        <h3>Warehouse Wise Information</h3>
+        <h3 style={{textAlign:"center",fontWeight:'bold',paddingBottom:"10px",borderBottom:"1px solid gray"}}>Warehouse Wise Information</h3>
         ) : ''}
 
         { user?.details?.role === 'Super Admin' ? (
         <Table
         aria-label="simple table"
         size="small"
+        style={{backgroundColor:"gray"}}
     
         >
         <TableHead>
@@ -76,12 +77,13 @@ const { user } = useRootStore();
         ) : ''}
 
         { user?.details?.role === 'Super Admin'  || user?.details?.role === 'Store Salesman' ? (
-        <h3>Store Wise Information</h3>
+        <h3  style={{textAlign:"center",fontWeight:'bold',paddingBottom:"10px",borderBottom:"1px solid gray"}} >Store Wise Information</h3>
         ) : ''}
         { user?.details?.role === 'Super Admin'  || user?.details?.role === 'Store Salesman' ? (
         <Table
         aria-label="simple table"
         size="small"
+        style={{backgroundColor:"gray"}}
     
         >
         <TableHead>

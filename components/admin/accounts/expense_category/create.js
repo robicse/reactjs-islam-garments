@@ -1,11 +1,12 @@
+
 import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-
+import cogoToast from "cogo-toast";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
+//import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import { Formik, Form, Field } from "formik";
@@ -14,11 +15,8 @@ import Grid from "@material-ui/core/Grid";
 import { Button, MenuItem } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
-import { baseUrl } from "../../../const/api";
-import { useAsyncEffect } from "use-async-effect";
-import axios from "axios";
+import { baseUrl } from "const/api";
+
 
 const styles = {
   cardCategoryWhite: {
@@ -41,48 +39,13 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-function Edit({ token, modal, editData, endpoint, mutate }) {
-  console.log(editData);
+const Create = ({ token, modal, endpoint, mutate }) => {
   const classes = useStyles();
-  const [errorAlert, setOpen] = React.useState({
-    open: false,
-    key: "",
-    value: [],
-  });
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen({
-      open: false,
-      key: "",
-      value: [],
-    });
-  };
 
-  // const [employee, setEmployee] = React.useState([]);
-  // const [department, setDepartment] = React.useState([]);
-  // const [designation, setDesignation] = React.useState([]);
+
   const [load, setLoad] = React.useState(false);
-  // let emp = `${baseUrl}/employee_list`;
-  // useAsyncEffect(async (isMounted) => {
-  //   await axios
-  //     .all([
-  //       axios.get(emp, {
-  //         headers: { Authorization: "Bearer " + token },
-  //       }),
-  //     ])
-  //     .then(
-  //       axios.spread((...responses) => {
-  //         setEmployee(responses[0].data.response.employees);
-  //         setLoad(false);
-  //       })
-  //     )
-  //     .catch((errors) => {
-  //       console.error(errors);
-  //     });
-  // }, []);
+;
 
   return (
     <div>
@@ -92,8 +55,8 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
             <CardBody>
               <Formik
                 initialValues={{
-                  name: editData.name,
-                  status: editData.status,
+                  name: "",
+                  status: "",
                 }}
                 validate={(values) => {
                   const errors = {};
@@ -110,7 +73,6 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                     Axios.post(
                       `${baseUrl}/${endpoint}`,
                       {
-                        expense_category_id: editData.id,
                         name: values.name,
                         status: values.status,
                       },
@@ -123,14 +85,10 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                         setSubmitting(false);
                         mutate();
                         modal(false);
+                        cogoToast.success('Create Success',{position: 'top-right', bar:{size: '10px'}});
                       })
                       .catch(function (error) {
-                        console.log(error);
-                        setOpen({
-                          open: true,
-                          key: Object.values(error.response.data.message),
-                          value: Object.values(error.response.data.message),
-                        });
+                     
                         setSubmitting(false);
                       });
                   });
@@ -153,6 +111,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                                 margin="normal"
                               />
                             </GridItem>
+
                             <GridItem xs={12} sm={12} md={6}>
                               <Field
                                 component={TextField}
@@ -195,30 +154,14 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                 )}
               </Formik>
             </CardBody>
-            <Snackbar
-              open={errorAlert.open}
-              autoHideDuration={2000}
-              onClose={handleClose}
-            >
-              <Alert
-                onClose={handleClose}
-                severity="error"
-                color="error"
-                style={{
-                  backgroundColor: "#ff1a1a",
-                  color: "white",
-                }}
-              >
-                {errorAlert.value[0]}
-              </Alert>
-            </Snackbar>
+           
           </Card>
         </GridItem>
       </GridContainer>
     </div>
   );
-}
+};
 
 // UserProfile.layout = Admin;
 
-export default Edit;
+export default Create;

@@ -11,6 +11,10 @@ import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import CategoryIcon from '@material-ui/icons/Category';
+import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
+import AssessmentIcon from '@material-ui/icons/Assessment';
 
 const dashboardRoutes = [
   {
@@ -64,33 +68,43 @@ const dashboardRoutes = [
     childs: [],
   },
   {
-    id: 6,
-    collapse: true,
-    path: '/customer',
+    id: 5,
+    collapse: false,
+    path: '/whole_sale_customer/list',
     childPath: '/list',
     name: 'Customer',
+    permission: 'whole_sale_customer_list',
     icon: PeopleOutlineIcon,
-    childs: [
-      {
-        id: 1,
-        collapse: false,
-        path: '/whole_sale_customer',
-        childPath: '/list',
-        name: 'Whole Sale Customer',
-        permission: 'whole_sale_customer_list',
-        icon: PeopleOutlineIcon,
-      },
-      {
-        id: 2,
-        collapse: false,
-        path: '/pos_sale_customer',
-        childPath: '/list',
-        name: 'POS Sale Customer',
-        permission: 'pos_sale_customer_list',
-        icon: PeopleOutlineIcon,
-      },
-    ],
+    childs: [],
   },
+  // {
+  //   id: 6,
+  //   collapse: true,
+  //   path: '/customer',
+  //   childPath: '/list',
+  //   name: 'Customer',
+  //   icon: PeopleOutlineIcon,
+  //   childs: [
+  //     {
+  //       id: 1,
+  //       collapse: false,
+  //       path: '/whole_sale_customer',
+  //       childPath: '/list',
+  //       name: 'Whole Sale Customer',
+  //       permission: 'whole_sale_customer_list',
+  //       icon: PeopleOutlineIcon,
+  //     },
+  //     {
+  //       id: 2,
+  //       collapse: false,
+  //       path: '/pos_sale_customer',
+  //       childPath: '/list',
+  //       name: 'POS Sale Customer',
+  //       permission: 'pos_sale_customer_list',
+  //       icon: PeopleOutlineIcon,
+  //     },
+  //   ],
+  // },
   // {
   //   id: 8,
   //   collapse: false,
@@ -106,7 +120,7 @@ const dashboardRoutes = [
     collapse: true,
     path: '/product',
     childPath: '/list',
-    name: 'PROD Managment',
+    name: 'PRD Managment',
     icon: LocalMallIcon,
     childs: [
       {
@@ -215,6 +229,15 @@ const dashboardRoutes = [
         permission: 'warehouse_stock',
         icon: FunctionsIcon,
       },
+      {
+        id: 3,
+        collapse: false,
+        path: '/store_management',
+        childPath: '/store_stock_request',
+        name: 'Stock Request',
+        permission: 'warehouse_stock',
+        icon: FunctionsIcon,
+      },
  
     ],
   },
@@ -320,7 +343,7 @@ const dashboardRoutes = [
     collapse: true,
     path: '/report',
     name: 'Report',
-    icon: SettingsIcon,
+    icon: AssessmentIcon,
     childs: [
       {
         id: 1,
@@ -329,7 +352,7 @@ const dashboardRoutes = [
         childPath: '/trial_balance',
         permission: 'report',
         name: 'Trial Balance',
-        icon: AccessibilityNewIcon,
+        icon: AssessmentIcon,
       },
       {
         id: 2,
@@ -338,7 +361,7 @@ const dashboardRoutes = [
         childPath: '/customer_due',
         permission: 'report',
         name: 'Customer Due',
-        icon: AccessibilityNewIcon,
+        icon: IndeterminateCheckBoxIcon,
       },
       {
         id: 3,
@@ -347,13 +370,42 @@ const dashboardRoutes = [
         childPath: '/supplier_due',
         permission: 'report',
         name: 'Supplier Due',
-        icon: AccessibilityNewIcon,
+        icon: IndeterminateCheckBoxIcon,
+      },
+    ],
+  },
+
+
+  {
+    id: 15,
+    collapse: true,
+    path: '/accounts',
+    name: 'Accounts',
+    icon: AccountBalanceWalletIcon,
+    childs: [
+      {
+        id: 1,
+        collapse: false,
+        path: '/accounts',
+        childPath: '/expense_category',
+        permission: 'role',
+        name: 'Expense Category',
+        icon: CategoryIcon,
+      },
+      {
+        id: 2,
+        collapse: false,
+        path: '/accounts',
+        childPath: '/expense',
+        permission: 'role',
+        name: 'Expense',
+        icon: IndeterminateCheckBoxIcon,
       },
     ],
   },
 
   {
-    id: 15,
+    id: 16,
     collapse: true,
     path: '/pos_settings',
     name: 'POS Setting',

@@ -307,7 +307,7 @@ console.log('role',user?.details?.role)
                         variant="subtitle1"
                         color="textSecondary"
                         style={{ color: 'rgb(255, 169, 4)' }}>
-                        Warehouse Stock
+                        WH Stock
                       </Typography>
                     </CardContent>
                   </Grid>
@@ -344,7 +344,7 @@ console.log('role',user?.details?.role)
                         variant="subtitle1"
                         color="textSecondary"
                         style={{ color: 'rgb(255, 169, 4)' }}>
-                        Ware Amount
+                        WH Amount
                       </Typography>
                     </CardContent>
                   </Grid>

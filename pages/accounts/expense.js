@@ -1,9 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
+import cogoToast from "cogo-toast";
 // @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
 import tableIcons from 'components/table_icon/icon';
 // core components
+import RefreshIcon from "@material-ui/icons/Refresh";
 import GridItem from 'components/Grid/GridItem.js';
 import GridContainer from 'components/Grid/GridContainer.js';
 import Card from 'components/Card/Card.js';
@@ -31,8 +33,8 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import Edit from '../../components/admin/expense_category/edit';
-import Create from '../../components/admin/expense_category/create';
+import Edit from '../../components/admin/accounts/expense/edit';
+import Create from '../../components/admin/accounts/expense/create';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 
@@ -74,10 +76,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const title = 'Expense Category';
+const title = 'Expense List';
 const subject = 'expense_category';
 const endpoint = {
-  list: 'expense_category_list',
+  expenseListAPi: `${baseUrl}/expense_list_pagination_with_search`,
+  list: 'expense_list_pagination_with_search',
   create: 'expense_category_create',
   edit: 'expense_category_edit',
   delete: 'expense_category_delete',
@@ -86,20 +89,17 @@ const endpoint = {
 const TableList = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
+  const tableRef = React.createRef();
+  const handleRefress = () => {
+    tableRef.current && tableRef.current.onQueryChange();
+  };
+
+
   const [editData, setEditData] = useState(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openWarning, setOpenWarning] = useState(false);
 
-  const handleClickWarning = () => {
-    setOpenWarning(true);
-  };
-  const handleCloseWarning = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenWarning(false);
-  };
 
   const handleClickOpenCreate = () => {
     setOpenCreateModal(true);
@@ -115,29 +115,20 @@ const TableList = observer(() => {
     setOpenEditModal(false);
   };
 
-  const fetcher = (url, auth) =>
-    axios
-      .get(url, {
-        headers: { Authorization: 'Bearer ' + auth },
-      })
-      .then((res) => res.data);
 
-  const url = `${baseUrl}/${endpoint.list}`;
-  const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
 
   const columns = [
-    { title: 'Name', field: 'name' },
+  {
+      title: "Expenase Date",
+      field: "date",
+    //   render: (rowData) => dateFormatWithTime(rowData.date_time),
+    },
+    { title: "Store Name", field: "store_name" },
+    { title: "Warehouse", field: "warehouse_name" },
+    { title: "Expense Category", field: "expense_category_name" },
     {
-      title: 'Status',
-      field: 'status',
-      render: (rowData) => (
-        <Chip
-          color={rowData.status ? 'primary' : 'secondary'}
-          size="small"
-          label={rowData.status ? 'Active' : 'Inactive'}
-          icon={rowData.status ? <CheckCircleIcon /> : <ErrorIcon />}
-        />
-      ),
+      title: "Amount",
+      field: "amount",
     },
   ];
 
@@ -200,56 +191,64 @@ const TableList = observer(() => {
               </Grid>
             </CardHeader>
             <CardBody>
-              {data && (
-                <MaterialTable
-                  icons={tableIcons}
-                  title="List"
-                  columns={columns}
-                  data={data.data}
-                  actions={[
-                    {
-                      icon: () => (
-                        <Button
-                          fullWidth={true}
-                          variant="contained"
-                          color="primary">
-                          <EditTwoToneIcon fontSize="small" color="white" />
-                        </Button>
-                      ),
-                      tooltip: 'Edit Tangible Asset',
-                      onClick: (event, rowData) => handleEdit(rowData),
-                    },
-                    (rowData) => ({
-                      icon: () => (
-                        <Button
-                          fullWidth={true}
-                          variant="contained"
-                          color="secondary">
-                          <DeleteForeverTwoToneIcon
-                            fontSize="small"
-                            color="white"
-                          />
-                        </Button>
-                      ),
-                      tooltip: 'Delete Tangible assset',
-                      onClick: (event, rowData) => (
-                        confirm('You want to delete ' + rowData.name),
-                        handleDelete(rowData.id)
-                      ),
-                      // disabled: rowData.birthYear < 2000,
-                    }),
-                  ]}
-                  options={{
-                    actionsColumnIndex: -1,
-                    exportButton: true,
-                    grouping: true,
-                    search: true,
-                    pageSize: 15,
-                    pageSizeOptions: [5, 10, 15, 20, 30],
-                    padding: 'dense',
-                  }}
-                />
-              )}
+            <MaterialTable
+                icons={tableIcons}
+                title="List"
+                columns={columns}
+                tableRef={tableRef}
+                data={(query) =>
+                  new Promise((resolve, reject) => {
+                    let url = `${endpoint.expenseListAPi}?`;
+                    //searching
+                    if (query.search) {
+                      url += `search=${query.search}`;
+                    }
+
+                    url += `&page=${query.page + 1}`;
+                    fetch(url, {
+                      method: "GET",
+                      headers: { Authorization: "Bearer " + user.auth_token },
+                    })
+                      .then((resp) => resp.json())
+                      .then((resp) => {
+                        resolve({
+                          data: resp.data?.data,
+                          page: resp?.data?.current_page - 1,
+                          totalCount: resp?.data?.total,
+                        });
+                      });
+                  })
+                }
+                actions={[
+                  {
+                    icon: () => (
+                      <Button
+                        fullWidth={true}
+                        variant="contained"
+                        color="primary"
+                      >
+                        <EditTwoToneIcon fontSize="small" color="white" />
+                      </Button>
+                    ),
+                    tooltip: "Edit",
+                    onClick: (event, rowData) => handleEdit(rowData),
+                  },
+
+                  {
+                    icon: RefreshIcon,
+                    tooltip: "Refresh Data",
+                    isFreeAction: true,
+                    onClick: () => handleRefress(),
+                  },
+                ]}
+                options={{
+                  actionsColumnIndex: -1,
+
+                  pageSize: 12,
+                  pageSizeOptions: [12],
+                  padding: "dense",
+                }}
+              />
             </CardBody>
           </Card>
           <Dialog
@@ -275,11 +274,12 @@ const TableList = observer(() => {
               token={user.auth_token}
               modal={setOpenCreateModal}
               endpoint={endpoint.create}
-              mutate={mutate}
+              handleRefress={handleRefress}
             />
           </Dialog>
 
           <Dialog
+          fullScreen
             open={openEditModal}
             onClose={handleCloseEdit}
             TransitionComponent={Transition}>
@@ -302,7 +302,7 @@ const TableList = observer(() => {
               modal={setOpenEditModal}
               editData={editData}
               endpoint={endpoint.edit}
-              mutate={mutate}
+              handleRefress={handleRefress}
             />
           </Dialog>
         </GridItem>

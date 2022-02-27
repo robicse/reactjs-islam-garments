@@ -151,6 +151,22 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               name="address"
                             />
                           </GridItem>
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              type="text"
+                              name="status"
+                              label="Status"
+                              select
+                              fullWidth
+                              variant="outlined"
+                              helperText="Please select status"
+                              margin="normal"
+                            >
+                              <MenuItem value="1">Active</MenuItem>
+                              <MenuItem value="0">Inactive</MenuItem>
+                            </Field>
+                          </GridItem>
                         
                         </GridContainer>
                         <Button

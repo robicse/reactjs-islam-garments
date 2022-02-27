@@ -405,9 +405,9 @@ const dashboardRoutes = [
         id: 3,
         collapse: false,
         path: '/accounts',
-        childPath: '/lager',
+        childPath: '/ladger',
         permission: 'role',
-        name: 'Lager',
+        name: 'Ladger',
         icon: IndeterminateCheckBoxIcon,
       },
 

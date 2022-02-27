@@ -263,7 +263,7 @@ const TableList = observer(() => {
             </CardBody>
           </Card>
           <Dialog
-            fullScreen
+            // fullScreen
             open={openCreateModal}
             onClose={handleCloseCreate}
             TransitionComponent={Transition}

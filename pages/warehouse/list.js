@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import ErrorIcon from "@material-ui/icons/Error";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "components/Grid/GridItem";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -108,6 +110,18 @@ const TableList = observer(() => {
     { title: "Phone", field: "phone" },
     { title: "Email", field: "email" },
     { title: "Address", field: "address" },
+    {
+      title: "Status",
+      field: "status",
+      render: (rowData) => (
+        <Chip
+          color={rowData.status ? "primary" : "secondary"}
+          size="small"
+          label={rowData.status ? "Active" : "Inactive"}
+          icon={rowData.status ? <CheckCircleIcon /> : <ErrorIcon />}
+        />
+      ),
+    },
   ];
 
 
@@ -221,7 +235,7 @@ const TableList = observer(() => {
             </CardBody>
           </Card>
           <Dialog
-            fullScreen
+            // fullScreen
             open={openCreateModal}
             onClose={handleCloseCreate}
             TransitionComponent={Transition}

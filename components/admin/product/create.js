@@ -235,7 +235,7 @@ console.log(unitType)
                     type: productType,
                     product_category_id: values.category_name.id,
                     product_unit_id: values.unit_name.id,
-                    product_sub_unit_id: values.sub_unit_name.id,
+                    product_sub_unit_id: values.sub_unit_name ?  values.sub_unit_name.id : "",
                     product_size_id: values.size_name.id,
                     product_code: values.item_code,
                     purchase_price: values.purchase_price,

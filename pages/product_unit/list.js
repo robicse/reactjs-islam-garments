@@ -192,7 +192,7 @@ const TableList = observer(() => {
                     <h4 className={classes.cardTitleWhite}>{title} List</h4>
                   </Box>
                 </Grid>
-                <Grid
+                {/* <Grid
                   container
                   item
                   xs={6}
@@ -208,7 +208,7 @@ const TableList = observer(() => {
                   >
                     Create {title}
                   </Button>
-                </Grid>
+                </Grid> */}
               </Grid>
             </CardHeader>
             <CardBody>

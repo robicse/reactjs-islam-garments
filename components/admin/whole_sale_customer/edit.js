@@ -77,7 +77,7 @@ console.log(nidFront,nidBack,image,bank_detail_image)
                 initialValues={{
                   customer_id: editData?.id,
                   name: editData?.name,
-                  shope_name: editData?.shope_name,
+                  shop_name: editData?.shop_name,
                   phone: editData?.phone,
                   email: editData?.email,
                   address: editData?.address,
@@ -96,7 +96,7 @@ console.log(nidFront,nidBack,image,bank_detail_image)
                   if (!values.name) {
                     errors.name = "Required";
                   }
-                  if (!values.shope_name) {
+                  if (!values.shop_name) {
                     errors.shope_name = "Required";
                   }
                   if (!values.address) {
@@ -111,7 +111,7 @@ console.log(nidFront,nidBack,image,bank_detail_image)
                   console.log(values)
                   const body = { customer_id: values.customer_id,
                     name: values.name,
-                    shope_name: values.shope_name,
+                    shop_name: values.shop_name,
                     phone: values.phone,
                     email: values.email,
                     customer_type: 'Whole Sale',
@@ -178,8 +178,8 @@ console.log(nidFront,nidBack,image,bank_detail_image)
                               margin="normal"
                               fullWidth
                               type="text"
-                              label="Shope Name"
-                              name="shope_name"
+                              label="Shop Name"
+                              name="shop_name"
                             />
                           </GridItem>
                           

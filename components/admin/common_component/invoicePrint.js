@@ -51,7 +51,7 @@ const InvoicePrint = React.forwardRef(
 
           <GridItem xs="6" style={{ textAlign: "end" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              Pay To
+            Invoice From
             </Typography>
 
             <Typography variant="body2">{adminObj?.name}</Typography>
@@ -87,7 +87,7 @@ const InvoicePrint = React.forwardRef(
 
           <GridItem xs="6" style={{ textAlign: "end" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              Pay To
+            Invoice From
             </Typography>
 
             <Typography variant="body2">{adminObj?.name}</Typography>
@@ -123,7 +123,7 @@ const InvoicePrint = React.forwardRef(
 
           <GridItem xs="6" style={{ textAlign: "end" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              Pay To
+              Invoice From
             </Typography>
 
             <Typography variant="body2">{adminObj?.name}</Typography>

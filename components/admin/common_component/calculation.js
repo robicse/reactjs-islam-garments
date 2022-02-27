@@ -94,25 +94,24 @@ const ClaculationComponent = ({
     }
   };
 
- // return cogoToast.warn('Please select Warehouse/Store',{position: 'top-right', bar:{size: '10px'}});
-  const handlePaidDue = (paidAmount) =>{
-       if(paidAmount < 0 ||  paidAmount > subTotal){
-         return cogoToast.warn('Please provide valid amount',{position: 'top-right', bar:{size: '10px'}});
-       }
-     
-       setPaid(paidAmount)
-       setDue(subTotal - paidAmount)
+  // return cogoToast.warn('Please select Warehouse/Store',{position: 'top-right', bar:{size: '10px'}});
+  const handlePaidDue = (paidAmount) => {
+    if (paidAmount < 0 || paidAmount > subTotal) {
+      return cogoToast.warn("Please provide valid amount", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
 
-  }
+    setPaid(paidAmount);
+    setDue(subTotal - paidAmount);
+  };
   return (
     <div>
+      <Grid container spacing={1} direction="row">
+        <Grid item xs={8}></Grid>
 
-       <Grid container spacing={1} direction="row">
-       <Grid item xs={8}>
-
-         </Grid>
-
-       <Grid item xs={2}>
+        <Grid item xs={2}>
           <TextField
             margin="normal"
             variant="outlined"
@@ -125,8 +124,8 @@ const ClaculationComponent = ({
             helperText="Please select payment type"
             onChange={(e) => setPaymentType(e.target.value)}
           >
-             <MenuItem value="1">Cash</MenuItem>
-            <MenuItem value="2">Credit</MenuItem>
+            <MenuItem value="1">Cash</MenuItem>
+            {/* <MenuItem value="2">Credit</MenuItem> */}
           </TextField>
         </Grid>
         <Grid item xs={2}>
@@ -144,53 +143,41 @@ const ClaculationComponent = ({
           />
         </Grid>
 
-        <Grid item xs={8}>
-
+        <Grid item xs={8}></Grid>
+        <Grid item xs={2}>
+          {paymentType == "2" && (
+            <TextField
+              margin="normal"
+              variant="outlined"
+              size="small"
+              type="tel"
+              label="Paid"
+              // value={parseFloat(paid)}
+              InputProps={{
+                className: classes.multilineColor,
+                readOnly: false,
+              }}
+              onChange={(e) => handlePaidDue(e.target.value)}
+            />
+          )}
         </Grid>
         <Grid item xs={2}>
-      {  paymentType == '2' &&   <TextField
-            margin="normal"
-            variant="outlined"
-            size="small"
-            type="tel"
-            label="Paid"
-            // value={parseFloat(paid)}
-            InputProps={{
-              className: classes.multilineColor,
-              readOnly: false,
-            }}
-            onChange={(e)=>handlePaidDue(e.target.value)}
-          />
-}
-</Grid>
-<Grid item xs={2}>
-{  paymentType == '2' && 
-
-<TextField
-margin="normal"
-variant="outlined"
-size="small"
-type="number"
-label="Due"
-value={parseFloat(due)}
-InputProps={{
-  className: classes.multilineColor,
-  readOnly: true,
-}}
-/>
-  }
-</Grid>
-
-  
-            
-    
-
-
-        
-      
+          {paymentType == "2" && (
+            <TextField
+              margin="normal"
+              variant="outlined"
+              size="small"
+              type="number"
+              label="Due"
+              value={parseFloat(due)}
+              InputProps={{
+                className: classes.multilineColor,
+                readOnly: true,
+              }}
+            />
+          )}
+        </Grid>
       </Grid>
-
-
 
       {/* <Grid container spacing={1} direction="row">
         <Grid item xs={2}>

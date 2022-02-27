@@ -172,6 +172,7 @@ const TableList = observer(() => {
 
   const columns = [
     { title: "Name", field: "name" },
+    { title: "Shope Name", field: "shope_name" },
     { title: "Code", field: "code" },
     { title: "Phone", field: "phone" },
     { title: "Address", field: "address" },
@@ -367,6 +368,7 @@ const TableList = observer(() => {
           </Dialog>
 
           <Dialog
+           fullScreen
             open={openEditModal}
             onClose={handleCloseEdit}
             TransitionComponent={Transition}

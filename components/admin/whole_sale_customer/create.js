@@ -73,6 +73,7 @@ function CreateParty({ token, modal, mutate, endpoint}) {
               <Formik
                 initialValues={{
                   name: "",
+                  shope_name: "",
                   phone: "",
                   email: "",
                   address: "",
@@ -91,6 +92,9 @@ function CreateParty({ token, modal, mutate, endpoint}) {
             
                   if (!values.name) {
                     errors.name = "Required";
+                  }
+                  if (!values.shope_name) {
+                    errors.shope_name = "Required";
                   }
                   if (!values.address) {
                     errors.address = "Required";
@@ -134,6 +138,7 @@ function CreateParty({ token, modal, mutate, endpoint}) {
   
                   const body = {
                     name: values.name,
+                    shope_name: values.shope_name,
                     phone: values.phone,
                     email: values.email,
                     address: values.address,
@@ -197,6 +202,17 @@ function CreateParty({ token, modal, mutate, endpoint}) {
                               type="text"
                               label="Name"
                               name="name"
+                            />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="text"
+                              label="Shope Name"
+                              name="shope_name"
                             />
                           </GridItem>
                           <GridItem xs={12} sm={12} md={4}>

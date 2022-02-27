@@ -401,6 +401,16 @@ const dashboardRoutes = [
         name: 'Expense',
         icon: IndeterminateCheckBoxIcon,
       },
+      {
+        id: 3,
+        collapse: false,
+        path: '/accounts',
+        childPath: '/lager',
+        permission: 'role',
+        name: 'Lager',
+        icon: IndeterminateCheckBoxIcon,
+      },
+
     ],
   },
 

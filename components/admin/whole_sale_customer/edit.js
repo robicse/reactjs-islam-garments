@@ -77,6 +77,7 @@ console.log(nidFront,nidBack,image,bank_detail_image)
                 initialValues={{
                   customer_id: editData?.id,
                   name: editData?.name,
+                  shope_name: editData?.shope_name,
                   phone: editData?.phone,
                   email: editData?.email,
                   address: editData?.address,
@@ -95,6 +96,9 @@ console.log(nidFront,nidBack,image,bank_detail_image)
                   if (!values.name) {
                     errors.name = "Required";
                   }
+                  if (!values.shope_name) {
+                    errors.shope_name = "Required";
+                  }
                   if (!values.address) {
                     errors.address = "Required";
                   }
@@ -107,6 +111,7 @@ console.log(nidFront,nidBack,image,bank_detail_image)
                   console.log(values)
                   const body = { customer_id: values.customer_id,
                     name: values.name,
+                    shope_name: values.shope_name,
                     phone: values.phone,
                     email: values.email,
                     customer_type: 'Whole Sale',
@@ -165,6 +170,19 @@ console.log(nidFront,nidBack,image,bank_detail_image)
                               name="name"
                             />
                           </GridItem>
+
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="text"
+                              label="Shope Name"
+                              name="shope_name"
+                            />
+                          </GridItem>
+                          
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}

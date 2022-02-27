@@ -22,7 +22,7 @@ const { user } = useRootStore();
         <Table
         aria-label="simple table"
         size="small"
-        style={{backgroundColor:"gray"}}
+        // style={{backgroundColor:"gray"}}
     
         >
         <TableHead>
@@ -83,7 +83,7 @@ const { user } = useRootStore();
         <Table
         aria-label="simple table"
         size="small"
-        style={{backgroundColor:"gray"}}
+        // style={{backgroundColor:"gray"}}
     
         >
         <TableHead>

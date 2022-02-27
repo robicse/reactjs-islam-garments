@@ -176,8 +176,8 @@ console.log(endpoint, modal, handleRefress)
     const body = {
       date: selectedDate,
       // supplier_id: selectedSupplyer,
-      warehouse_id: selectedWarehouse,
-      store_id: selectedStore,
+      request_to_warehouse_id: selectedWarehouse,
+      request_from_store_id: selectedStore,
       products: JSON.stringify(selectedProductList),
       miscellaneous_comment: "",
       miscellaneous_charge: "",

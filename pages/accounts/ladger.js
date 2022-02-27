@@ -218,7 +218,7 @@ const LagerCom = observer(() => {
           totalDebit: totalAmount.debit + res.data.response.pre_debit,
           totalCredit: totalAmount.credit + res.data.response.pre_credit,
         };
-
+console.log(res.data.response.pre_credit)
         setTotalBalancedebitAndCredit(totalbalancedebitAndCredit);
       })
       .catch((error) => {

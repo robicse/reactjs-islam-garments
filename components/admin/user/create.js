@@ -111,9 +111,9 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                   if (!values.status) {
                     errors.status = "Required";
                   }
-                  if (!values.user_for) {
-                    errors.user_for = "Required";
-                  }
+                  // if (!values.user_for) {
+                  //   errors.user_for = "Required";
+                  // }
                   if (!values.password) {
                     errors.password = "Required";
                   } else if (values.password.length < 5) {
@@ -124,9 +124,15 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                   } else if (values.confirm_password != values.password) {
                     errors.confirm_password = "Password does not match";
                   }
+                  // console.log(values)
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+                  console.log(values)
+                  if (!userFor) {
+                    setSubmitting(false);
+                    return cogoToast.warn('Please Select User For',{position: 'top-right', bar:{size: '10px'}});
+                  }
 
                   if (!values.warehouse && !values.store) {
                     setSubmitting(false);
@@ -162,6 +168,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                         modal(false);
                       })
                       .catch(function (error) {
+                        console.log(error)
                         AllApplicationErrorNotification(error?.response?.data);
                         setSubmitting(false);
                       });

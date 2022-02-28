@@ -83,9 +83,11 @@ const WarehouseStockIn = observer(() => {
     tableRef.current && tableRef.current.onQueryChange();
   };
 
+
+  const subject = "Warehouse Stock In";
   const endpoint = {
     title: "Warehouse Stock",
-    subject: "Warehouse Stock",
+    
     warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
     supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
     sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
@@ -199,19 +201,19 @@ const WarehouseStockIn = observer(() => {
 
   // handle create
   const handleCreate = () => {
-    // if (!user.can("Create", subject)) {
-    //   cogoToast.error("You don't  have Create permission!", {
-    //     position: "top-right",
-    //     bar: { size: "10px" },
-    //   });
-    //   return null;
-    // }
+    if (!user.can("Create", subject)) {
+      cogoToast.error("You don't  have Create permission!", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+      return null;
+    }
     handleClickOpenCreate(true);
   };
 
   return (
-    // <Gurd subject={subject}>
-    <div>
+   <Gurd subject={subject}>
+  
       <div style={{ display: "none" }}>
         <StockInPrint
           ref={componentRef}
@@ -398,8 +400,8 @@ const WarehouseStockIn = observer(() => {
         </GridItem>
       </GridContainer>
 
-      {/* </Gurd> */}
-    </div>
+      </Gurd>
+
   );
 });
 

@@ -104,35 +104,35 @@ function CreateParty({ token, modal, mutate }) {
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  if (!nidFront) {
-                    setSubmitting(false);
-                    return cogoToast.warn("Please Upload NID Front Image", {
-                      position: "top-right",
-                      bar: { size: "10px" },
-                    });
-                  }
-                  if (!nidBack) {
-                    setSubmitting(false);
-                    return cogoToast.warn("Please Upload NID Back Image", {
-                      position: "top-right",
-                      bar: { size: "10px" },
-                    });
-                  }
-                  if (!image) {
-                    setSubmitting(false);
-                    return cogoToast.warn("Please Upload Supplier Image", {
-                      position: "top-right",
-                      bar: { size: "10px" },
-                    });
-                  }
+                  // if (!nidFront) {
+                  //   setSubmitting(false);
+                  //   return cogoToast.warn("Please Upload NID Front Image", {
+                  //     position: "top-right",
+                  //     bar: { size: "10px" },
+                  //   });
+                  // }
+                  // if (!nidBack) {
+                  //   setSubmitting(false);
+                  //   return cogoToast.warn("Please Upload NID Back Image", {
+                  //     position: "top-right",
+                  //     bar: { size: "10px" },
+                  //   });
+                  // }
+                  // if (!image) {
+                  //   setSubmitting(false);
+                  //   return cogoToast.warn("Please Upload Supplier Image", {
+                  //     position: "top-right",
+                  //     bar: { size: "10px" },
+                  //   });
+                  // }
 
-                  if (!bank_detail_image) {
-                    setSubmitting(false);
-                    return cogoToast.warn("Please Upload Bank Details Image", {
-                      position: "top-right",
-                      bar: { size: "10px" },
-                    });
-                  }
+                  // if (!bank_detail_image) {
+                  //   setSubmitting(false);
+                  //   return cogoToast.warn("Please Upload Bank Details Image", {
+                  //     position: "top-right",
+                  //     bar: { size: "10px" },
+                  //   });
+                  // }
 
                   const body = {
                     type: values.type,

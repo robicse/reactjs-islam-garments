@@ -72,7 +72,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = "Stock Out (POS)";
-const subject = "Store Stock";
+const subject = "Whole Sale";
 
 const wholesaleList = observer(() => {
   const classes = useStyles();
@@ -84,7 +84,7 @@ const wholesaleList = observer(() => {
 
   const endpoint = {
     title: "Stock Out (POS)",
-    subject: "Store Stock",
+    subject: "Whole Sale",
     // warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
     // supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
     storeActiveListUrl: `${baseUrl}/store_active_list`,
@@ -111,9 +111,9 @@ const wholesaleList = observer(() => {
   const [printData, setPrintData] = useState(null);
   const [editData, setEditData] = useState(null);
 
-  const handleClickOpenCreate = () => {
-    setOpenCreateModal(true);
-  };
+  // const handleClickOpenCreate = () => {
+  //   setOpenCreateModal(true);
+  // };
   const handleCloseCreate = () => {
     setOpenCreateModal(false);
   };
@@ -181,19 +181,19 @@ const wholesaleList = observer(() => {
 
   // handle create
   const handleCreate = () => {
-    // if (!user.can("Create", subject)) {
-    //   cogoToast.error("You don't  have Create permission!", {
-    //     position: "top-right",
-    //     bar: { size: "10px" },
-    //   });
-    //   return null;
-    // }
-    handleClickOpenCreate(true);
+    if (!user.can("Create", subject)) {
+      cogoToast.error("You don't  have Create permission!", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+      return null;
+    }
+    setOpenCreateModal(true);
   };
  
   return (
-    // <Gurd subject={subject}>
-    <div>
+     <Gurd subject={subject}>
+  
       <div style={{ display: "none" }}>
         <StockOutPrint
           ref={componentRef}
@@ -367,7 +367,7 @@ const wholesaleList = observer(() => {
           </Dialog>
         </GridItem>
       </GridContainer>
-    </div>
+    </Gurd>
   );
 });
 

@@ -73,7 +73,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = "Store Stock In";
-const subject = "Store Stock";
+const subject = "Store Stock In";
 
 
 const StoreStockOutComponent = observer(() => {
@@ -188,21 +188,21 @@ const endpoint = {
     
       // handle create
       const handleCreate = () => {
-        // if (!user.can("Create", subject)) {
-        //   cogoToast.error("You don't  have Create permission!", {
-        //     position: "top-right",
-        //     bar: { size: "10px" },
-        //   });
-        //   return null;
-        // }
+        if (!user.can("Create", subject)) {
+          cogoToast.error("You don't  have Create permission!", {
+            position: "top-right",
+            bar: { size: "10px" },
+          });
+          return null;
+        }
         handleClickOpenCreate(true);
       };
     
       
 
   return (
-    // <Gurd subject={subject}>
-    <div>
+   <Gurd subject={subject}>
+
       <div style={{ display: "none" }}>
         <StockInPrint
             ref={componentRef}
@@ -390,7 +390,7 @@ const endpoint = {
 
         </GridItem>
       </GridContainer>
-    </div>
+    </Gurd>
   );
 });
 

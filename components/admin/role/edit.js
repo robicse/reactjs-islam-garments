@@ -164,6 +164,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               type="text"
                               label="Name"
                               name="name"
+                              disabled
                             />
                           </GridItem>
                           <GridItem xs={12} sm={12} md={12}>

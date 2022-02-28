@@ -16,6 +16,9 @@ import CategoryIcon from '@material-ui/icons/Category';
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 
+// import Gurd from "components/guard/Gurd";
+// <Gurd subject={subject}>
+
 const dashboardRoutes = [
   {
     id: 1,
@@ -405,9 +408,18 @@ const dashboardRoutes = [
         id: 3,
         collapse: false,
         path: '/accounts',
-        childPath: '/ladger',
+        childPath: '/posting',
         permission: 'role',
-        name: 'Ladger',
+        name: 'Posting',
+        icon: IndeterminateCheckBoxIcon,
+      },
+      {
+        id: 3,
+        collapse: false,
+        path: '/accounts',
+        childPath: '/ledger',
+        permission: 'role',
+        name: 'Ledger',
         icon: IndeterminateCheckBoxIcon,
       },
 

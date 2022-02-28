@@ -76,10 +76,12 @@ const StoreStockComponent = observer(() => {
   const [storeId, setStoreId] = useState(null);
   const [storeList, setStoreList] = useState([]);
 
+  
 
-const endpoint = {
+
+
+  const endpoint = {
   title:"Store Stock",
-  subject: "Store Stock",
   activeStorelistApi: `${baseUrl}/store_active_list`,
   stockListApi: `${baseUrl}/store_current_stock_by_id`,
   stockInAPi: `${baseUrl}/store_stock_in`,
@@ -88,7 +90,7 @@ const endpoint = {
   headers: { headers: { Authorization: "Bearer " + user.details.token }}
 };
 
-
+const subject = "Store Stock";
 
 //store active list fetch
 
@@ -129,8 +131,8 @@ React.useEffect(()=>{
   ];
 
   return (
-    // <Gurd subject={endpoint.subject}>
-    <div>
+   <Gurd subject={subject}>
+  
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -225,15 +227,6 @@ React.useEffect(()=>{
                               totalCount:0,
                         });
                           }
-                          // resolve({
-                            // data: resp?.response?.store_current_stock_list
-                            //   ?.data,
-                            // page:
-                            //   resp.response?.store_current_stock_list
-                            //     ?.current_page - 1,
-                            // totalCount:
-                            //   resp?.response?.store_current_stock_list?.total,
-                          // });
                         });
                     })
                   }
@@ -285,8 +278,8 @@ React.useEffect(()=>{
           </Dialog> */}
         </GridItem>
       </GridContainer>
-    {/* </Gurd> */}
-    </div>
+     </Gurd> 
+
   );
 });
 

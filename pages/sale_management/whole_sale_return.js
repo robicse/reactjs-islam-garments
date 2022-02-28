@@ -71,7 +71,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = "Sale Return Invoice List (Whole)";
-const subject = "sale_return_customer_van_route";
+const subject = "Whole Sale Return";
+
 const endpoint = {
   list: "product_sale_return_customer_van_route_list",
   edit: "product_sale_return_customer_van_route_create",
@@ -80,6 +81,7 @@ const endpoint = {
 const WholesaleReturn = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
+
   const [editData, setEditData] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [invoiceData,setInvoiceData] = useState(null);
@@ -151,8 +153,8 @@ const WholesaleReturn = observer(() => {
 
   return (
 
-    // <Gurd subject={subject}>
-<div>
+   <Gurd subject={subject}>
+
 
 {/* <div style={{ display: "none" }}>
         <SalesReturnPrint 
@@ -300,7 +302,7 @@ const WholesaleReturn = observer(() => {
         </GridItem>
       </GridContainer>
 
-      </div>
+      </Gurd>
 
   );
 });

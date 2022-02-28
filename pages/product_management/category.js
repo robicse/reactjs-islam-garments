@@ -68,7 +68,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = "Product Category";
-const subject = "Product Size";
+const subject = "Product Category";
 const endpoint = {
   list: "product_category_list",
   create: "product_category_create",

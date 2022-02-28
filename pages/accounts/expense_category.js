@@ -76,7 +76,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = 'Expense Category';
-const subject = 'expense_category';
+const subject = 'Expense Category';
 const endpoint = {
   list: 'expense_category_list',
   create: 'expense_category_create',
@@ -92,15 +92,7 @@ const TableList = observer(() => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openWarning, setOpenWarning] = useState(false);
 
-  const handleClickWarning = () => {
-    setOpenWarning(true);
-  };
-  const handleCloseWarning = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenWarning(false);
-  };
+
 
   const handleClickOpenCreate = () => {
     setOpenCreateModal(true);
@@ -158,18 +150,33 @@ const TableList = observer(() => {
     );
     mutate();
   };
-  const handleEdit = (row) => {
- 
-    setEditData(row);
-    setOpenEditModal(true);
-  };
-  const handleCreate = () => {
- 
-    handleClickOpenCreate(true);
-  };
+// handle edit
+const handleEdit = (row) => {
+  if (!user.can("Edit", subject)) {
+    cogoToast.error("You don't have Edit permission!", {
+      position: "top-right",
+      bar: { size: "10px" },
+    });
+    return null;
+  }
+  setEditData(row);
+  setOpenEditModal(true);
+};
+
+// handle create
+const handleCreate = () => {
+  if (!user.can("Create", subject)) {
+    cogoToast.error("You don't  have Create permission!", {
+      position: "top-right",
+      bar: { size: "10px" },
+    });
+    return null;
+  }
+  handleClickOpenCreate(true);
+};
   return (
-    // <Gurd subject={subject}>
-    <div>
+     <Gurd subject={subject}>
+  
 
   
       <GridContainer>
@@ -309,7 +316,7 @@ const TableList = observer(() => {
         </GridItem>
       </GridContainer>
 
-      </div>
+      </Gurd>
   );
 });
 

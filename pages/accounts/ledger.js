@@ -8,20 +8,15 @@ import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
-import Gurd from "../../components/guard/Gurd";
+import Gurd from "components/guard/Gurd";
 // import { useAsyncEffect } from 'use-async-effect';
 import axios from "axios";
 import { useRootStore } from "../../models/root-store-provider";
 import { observer } from "mobx-react-lite";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import CloseIcon from "@material-ui/icons/Close";
-import Slide from "@material-ui/core/Slide";
 import { Box, Chip, Grid, TextField, Divider } from "@material-ui/core";
 import { baseUrl } from "../../const/api";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
-// import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from "@material-ui/core/MenuItem";
 import { useReactToPrint } from "react-to-print";
 import Table from "@material-ui/core/Table";
@@ -72,15 +67,6 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-const title = "Ledger";
-const subject = "ledger";
-const endpoint = {
-  list: "ledger",
-  create: "store_stock_create",
-  edit: "store_stock_edit",
-  delete: "store_stock_delete",
-};
-
 let db = 0;
 let cr = 0;
 const LagerCom = observer(() => {
@@ -106,7 +92,6 @@ const LagerCom = observer(() => {
   const [invoiceData, setInvoicedata, setInvoicedataPromise] =
     useStatePromise(null);
   const [invoiceProduct, setInvoiceproduct] = useState(null);
-  const [glHead, setGLHead] = React.useState(false);
 
   const endpoint = {
     warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
@@ -140,7 +125,6 @@ const LagerCom = observer(() => {
       console.log(error);
     }
   }, []);
-
 
   const fetchLedger = () => {
     axios
@@ -218,7 +202,7 @@ const LagerCom = observer(() => {
           totalDebit: totalAmount.debit + res.data.response.pre_debit,
           totalCredit: totalAmount.credit + res.data.response.pre_credit,
         };
-console.log(res.data.response.pre_credit)
+        console.log(res.data.response.pre_credit);
         setTotalBalancedebitAndCredit(totalbalancedebitAndCredit);
       })
       .catch((error) => {
@@ -247,8 +231,7 @@ console.log(res.data.response.pre_credit)
     content: () => componentRef.current,
   });
   return (
-    <div>
-      {/* <Gurd subject={subject}> */}
+    <Gurd subject="Ledger">
       {/* <div style={{ display: 'none' }}>
         <LagerList
           ref={componentRef}
@@ -491,13 +474,14 @@ console.log(res.data.response.pre_credit)
                             >
                               Current Total
                             </TableCell>
-                            <TableCell component="th" scope="row"></TableCell>
+
                             <TableCell component="th" scope="row">
                               {totalBalancedebitAndCredit?.totalDebit}
                             </TableCell>
                             <TableCell component="th" scope="row">
                               {totalBalancedebitAndCredit?.totalCredit}
                             </TableCell>
+                            <TableCell component="th" scope="row"></TableCell>
                           </TableRow>
                         </>
                       )}
@@ -533,7 +517,7 @@ console.log(res.data.response.pre_credit)
           </Card>
         </GridItem>
       </GridContainer>
-    </div>
+    </Gurd>
   );
 });
 

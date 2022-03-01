@@ -148,17 +148,24 @@ const PostingCom = observer(() => {
   //   const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
 
   const columns = [
-    { title: "Voucher Name", field: "voucher_type_name" },
-    {
-      title: "Voucher No",
-      field: "voucher_no",
-    },
-    // { title: "Is Approved", field: "is_approved" },
     {
       title: "Transaction Date",
       field: "transaction_date",
       render: (rowData) => dateFormatWithoutTime(rowData.transaction_date_time),
     },
+    { title: "Voucher Name", field: "voucher_type_name" },
+    {
+      title: "Voucher No",
+      field: "voucher_no",
+    },
+    { title: "Description", field: "description" },
+  
+    { title: "chart of account_name", field: "chart_of_account_name" },
+      
+    { title: "chart of account_name", field: "chart_of_account_name" },
+      
+    { title: "Credit", field: "credit" },
+    { title: "Debit", field: "debit" },
   ];
 
   const handleDelete = async (row_id) => {

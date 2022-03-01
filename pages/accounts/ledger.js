@@ -126,6 +126,12 @@ const LagerCom = observer(() => {
     }
   }, []);
 
+  console.log(responseData?.chart_of_account_transaction)
+
+  const lastItem = responseData && responseData?.chart_of_account_transaction[responseData?.chart_of_account_transaction.length - 1]
+  console.log(lastItem);
+
+
   const fetchLedger = () => {
     axios
       .post(
@@ -470,7 +476,7 @@ const LagerCom = observer(() => {
                             )
                           )}
 
-                          <TableRow>
+                          {/* <TableRow>
                             <TableCell component="th" scope="row"></TableCell>
                             <TableCell
                               component="th"
@@ -487,7 +493,7 @@ const LagerCom = observer(() => {
                               {totalBalancedebitAndCredit?.totalCredit}
                             </TableCell>
                             <TableCell component="th" scope="row"></TableCell>
-                          </TableRow>
+                          </TableRow> */}
                         </>
                       )}
                       <Divider />
@@ -499,8 +505,7 @@ const LagerCom = observer(() => {
                           Closing Balance :
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          {totalBalancedebitAndCredit.totalDebit -
-                            totalBalancedebitAndCredit.totalCredit}
+                       {lastItem?.balance}
                         </TableCell>
                       </TableRow>
                     </TableBody>

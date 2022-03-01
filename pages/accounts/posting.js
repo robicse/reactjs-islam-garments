@@ -160,9 +160,9 @@ const PostingCom = observer(() => {
     },
     { title: "Description", field: "description" },
   
-    { title: "chart of account_name", field: "chart_of_account_name" },
+    // { title: "chart of account_name", field: "chart_of_account_name" },
       
-    { title: "chart of account_name", field: "chart_of_account_name" },
+    { title: "Account Name", field: "chart_of_account_name" },
       
     { title: "Credit", field: "credit" },
     { title: "Debit", field: "debit" },

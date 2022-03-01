@@ -72,8 +72,7 @@ const CustomerSue = observer(() => {
     wholeSaleCustomerActiveListUrl: `${baseUrl}/whole_sale_customer_active_list`,
     headers: { headers: { Authorization: "Bearer " + user.details.token } },
     customerDueApi: `${baseUrl}/customer_current_total_due_by_customer_id`,
-    customerDuePaidApi: `${baseUrl}/customer_due_paidttt`,
-    
+    customerDuePaidApi: `${baseUrl}/customer_due_paid`,
   };
 
   //loading when component run

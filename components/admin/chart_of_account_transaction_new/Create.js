@@ -11,16 +11,11 @@ import { TextField } from "formik-material-ui";
 import Grid from "@material-ui/core/Grid";
 import { Box, Button, MenuItem, Typography } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
 import { baseUrl } from "../../../const/api";
 import { useAsyncEffect } from "use-async-effect";
 import axios from "axios";
 import { Autocomplete } from "formik-material-ui-lab";
 import MuiTextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -52,75 +47,49 @@ const styles = {
 const useStyles = makeStyles(styles);
 const Create = ({ token, modal, mutate, handlePrint, user }) => {
   const classes = useStyles();
-  const [errorAlert, setOpen] = React.useState({
-    open: false,
-    key: "",
-    value: [],
-    severity: "error",
-    color: "error",
-  });
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen({
-      open: false,
-      key: "",
-      value: [],
-      severity: "error",
-      color: "error",
-    });
-  };
+
 
   const [load, setLoad] = React.useState(false);
   const [lagerHeadList, setLagerHeadList] = React.useState([]);
-
+  const [voucherList, setVoucherList] = React.useState([]);
+  const [voucherId, setVoucherId] = React.useState(null);
 
   const endpoint = {
-    // transactionListUrl: `${baseUrl}/chart_of_account_is_transaction_list`,
-    // voucherTypeListUrl: `${baseUrl}/chart_of_account_is_transaction_list`,
+    createPosting: `${baseUrl}/chart_of_account_transaction_create`,
+    voucherListUrl: `${baseUrl}/voucher_type_list`,
     legerActiveListUrl: `${baseUrl}/chart_of_account_is_general_ledger_list`,
-    // storeActiveListUrl: `${baseUrl}/store_active_list`,
     headers: { headers: { Authorization: "Bearer " + user.auth_token } },
   };
 
-  // let parties = `${baseUrl}/chart_of_account_is_transaction_list`;
-  // let vouch = `${baseUrl}/voucher_type_list`;
-  // let store = `${baseUrl}/store_list`;
 
+  //loading when component run
+  useAsyncEffect(async (isMounted) => {
+    try {
+      const ledgerRes = await axios.get(
+        endpoint.legerActiveListUrl,
+        endpoint.headers
+      );
+      const voucherRes = await axios.get(
+        endpoint.voucherListUrl,
+        endpoint.headers
+      );
 
-    //loading when component run
-    useAsyncEffect(async (isMounted) => {
-      try {
-  
-        const ledgerRes = await axios.get(
-          endpoint.legerActiveListUrl,
-          endpoint.headers
+      const formatChartOfAccount =
+        ledgerRes?.data?.response?.chart_of_accounts?.map(
+          (item) => item.head_name
         );
 
-        setLagerHeadList(ledgerRes?.data?.response?.chart_of_accounts)
-        setLoad(true)
-        // const legerHeadRes = await axios.get(
-        //   endpoint.legerActiveListUrl,
-        //   endpoint.headers
-        // );
-        // console.log(ledgerRes?.data?.response?.chart_of_accounts)
-        // console.log(voucherRes?.data?.response)
-        // console.log(transRes?.data?.response)
-        // console.log(transRes,voucherRes,ledgerRes)
-  
-      } catch (error) {
-        console.log(error);
-      }
-    }, []);
+      setLagerHeadList(formatChartOfAccount);
+
+      setVoucherList(voucherRes?.data?.response?.voucher_type);
+      setLoad(true);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
 
-    console.log(lagerHeadList)
-
-    // cogoToast.error("You don't  have Create permission!", {
-    //   position: "top-right",
-    //   bar: { size: "10px" },
-    // });
 
   return (
     <div>
@@ -131,30 +100,37 @@ const Create = ({ token, modal, mutate, handlePrint, user }) => {
             <CardBody>
               <Formik
                 initialValues={{
-    
                   products: [],
                   date: "",
                 }}
                 validate={(values) => {
                   const errors = {};
-                  // if (!values.date) {
-                  //   errors.date = "Required";
-                  // }
+                  if (!values.date) {
+                    errors.date = "Required";
+                  }
 
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  // if (!voucherId) {
-                  //   setSubmitting(false);
-                  //   return alert("Please Select Voucher");
-                  // }
+                  if (!voucherId) {
+                    setSubmitting(false);
+                    return cogoToast.warn("Please Select Voucher", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                    // return alert("Please Select Voucher");
+                  }
 
                   let debitAmount = 0;
                   let creditAmount = 0;
 
                   if (!values?.products.length) {
                     setSubmitting(false);
-                    return alert("Please Fill Transaction");
+                    return cogoToast.warn("Please Fill Transaction", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                    // return alert("Please Fill Transaction");
                   }
 
                   values?.products.map((tra) => {
@@ -167,46 +143,59 @@ const Create = ({ token, modal, mutate, handlePrint, user }) => {
                   });
                   if (debitAmount !== creditAmount) {
                     setSubmitting(false);
-                    return alert("Debit and credit amount must be equal");
+                    return cogoToast.warn("Debit and credit amount must be equal", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                    // return alert("Debit and credit amount must be equal");
                   }
 
                   if (debitAmount == 0 && creditAmount == 0) {
                     setSubmitting(false);
-                    return alert("Please Fill Transaction Amount");
+                   return cogoToast.warn("Please Fill Transaction Amount", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                    // return alert("Please Fill Transaction Amount");
                   }
 
+                  // console.log(values)
+                  // setSubmitting(false);
+                  const body = {
+                    date: values.date,
+                    voucher_type_id: voucherId,
+                    transactions: JSON.stringify(values.products),
+                  };
+                  const data = new FormData();
+                  Object.keys(body).forEach((key) =>
+                    data.append(key, body[key])
+                  );
 
-                  console.log(values)
-                  setSubmitting(false);
-
-                  // setTimeout(() => {
-                  //   axios
-                  //     .post(
-                  //       `${baseUrl}/${endpoint}`,
-                  //       {
-                  //         voucher_type_id: voucherId,
-                  //         date: values.date,
-                  //         // store_id: selectedStore,
-                  //         transactions: values.products,
-                  //       },
-                  //       {
-                  //         headers: { Authorization: "Bearer " + token },
-                  //       }
-                  //     )
-                  //     .then((res) => {
-                  //       setSubmitting(false);
-                  //       mutate();
-                  //       modal(false);
-                  //     })
-                  //     .catch(function (error) {
-                  //       setOpen({
-                  //         open: true,
-                  //         key: Object.values(error.response.data.message),
-                  //         value: Object.values(error.response.data.message),
-                  //       });
-                  //       setSubmitting(false);
-                  //     });
-                  // });
+                  setTimeout(() => {
+                    axios
+                      .post(endpoint.createPosting, data, endpoint.headers)
+                      .then((res) => {
+                        setSubmitting(false);
+                        mutate();
+                        modal(false);
+                        cogoToast.success("Create Success", {
+                          position: "top-right",
+                          bar: { size: "10px" },
+                        });
+                      })
+                      .catch(function (error) {
+                        // setOpen({
+                        //   open: true,
+                        //   key: Object.values(error.response.data.message),
+                        //   value: Object.values(error.response.data.message),
+                        // });
+                        setSubmitting(false);
+                        cogoToast.error("Error", {
+                          position: "top-right",
+                          bar: { size: "10px" },
+                        });
+                      });
+                  });
                 }}
               >
                 {({ values, errors, submitForm, isSubmitting }) => (
@@ -214,7 +203,7 @@ const Create = ({ token, modal, mutate, handlePrint, user }) => {
                     <div className={classes.paper}>
                       <form className={classes.form} noValidate>
                         <GridContainer>
-                          {/* <GridItem xs={12} sm={4} md={4}>
+                          <GridItem xs={12} sm={4} md={4}>
                             {load ? (
                               <Box mt={2}>
                                 <FormControl
@@ -229,10 +218,12 @@ const Create = ({ token, modal, mutate, handlePrint, user }) => {
                                     labelId="demo-simple-select-outlined-label"
                                     id="demo-simple-select-outlined"
                                     label="Store"
-                                    onChange={fetchStock}
+                                    onChange={(e) =>
+                                      setVoucherId(e.target.value)
+                                    }
                                   >
-                                    {vouchers &&
-                                      vouchers.map((str) => (
+                                    {voucherList &&
+                                      voucherList.map((str) => (
                                         <MenuItem value={str.id} key={str.id}>
                                           {str.name}
                                         </MenuItem>
@@ -243,8 +234,8 @@ const Create = ({ token, modal, mutate, handlePrint, user }) => {
                             ) : (
                               <CircularProgress />
                             )}
-                          </GridItem> */}
-                      
+                          </GridItem>
+
                           <Grid item xs={3}>
                             <Field
                               component={TextField}
@@ -307,11 +298,11 @@ const Create = ({ token, modal, mutate, handlePrint, user }) => {
                                                       options={lagerHeadList}
                                                       getOptionLabel={(
                                                         option
-                                                      ) => option.head_name}
+                                                      ) => option}
                                                       renderInput={(params) => (
                                                         <MuiTextField
                                                           {...params}
-                                                          label="chart_of_account_name"
+                                                          label="Chart of account name"
                                                           variant="outlined"
                                                           fullWidth={true}
                                                           margin="normal"
@@ -418,7 +409,6 @@ const Create = ({ token, modal, mutate, handlePrint, user }) => {
                                             backgroundColor: "#0e41947a",
                                           }}
                                           onClick={() => {
-                           
                                             push({
                                               chart_of_account_name: "",
                                               debit: "",
@@ -455,32 +445,12 @@ const Create = ({ token, modal, mutate, handlePrint, user }) => {
                             )}
                           </Button>
                         </Box>
-                        {/* <Dialog
-                          open={openCustomer}
-                          onClose={handleCloseCustomer}
-                          aria-labelledby="form-dialog-title">
-                          <DialogContent>
-                            <CreateCustomer
-                              token={token}
-                              handleClose={handleCloseCustomer}
-                              storeUpdate={getCustomer}
-                            />
-                          </DialogContent>
-                          <DialogActions>
-                            <Button
-                              onClick={handleCloseCustomer}
-                              color="primary">
-                              Cancel
-                            </Button>
-                          </DialogActions>
-                        </Dialog> */}
                       </form>
                     </div>
                   </div>
                 )}
               </Formik>
             </CardBody>
-
           </Card>
         </GridItem>
       </GridContainer>

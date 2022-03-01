@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 });
 const InvoicePrint = React.forwardRef(
   ({ defaultprintData, printData, invoiceTitle }, ref) => {
-
+console.log(defaultprintData)
     const classes = useStyles();
 
     const stockOutRender = (renData) => {
@@ -251,7 +251,33 @@ const InvoicePrint = React.forwardRef(
                       Sub Total
                     </TableCell>
                     <TableCell align="right">
-                      {defaultprintData?.sub_total_amount}
+                      {defaultprintData?.grand_total_amount}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell align="right" colSpan={5}>
+                      Payment Type
+                    </TableCell>
+                    <TableCell align="right">
+                      {defaultprintData?.payment_type}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell align="right" colSpan={5}>
+                     Paid
+                    </TableCell>
+                    <TableCell align="right">
+                      {defaultprintData?.paid_amount}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="right" colSpan={5}>
+                   Due
+                    </TableCell>
+                    <TableCell align="right">
+                      {defaultprintData?.due_amount}
                     </TableCell>
                   </TableRow>
                 </TableBody>

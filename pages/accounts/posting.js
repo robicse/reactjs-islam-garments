@@ -163,9 +163,10 @@ const PostingCom = observer(() => {
     // { title: "chart of account_name", field: "chart_of_account_name" },
       
     { title: "Account Name", field: "chart_of_account_name" },
+    { title: "Debit", field: "debit" },
       
     { title: "Credit", field: "credit" },
-    { title: "Debit", field: "debit" },
+
   ];
 
   const handleDelete = async (row_id) => {

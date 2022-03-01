@@ -308,8 +308,18 @@ const LagerCom = observer(() => {
                   size="small"
                   name="gender1"
                   value={wareOrStore}
-                  onChange={(e) => setWareOrStore(e.target.value)}
+                  onChange={(e) =>{
+                    setWareOrStore(e.target.value)
+                    setSelecteStore(null)
+                    setSelectedWarehouse(null)
+                  } }
                 >
+                   <FormControlLabel
+                    size="small"
+                    value="None"
+                    control={<Radio size="small" />}
+                    label="ALL"
+                  />
                   <FormControlLabel
                     size="small"
                     value="Warehouse"
@@ -322,12 +332,7 @@ const LagerCom = observer(() => {
                     control={<Radio size="small" />}
                     label="Store"
                   />
-                  <FormControlLabel
-                    size="small"
-                    value="None"
-                    control={<Radio size="small" />}
-                    label="None"
-                  />
+                 
                 </RadioGroup>
               </FormControl>
             </Grid>

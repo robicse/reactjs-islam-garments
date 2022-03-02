@@ -168,7 +168,7 @@ export default function SearchByDrpdown({
           />
         </GridItem>
 
-        <GridItem xs={12} sm={3} md={3}>
+        <GridItem xs={12} sm={3} md={2}>
           <Autocomplete
             size="small"
             id="combo-box-demo"
@@ -197,7 +197,7 @@ export default function SearchByDrpdown({
         </GridItem>
 
         {selectedUnit?.name == "Bundle" && (
-          <GridItem xs={12} sm={3} md={1}>
+          <GridItem xs={12} sm={3} md={2}>
             <Autocomplete
               size="small"
               id="combo-box-demo"

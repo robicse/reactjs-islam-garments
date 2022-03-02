@@ -128,7 +128,7 @@ const CustomerDue = observer(() => {
 
   const handlePaymentSubmit = async (id) => {
 
-    if (paid < 0 || paid > currentDue) {
+    if (paid <= 0 || paid > currentDue) {
         return cogoToast.warn("Please provide valid amount", {
           position: "top-right",
           bar: { size: "10px" },
@@ -136,11 +136,18 @@ const CustomerDue = observer(() => {
       }
 
     try {
- 
+ console.log(
+      {
+      supplier_id: id,
+      paid_amount: paid,
+      due_amount: due,
+    }
+  
+  )
       const result = await axios.post(
-        endpoint.supplierDuePaidApi,
-        {
-          customer_id: id,
+        endpoint.supplier_due_paid,
+        { payment_type_id:'1',
+          supplier_id: id,
           paid_amount: paid,
           due_amount: due,
         },

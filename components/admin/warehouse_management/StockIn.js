@@ -183,16 +183,17 @@ const Create = ({ endpoint, modal, handleRefress }) => {
       supplier_id: selectedSupplyer,
       warehouse_id: selectedWarehouse,
       products: JSON.stringify(selectedProductList),
-      sub_total_amount: subTotal,
       discount_type: discountType,
       discount_percent: discountParcent,
       discount_amount: discountAmount,
       after_discount_amount: afterDiscountAmount,
+      sub_total_amount: subTotal,
       grand_total_amount: grand,
-      paid_amount: grand,
+      paid_amount: paid,
       due_amount: due,
-      payment_type_id: 1,
+      payment_type_id: paymentType,
     };
+    console.log(body)
 
     // convert formdata
     const data = new FormData();
@@ -211,7 +212,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
       );
       handleRefress();
       setButtonLoading(false);
-      modal(false);
+      // modal(false);
       // handleRefress();
     } catch (error) {
       AllApplicationErrorNotification(error);
@@ -221,8 +222,8 @@ const Create = ({ endpoint, modal, handleRefress }) => {
 
   return (
     <div>
-      <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
-        <GridItem xs={12} sm={3} md={2}>
+      <GridContainer style={{ padding: "15px", marginTop: 250 }}>
+        <GridItem xs={12} sm={3} md={3}>
           <TextField
             size="small"
             id="standard-basic"
@@ -253,7 +254,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
         <GridItem
           xs={12}
           sm={3}
-          md={1}
+          md={3}
           style={{ textAlign: "center", marginTop: "10px" }}
         >
           <ArrowForwardIcon size="large" />

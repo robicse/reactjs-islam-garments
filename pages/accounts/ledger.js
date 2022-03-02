@@ -87,6 +87,10 @@ const LagerCom = observer(() => {
 
   const [preBalance, setPreBalance] = useState(0);
   const [preDebCre, setPreDebCre] = useState("De");
+
+  const [resType, setResType] = useState(null);
+
+
   const [totalBalancedebitAndCredit, setTotalBalancedebitAndCredit] =
     useState(0);
   const [invoiceData, setInvoicedata, setInvoicedataPromise] =
@@ -146,6 +150,8 @@ const LagerCom = observer(() => {
         endpoint.headers
       )
       .then((res) => {
+
+        setResType(res.data.response?.head_debit_or_credit)
         setPreBalance(res.data.response.PreBalance);
         setPreDebCre(res.data.response.preDebCre);
 
@@ -505,7 +511,7 @@ const LagerCom = observer(() => {
                           Closing Balance :
                         </TableCell>
                         <TableCell component="th" scope="row">
-                       {lastItem?.balance}
+                       {lastItem?.balance} {resType}
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -522,6 +528,9 @@ const LagerCom = observer(() => {
                     Print
                   </Button>
                 )} */}
+
+
+                
               </Grid>
             </CardBody>
           </Card>

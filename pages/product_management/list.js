@@ -268,7 +268,7 @@ const TableList = observer(() => {
   return (
     <Gurd subject={subject}>
       <div style={{ display: "none" }}>
-        <Barcode
+        {/* <Barcode
           ref={componentRef}
           inv={invoiceData}
           barProd={barcodeProduct}
@@ -276,7 +276,7 @@ const TableList = observer(() => {
           vatStatus={vatStatus}
           barProdPrice={barcodeProductPrice}
           invoiceProduct={invoiceProduct}
-        />
+        /> */}
       </div>
 
       <Grid xs={12}>

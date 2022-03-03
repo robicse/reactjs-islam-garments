@@ -49,6 +49,9 @@ const styles = {
     marginBottom: "3px",
     textDecoration: "none",
   },
+  submit: {
+    marginTop: "25px",
+  },
 };
 
 const useStyles = makeStyles(styles);
@@ -68,7 +71,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
 
   const [productType, setProductType] = React.useState("Own");
   const [unitType, setUnitType] = React.useState("Pcs");
-console.log(unitType)
+  console.log(unitType);
   // load data
   useAsyncEffect(async (isMounted) => {
     await axios
@@ -113,7 +116,7 @@ console.log(unitType)
       product_unit_id,
       product_size_id,
       product_code,
-      product_sub_unit_id
+      product_sub_unit_id,
     };
 
     try {
@@ -139,12 +142,6 @@ console.log(unitType)
     }
   };
 
-  // const uploadImageHnadle = (img) => {
-  //   setImage(img);
-  // };
-
-  console.log(subunitList);
-
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
@@ -153,7 +150,7 @@ console.log(unitType)
             <CardBody>
               <Formik
                 initialValues={{
-                  type_name: "",
+                  type_name: "Own",
                   unit_name: "",
                   sub_unit_name: "",
                   size_name: "",
@@ -167,10 +164,12 @@ console.log(unitType)
                 }}
                 validate={(values) => {
                   const errors = {};
-                  console.log(values);
+
+
+
                   if (values.type_name) {
-                    if(values.type_name=='Buy'){
-                      values.item_code = ""
+                    if (values.type_name == "Buy") {
+                      values.item_code = "";
                     }
                     setProductType(values.type_name);
                   }
@@ -178,47 +177,60 @@ console.log(unitType)
                   if (values.unit_name) {
                     setUnitType(values?.unit_name?.name);
                   }
-                  // if (!values.type_name) {
-                  //   errors.type_name = "Required";
-                  // }
-
-                  // if (!values.category_name) {
-                  //   errors.type_name = "Required";
-                  // }
-
-                  // if (!values.unit_name) {
-                  //   errors.unit_name = "Required";
-                  // }
-
-                  // if (!values.size_name) {
-                  //   errors.size_name = "Required";
-                  // }
-
-                  if (
-                    (values.type_name &&
-                      values.category_name &&
-                      values.unit_name &&
-                      values.size_name) ||
-                    values.item_code ||
-                   values.sub_unit_name
-                  ) {
-                    const functionResult = handleDuplicateProduct(
-                      values?.type_name,
-                      values?.category_name?.id,
-                      values?.unit_name?.id,
-                      values?.size_name?.id,
-                      values?.item_code,
-                      values?.sub_unit_name?.id
-                    );
+                  if (values.unit_name?.name == 'Pcs') {
+                    console.log('subunit')
+                    values.sub_unit_name = "";
                   }
 
-                  // if (!values.item_code) {
-                  //   errors.item_code = "Required";
-                  // }
+                  if (values.type_name == "Own") {
+                    if (
+                      values.type_name &&
+                      values.category_name &&
+                      values.unit_name &&
+                      values.size_name ||
+                      values.item_code
+                    ) {
+                      const functionResult = handleDuplicateProduct(
+                        values?.type_name,
+                        values?.category_name?.id,
+                        values?.unit_name?.id,
+                        values?.size_name?.id,
+                        values?.item_code,
+                        values?.sub_unit_name?.id
+                      );
+                    }
+                  }
 
-                  // if (!values.purchase_price) {
-                  //   errors.purchase_price = "Required";
-                  // }
+                  if (values.type_name == "Buy") {
+                    if (values.unit_name == "Bundle") {
+                      if (
+                        values.type_name &&
+                        values.category_name &&
+                        values.unit_name &&
+                        values.sub_unit_name
+                      ) {
+                        const functionResult = handleDuplicateProduct(
+                          values?.type_name,
+                          values?.category_name?.id,
+                          values?.unit_name?.id,
+                          values?.sub_unit_name?.id
+                        );
+                      }
+                    } else {
+                      if (
+                        values.type_name &&
+                        values.category_name &&
+                        values.unit_name
+                      ) {
+                        const functionResult = handleDuplicateProduct(
+                          values?.type_name,
+                          values?.category_name?.id,
+                          values?.unit_name?.id,
+                          values?.sub_unit_name?.id
+                        );
+                      }
+                    }
+                  }
 
                   return errors;
                 }}
@@ -235,7 +247,9 @@ console.log(unitType)
                     type: productType,
                     product_category_id: values.category_name.id,
                     product_unit_id: values.unit_name.id,
-                    product_sub_unit_id: values.sub_unit_name ?  values.sub_unit_name.id : "",
+                    product_sub_unit_id: values.sub_unit_name
+                      ? values.sub_unit_name.id
+                      : "",
                     product_size_id: values.size_name.id,
                     product_code: values.item_code,
                     purchase_price: values.purchase_price,
@@ -339,9 +353,7 @@ console.log(unitType)
                               margin="normal"
                             >
                               {unitList.map((item) => (
-                                <MenuItem value={item}>
-                                  {item.name}
-                                </MenuItem>
+                                <MenuItem value={item}>{item.name}</MenuItem>
                               ))}
                             </Field>
                           </GridItem>
@@ -369,24 +381,26 @@ console.log(unitType)
                             </GridItem>
                           )}
 
-                          <GridItem xs={12} sm={4} md={3}>
-                            <Field
-                              name="size_name"
-                              component={Autocomplete}
-                              options={sizeList}
-                              getOptionLabel={(option) => option.name}
-                              renderInput={(params) => (
-                                <MuiTextField
-                                  {...params}
-                                  label="Size"
-                                  variant="outlined"
-                                  fullWidth
-                                  // helperText="Please select unit"
-                                  margin="normal"
-                                />
-                              )}
-                            />
-                          </GridItem>
+                          {productType == "Own" && (
+                            <GridItem xs={12} sm={4} md={3}>
+                              <Field
+                                name="size_name"
+                                component={Autocomplete}
+                                options={sizeList}
+                                getOptionLabel={(option) => option.name}
+                                renderInput={(params) => (
+                                  <MuiTextField
+                                    {...params}
+                                    label="Size"
+                                    variant="outlined"
+                                    fullWidth
+                                    // helperText="Please select unit"
+                                    margin="normal"
+                                  />
+                                )}
+                              />
+                            </GridItem>
+                          )}
 
                           {productType == "Own" && (
                             <GridItem xs={12} sm={4} md={3}>

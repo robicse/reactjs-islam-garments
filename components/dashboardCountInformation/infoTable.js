@@ -1,6 +1,8 @@
 import React from "react";
 import { useRootStore } from "../../models/root-store-provider";
 import { observer } from "mobx-react-lite";
+import Card from "components/Card/Card.js";
+import CardBody from "components/Card/CardBody.js";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -81,7 +83,7 @@ const TableList = observer(
 
     return (
       <div>
-        {user?.details?.role === "Super Admin" ? (
+        {/* {user?.details?.role === "Super Admin" ? (
           <h3
             style={{
               textAlign: "center",
@@ -94,15 +96,20 @@ const TableList = observer(
           </h3>
         ) : (
           ""
-        )}
+        )} */}
 
         {user?.details?.role === "Super Admin" ? (
+          <Card>
+
+      
+          <CardBody>
+
           <Table
             aria-label="simple table"
             size="small"
             // style={{backgroundColor:"gray"}}
           >
-            <TableHead style={{ backgroundColor: "#3399ff" }}>
+            <TableHead>
               <TableRow>
                 <TableCell style={{ padding: "1px", textAlign: "center" }}>
                   SL#
@@ -168,11 +175,13 @@ const TableList = observer(
               </TableRow>
             </TableBody>
           </Table>
+          </CardBody>
+          </Card>
         ) : (
           ""
         )}
 
-        {user?.details?.role === "Super Admin" ||
+        {/* {user?.details?.role === "Super Admin" ||
         user?.details?.role === "Store Salesman" ? (
           <h3
             style={{
@@ -186,15 +195,18 @@ const TableList = observer(
           </h3>
         ) : (
           ""
-        )}
+        )} */}
         {user?.details?.role === "Super Admin" ||
         user?.details?.role === "Store Salesman" ? (
-          <Table
+          <Card>
+            <CardBody>
+
+            <Table
             aria-label="simple table"
             size="small"
             // style={{backgroundColor:"gray"}}
           >
-            <TableHead style={{ backgroundColor: "#3399ff" }}>
+            <TableHead >
               <TableRow>
                 <TableCell style={{ padding: "1px", textAlign: "center" }}>
                   SL#
@@ -260,6 +272,12 @@ const TableList = observer(
               </TableRow>
             </TableBody>
           </Table>
+
+            </CardBody>
+          </Card>
+        
+        
+  
         ) : (
           ""
         )}

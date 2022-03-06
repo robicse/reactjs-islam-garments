@@ -65,6 +65,8 @@ console.log(endpoint, modal, handleRefress)
   // selected prodict state
   const [selectedProductList, setSelectedProduct] = React.useState([]);
 
+
+  console.log(paymentType)
   //loading when component run
   useAsyncEffect(async (isMounted) => {
     try {
@@ -204,10 +206,11 @@ console.log(endpoint, modal, handleRefress)
       discount_percent: discountParcent,
       discount_amount: discountAmount,
       after_discount_amount: afterDiscountAmount,
+      sub_total_amount: subTotal,
       grand_total_amount: grand,
-      paid_amount: grand,
+      paid_amount: paid,
       due_amount: due,
-      payment_type_id: 1,
+      payment_type_id: paymentType,
     };
 
     // convert formdata

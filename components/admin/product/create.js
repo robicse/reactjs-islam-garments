@@ -165,11 +165,10 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                 validate={(values) => {
                   const errors = {};
 
-
-
                   if (values.type_name) {
                     if (values.type_name == "Buy") {
                       values.item_code = "";
+                      values.size_name = ""
                     }
                     setProductType(values.type_name);
                   }
@@ -177,70 +176,125 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                   if (values.unit_name) {
                     setUnitType(values?.unit_name?.name);
                   }
-                  if (values.unit_name?.name == 'Pcs') {
-                    console.log('subunit')
+                  if (values.unit_name?.name == "Pcs") {
                     values.sub_unit_name = "";
                   }
 
-                  if (values.type_name == "Own") {
-                    if (
-                      values.type_name &&
-                      values.category_name &&
-                      values.unit_name &&
-                      values.size_name ||
-                      values.item_code
-                    ) {
-                      const functionResult = handleDuplicateProduct(
-                        values?.type_name,
-                        values?.category_name?.id,
-                        values?.unit_name?.id,
-                        values?.size_name?.id,
-                        values?.item_code,
-                        values?.sub_unit_name?.id
-                      );
-                    }
-                  }
 
-                  if (values.type_name == "Buy") {
-                    if (values.unit_name == "Bundle") {
-                      if (
-                        values.type_name &&
-                        values.category_name &&
-                        values.unit_name &&
-                        values.sub_unit_name
-                      ) {
-                        const functionResult = handleDuplicateProduct(
-                          values?.type_name,
-                          values?.category_name?.id,
-                          values?.unit_name?.id,
-                          values?.sub_unit_name?.id
-                        );
-                      }
-                    } else {
-                      if (
-                        values.type_name &&
-                        values.category_name &&
-                        values.unit_name
-                      ) {
-                        const functionResult = handleDuplicateProduct(
-                          values?.type_name,
-                          values?.category_name?.id,
-                          values?.unit_name?.id,
-                          values?.sub_unit_name?.id
-                        );
-                      }
-                    }
-                  }
+        
 
+                  // if (values.type_name == "Own") {
+                  //   if (
+                  //     values.type_name &&
+                  //     values.category_name &&
+                  //     values.unit_name &&
+                  //     values.size_name ||
+                  //     values.item_code
+                  //   ) {
+                  //     const functionResult = handleDuplicateProduct(
+                  //       values?.type_name,
+                  //       values?.category_name?.id,
+                  //       values?.unit_name?.id,
+                  //       values?.size_name?.id,
+                  //       values?.item_code,
+                  //       values?.sub_unit_name?.id
+                  //     );
+                  //   }
+                  // }
+
+                  // if (values.type_name == "Buy") {
+                  //   if (values.unit_name == "Bundle") {
+                  //     if (
+                  //       values.type_name &&
+                  //       values.category_name &&
+                  //       values.unit_name &&
+                  //       values.sub_unit_name
+                  //     ) {
+                  //       const functionResult = handleDuplicateProduct(
+                  //         values?.type_name,
+                  //         values?.category_name?.id,
+                  //         values?.unit_name?.id,
+                  //         values?.sub_unit_name?.id
+                  //       );
+                  //     }
+                  //   } else {
+                  //     if (
+                  //       values.type_name &&
+                  //       values.category_name &&
+                  //       values.unit_name
+                  //     ) {
+                  //       const functionResult = handleDuplicateProduct(
+                  //         values?.type_name,
+                  //         values?.category_name?.id,
+                  //         values?.unit_name?.id,
+                  //         values?.sub_unit_name?.id
+                  //       );
+                  //     }
+                  //   }
+                  // }
+                  console.log(values);
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  if (!submitAllow) {
+                  if (!values.category_name) {
                     setSubmitting(false);
-                    return cogoToast.info("Product Alreday Exits", {
+                    return cogoToast.warn("Please Select Category", {
                       position: "top-right",
                       bar: { size: "10px" },
                     });
+                  }
+
+                  if (!values.unit_name) {
+                    setSubmitting(false);
+                    return cogoToast.warn("Please Select Unit", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                  }
+
+                  if (
+                    values.unit_name?.name == "Bundle" &&
+                    !values.sub_unit_name
+                  ) {
+                    setSubmitting(false);
+                    return cogoToast.warn("Please Select Sub Unit", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                  }
+
+                  if (!values.purchase_price) {
+                    setSubmitting(false);
+                    return cogoToast.warn("Please Select price", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                  }
+
+                  if (!values.purchase_price) {
+                    setSubmitting(false);
+                    return cogoToast.warn("Please Select price", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
+                  }
+
+                  if (values.type_name == "Own") {
+                    if (!values.size_name) {
+                      setSubmitting(false);
+                      return cogoToast.warn("Please Select Size", {
+                        position: "top-right",
+                        bar: { size: "10px" },
+                      });
+                    }
+
+                    if (!values.item_code) {
+                      setSubmitting(false);
+                      return cogoToast.warn("Please Select Product Code", {
+                        position: "top-right",
+                        bar: { size: "10px" },
+                      });
+                    }
                   }
 
                   const body = {
@@ -250,7 +304,9 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                     product_sub_unit_id: values.sub_unit_name
                       ? values.sub_unit_name.id
                       : "",
-                    product_size_id: values.size_name.id,
+                    product_size_id: values.size_name
+                      ? values.size_name.id
+                      : "",
                     product_code: values.item_code,
                     purchase_price: values.purchase_price,
                     selling_price: values.purchase_price,
@@ -267,10 +323,14 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                     back_image: backImage,
                   };
 
+                  console.log(body);
+
                   const formData = new FormData();
                   Object.keys(body).forEach((key) =>
                     formData.append(key, body[key])
                   );
+
+         
 
                   setTimeout(() => {
                     Axios.post(endpoint.createAPi, formData, {
@@ -290,6 +350,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                         });
                       })
                       .catch(function (error) {
+                        console.log(error?.response?.data)
                         AllApplicationErrorNotification(error?.response?.data);
 
                         setSubmitting(false);

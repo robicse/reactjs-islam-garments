@@ -102,7 +102,7 @@ const TableList = observer(
             size="small"
             // style={{backgroundColor:"gray"}}
           >
-            <TableHead style={{ backgroundColor: "gray" }}>
+            <TableHead style={{ backgroundColor: "#3399ff" }}>
               <TableRow>
                 <TableCell style={{ padding: "1px", textAlign: "center" }}>
                   SL#
@@ -194,7 +194,7 @@ const TableList = observer(
             size="small"
             // style={{backgroundColor:"gray"}}
           >
-            <TableHead style={{ backgroundColor: "gray" }}>
+            <TableHead style={{ backgroundColor: "#3399ff" }}>
               <TableRow>
                 <TableCell style={{ padding: "1px", textAlign: "center" }}>
                   SL#

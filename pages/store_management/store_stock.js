@@ -112,21 +112,28 @@ React.useEffect(()=>{
 
 
   const columns = [
-    { title: "Store Name", field: "store_name" },
+    { title: "Store", field: "store_name" },
     {
-      title: "Product Name",
-      field: "product_name",
-      render: (rowData) => (
-        <Typography variant="subtitle2" style={{ width: "250px" }}>
-          {rowData.product_name}
-        </Typography>
-      ),
+      title: "Type",
+      field: "type",
+
     },
+    // {
+    //   title: "Product Name",
+    //   field: "product_name",
+    //   render: (rowData) => (
+    //     <Typography variant="subtitle2" style={{ width: "250px" }}>
+    //       {rowData.product_name}
+    //     </Typography>
+    //   ),
+    // },
+    { title: "Code", field: "product_code" },
+    { title: "Category", field: "product_category_name" },
     { title: "Unit", field: "product_unit_name" },
     { title: "Size", field: "product_size_name" },
     { title: "Price", field: "purchase_price" },
-    { title: "Product Code", field: "product_code" },
-    { title: "Current Stock", field: "current_stock" },
+    
+    { title: "Stock", field: "current_stock" },
     
   ];
 

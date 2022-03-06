@@ -32,22 +32,20 @@ const styles = {
     textDecoration: "none",
   },
   submit: {
-    marginTop:"15px"
-  }
+    marginTop: "15px",
+  },
 };
 
 const useStyles = makeStyles(styles);
 
-const Create = ({ token, modal, endpoint, mutate }) => {
+const StoreCreateComponent = ({ token, modal, endpoint, mutate }) => {
   const classes = useStyles();
-
 
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-          
             <CardBody>
               <Formik
                 initialValues={{
@@ -74,7 +72,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                   if (!values.address) {
                     errors.address = "Required";
                   }
-              
+
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
@@ -87,7 +85,6 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                         email: values.email,
                         address: values.address,
                         status: values.status,
-                        
                       },
                       {
                         headers: { Authorization: "Bearer " + token },
@@ -169,7 +166,6 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                               select
                               fullWidth
                               variant="outlined"
-                             
                               margin="normal"
                             >
                               <MenuItem value="1">Active</MenuItem>
@@ -198,7 +194,6 @@ const Create = ({ token, modal, endpoint, mutate }) => {
                 )}
               </Formik>
             </CardBody>
-
           </Card>
         </GridItem>
       </GridContainer>
@@ -206,4 +201,4 @@ const Create = ({ token, modal, endpoint, mutate }) => {
   );
 };
 
-export default Create;
+export default StoreCreateComponent;

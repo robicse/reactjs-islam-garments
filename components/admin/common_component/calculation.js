@@ -88,7 +88,8 @@ const ClaculationComponent = ({
 
     setGrand(afterDisCal);
     setAfterDiscountAmount(afterDisCal);
-    setDue(subTotal-paid)
+    const p = paid || 0
+    setDue(subTotal- p)
     
     // setDiscountPointHandle(discountPoint);
   }, [products, subTotal, afterDiscountAmount, discountAmount]);
@@ -104,24 +105,17 @@ const findPaymentTypeById=(id)=>{
  const getType = paymentTypeList.filter((item)=>item.id==id)
  return getType[0].name
 }
+
+
   const paymentTypeHandle=(ty)=>{
-    setPaid(0)
-    setDue(0)
     setPaymentType(ty)
-    const calget = findPaymentTypeById(ty)
-    if(calget == 'Credit'){
-      setDue(subTotal-paid)
-      console.log(subTotal,paid,due)
+    // setPaid(0)
+    // setDue(0)
+
+    //   console.log(subTotal,paid,due)
       // console.log(subTotal,paid)
       //   setDue(10)
-    }
-    if(calget == 'Cash'){
-      console.log(subTotal,paid,due)
-      // setPaid(subTotal)
-      // setDue(0)
-      // setPaymentType(ty)
-    }
- 
+   
   }
   // const setDiscountPointHandle = (dPoint) => {
   //   if (dPoint && dPoint >= 0) {
@@ -212,7 +206,7 @@ const findPaymentTypeById=(id)=>{
 
         <Grid item xs={8}></Grid>
         <Grid item xs={2}>
-          {paymentType == "2" && (
+         
             <TextField
               margin="normal"
               variant="outlined"
@@ -226,10 +220,10 @@ const findPaymentTypeById=(id)=>{
               }}
               onChange={(e) => handlePaidDue(e.target.value)}
             />
-          )}
+     
         </Grid>
         <Grid item xs={2}>
-          {paymentType == "2" && (
+     
             <TextField
               margin="normal"
               variant="outlined"
@@ -242,7 +236,7 @@ const findPaymentTypeById=(id)=>{
                 readOnly: true,
               }}
             />
-          )}
+       
         </Grid>
       </Grid>
 

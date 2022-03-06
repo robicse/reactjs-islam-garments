@@ -32,6 +32,9 @@ const styles = {
     marginBottom: "3px",
     textDecoration: "none",
   },
+  submit:{
+    marginTop:"25px"
+  }
 };
 
 const useStyles = makeStyles(styles);
@@ -45,7 +48,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
 
   const [userFor, setUserFor] = React.useState("Store");
   const [image, setImage] = React.useState(null);
-  console.log(userFor)
+  console.log(userFor);
 
   let ware = `${baseUrl}/warehouse_list`;
   let stor = `${baseUrl}/store_list`;
@@ -129,29 +132,35 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
-                  console.log(values)
+                  console.log(values);
                   if (!userFor) {
                     setSubmitting(false);
-                    return cogoToast.warn('Please Select User For',{position: 'top-right', bar:{size: '10px'}});
+                    return cogoToast.warn("Please Select User For", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
                   }
 
                   if (!values.warehouse && !values.store) {
                     setSubmitting(false);
-                    return cogoToast.warn('Please Select Warehouse or Store',{position: 'top-right', bar:{size: '10px'}});
+                    return cogoToast.warn("Please Select Warehouse or Store", {
+                      position: "top-right",
+                      bar: { size: "10px" },
+                    });
                   }
 
                   const body = {
                     roles: values.roles,
-                        name: values.name,
-                        phone: values.phone,
-                        email: values.email,
-                        user_for: userFor,
-                        status: values.status,
-                        password: values.password,
-                        confirm_password: values.confirm_password,
-                        warehouse_id: values.warehouse,
-                        store_id: values.store,
-                        image: image,
+                    name: values.name,
+                    phone: values.phone,
+                    email: values.email,
+                    user_for: userFor,
+                    status: values.status,
+                    password: values.password,
+                    confirm_password: values.confirm_password,
+                    warehouse_id: values.warehouse,
+                    store_id: values.store,
+                    image: image,
                   };
 
                   const formData = new FormData();
@@ -160,13 +169,9 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                   );
 
                   setTimeout(() => {
-                    Axios.post(
-                      `${baseUrl}/${endpoint}`,
-                      formData,
-                      {
-                        headers: { Authorization: "Bearer " + token },
-                      }
-                    )
+                    Axios.post(`${baseUrl}/${endpoint}`, formData, {
+                      headers: { Authorization: "Bearer " + token },
+                    })
                       .then((res) => {
                         cogoToast.success("Create Success", {
                           position: "top-right",
@@ -177,7 +182,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                         modal(false);
                       })
                       .catch(function (error) {
-                        console.log(error)
+                        console.log(error);
                         AllApplicationErrorNotification(error?.response?.data);
                         setSubmitting(false);
                       });
@@ -222,7 +227,6 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                               name="email"
                             />
                           </GridItem>
-                     
 
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
@@ -233,7 +237,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                               select
                               fullWidth
                               variant="outlined"
-                              helperText="Please select roles"
+                              // helperText="Please select roles"
                               margin="normal"
                             >
                               {roles.map((role) => (
@@ -244,71 +248,69 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                             </Field>
                           </GridItem>
 
-                          
                           <GridItem xs={12} sm={12} md={4}>
-                                <Field
-                                  component={TextField}
-                                  type="text"
-                                  name="user_for"
-                                  value={userFor}
-                                  label="User For"
-                                  select
-                                  fullWidth
-                                  variant="outlined"
-                                  helperText="Please select Store"
-                                  margin="normal"
-                                  onChange={(e) => setUserFor(e.target.value)}
-                                  helperText="Please select one"
-                                >
-                                  <MenuItem value="Warehouse">Warehouse</MenuItem>
-                                  <MenuItem value="Store">Store</MenuItem>
-                                </Field>
-                              </GridItem>
+                            <Field
+                              component={TextField}
+                              type="text"
+                              name="user_for"
+                              value={userFor}
+                              label="User For"
+                              select
+                              fullWidth
+                              variant="outlined"
+                              // helperText="Please select Store"
+                              margin="normal"
+                              onChange={(e) => setUserFor(e.target.value)}
+                              helperText="Please select one"
+                            >
+                              <MenuItem value="Warehouse">Warehouse</MenuItem>
+                              <MenuItem value="Store">Store</MenuItem>
+                            </Field>
+                          </GridItem>
 
                           {userFor == "Warehouse" ? (
                             <>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              type="text"
-                              name="warehouse"
-                              label="Warehouse"
-                              select
-                              fullWidth
-                              variant="outlined"
-                              helperText="Please select warehouse"
-                              margin="normal"
-                            >
-                              {warehouse.map((w) => (
-                                <MenuItem value={w.id}>{w.name}</MenuItem>
-                              ))}
-                            </Field>
-                          </GridItem>
-
-                          </>
-                              ) : (
-                                <>
-
-                          <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              type="text"
-                              name="store"
-                              label="Store"
-                              select
-                              fullWidth
-                              variant="outlined"
-                              helperText="Please select store"
-                              margin="normal"
-                            >
-                              {store.map((s) => (
-                                <MenuItem value={s.id}>{s.store_name}</MenuItem>
-                              ))}
-                            </Field>
-                          </GridItem>
-
-                          </>
-                              )}
+                              <GridItem xs={12} sm={12} md={4}>
+                                <Field
+                                  component={TextField}
+                                  type="text"
+                                  name="warehouse"
+                                  label="Warehouse"
+                                  select
+                                  fullWidth
+                                  variant="outlined"
+                                  // helperText="Please select warehouse"
+                                  margin="normal"
+                                >
+                                  {warehouse.map((w) => (
+                                    <MenuItem value={w.id}>{w.name}</MenuItem>
+                                  ))}
+                                </Field>
+                              </GridItem>
+                            </>
+                          ) : (
+                            <>
+                              <GridItem xs={12} sm={12} md={4}>
+                                <Field
+                                  component={TextField}
+                                  type="text"
+                                  name="store"
+                                  label="Store"
+                                  select
+                                  fullWidth
+                                  variant="outlined"
+                                  // helperText="Please select store"
+                                  margin="normal"
+                                >
+                                  {store.map((s) => (
+                                    <MenuItem value={s.id}>
+                                      {s.store_name}
+                                    </MenuItem>
+                                  ))}
+                                </Field>
+                              </GridItem>
+                            </>
+                          )}
 
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
@@ -357,7 +359,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                               select
                               fullWidth
                               variant="outlined"
-                              helperText="Please select status"
+                              // helperText="Please select status"
                               margin="normal"
                             >
                               <MenuItem value="1">Active</MenuItem>

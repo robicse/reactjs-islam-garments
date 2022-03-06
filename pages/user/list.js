@@ -26,12 +26,12 @@ import useSWR from "swr";
 import { baseUrl, webUrl } from "../../const/api";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
-import Edit from "../../components/admin/user/edit";
-import Create from "../../components/admin/user/create";
+import Edit from "components/admin/user/edit";
+import Create from "components/admin/user/create";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteForeverTwoToneIcon from "@material-ui/icons/DeleteForeverTwoTone";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import Avatar from '@material-ui/core/Avatar';
+import Avatar from "@material-ui/core/Avatar";
 
 const styles = {
   cardCategoryWhite: {
@@ -77,7 +77,7 @@ const endpoint = {
   delete: "user_delete",
 };
 
-const TableList = observer(() => {
+const UserListComponent = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
   const [editData, setEditData] = useState(null);
@@ -91,9 +91,9 @@ const TableList = observer(() => {
     setOpenCreateModal(false);
   };
 
-  const handleClickOpenEdit = () => {
-    setOpenEditModal(true);
-  };
+  // const handleClickOpenEdit = () => {
+  //   setOpenEditModal(true);
+  // };
   const handleCloseEdit = () => {
     setOpenEditModal(false);
   };
@@ -109,13 +109,16 @@ const TableList = observer(() => {
   const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
 
   const columns = [
-    { title: 'Image', render: (rowData) => (
-
-      <Avatar alt='o'  variant="square"
-      src={`${webUrl}/uploads/users/${rowData?.image}`} 
-      
-      />
-    )},
+    {
+      title: "Image",
+      render: (rowData) => (
+        <Avatar
+          alt="o"
+          variant="square"
+          src={`${webUrl}/uploads/users/${rowData?.image}`}
+        />
+      ),
+    },
     {
       title: "Name",
       field: "name",
@@ -131,13 +134,13 @@ const TableList = observer(() => {
     { title: "User For", field: "user_for" },
 
     {
-      title: "Warehouse Name",
+      title: "Warehouse",
       field: "warehouse_name",
       render: (rowData) =>
         rowData.warehouse_name ? rowData.warehouse_name : <ErrorOutlineIcon />,
     },
     {
-      title: "Store Name",
+      title: "Store",
       field: "store_name",
       render: (rowData) =>
         rowData.store_name ? rowData.store_name : <ErrorOutlineIcon />,
@@ -359,4 +362,4 @@ const TableList = observer(() => {
   );
 });
 
-export default TableList;
+export default UserListComponent;

@@ -22,15 +22,15 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import { Box, Chip, Grid } from "@material-ui/core";
+import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
+//import DeleteForeverTwoToneIcon from "@material-ui/icons/DeleteForeverTwoTone";
 import useSWR from "swr";
-import { baseUrl } from "../../const/api";
+import { baseUrl } from "const/api";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
-import Edit from "../../components/admin/store/edit";
-import Create from "../../components/admin/store/create";
-import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
-import DeleteForeverTwoToneIcon from "@material-ui/icons/DeleteForeverTwoTone";
-import AllApplicationErrorNotification from "../../components/utils/errorNotification";
+import Edit from "components/admin/store/edit";
+import Create from "components/admin/store/create";
+// import AllApplicationErrorNotification from "components/utils/errorNotification";
 
 const styles = {
   cardCategoryWhite: {
@@ -76,7 +76,7 @@ const endpoint = {
   delete: "store_delete",
 };
 
-const TableList = observer(() => {
+const StoreListComponent = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
   const [editData, setEditData] = useState(null);
@@ -149,34 +149,34 @@ const TableList = observer(() => {
   };
 
   // handle Delette
-  const handleDelete = async (row_id) => {
-    if (!user.can("Delete", subject)) {
-      cogoToast.warn("You don't have permission!", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-      return null;
-    }
+  // const handleDelete = async (row_id) => {
+  //   if (!user.can("Delete", subject)) {
+  //     cogoToast.warn("You don't have permission!", {
+  //       position: "top-right",
+  //       bar: { size: "10px" },
+  //     });
+  //     return null;
+  //   }
 
-    try {
-      await axios.post(
-        `${baseUrl}/${endpoint.delete}`,
-        {
-          store_id: row_id,
-        },
-        {
-          headers: { Authorization: "Bearer " + user.auth_token },
-        }
-      );
-      cogoToast.success("Delete Success", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-      mutate();
-    } catch (error) {
-      AllApplicationErrorNotification(error?.response?.data);
-    }
-  };
+  //   try {
+  //     await axios.post(
+  //       `${baseUrl}/${endpoint.delete}`,
+  //       {
+  //         store_id: row_id,
+  //       },
+  //       {
+  //         headers: { Authorization: "Bearer " + user.auth_token },
+  //       }
+  //     );
+  //     cogoToast.success("Delete Success", {
+  //       position: "top-right",
+  //       bar: { size: "10px" },
+  //     });
+  //     mutate();
+  //   } catch (error) {
+  //     AllApplicationErrorNotification(error?.response?.data);
+  //   }
+  // };
 
   return (
     <Gurd subject={subject}>
@@ -230,25 +230,25 @@ const TableList = observer(() => {
                       tooltip: "Edit User",
                       onClick: (event, rowData) => handleEdit(rowData),
                     },
-                    (rowData) => ({
-                      icon: () => (
-                        <Button
-                          fullWidth={true}
-                          variant="contained"
-                          color="secondary"
-                        >
-                          <DeleteForeverTwoToneIcon
-                            fontSize="small"
-                            color="white"
-                          />
-                        </Button>
-                      ),
-                      tooltip: "Delete Party",
-                      onClick: (event, rowData) => (
-                        confirm("You want to delete " + rowData.store_name),
-                        handleDelete(rowData.id)
-                      ),
-                    }),
+                    // (rowData) => ({
+                    //   icon: () => (
+                    //     <Button
+                    //       fullWidth={true}
+                    //       variant="contained"
+                    //       color="secondary"
+                    //     >
+                    //       <DeleteForeverTwoToneIcon
+                    //         fontSize="small"
+                    //         color="white"
+                    //       />
+                    //     </Button>
+                    //   ),
+                    //   tooltip: "Delete Party",
+                    //   onClick: (event, rowData) => (
+                    //     confirm("You want to delete " + rowData.store_name),
+                    //     handleDelete(rowData.id)
+                    //   ),
+                    // }),
                   ]}
                   options={{
                     actionsColumnIndex: -1,
@@ -325,4 +325,4 @@ const TableList = observer(() => {
   );
 });
 
-export default TableList;
+export default StoreListComponent;

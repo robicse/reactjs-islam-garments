@@ -24,14 +24,11 @@ import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import { Box, Chip, Grid } from "@material-ui/core";
 import useSWR from "swr";
-import { baseUrl } from "../../const/api";
-import MuiAlert from "@material-ui/lab/Alert";
-import Edit from "../../components/admin/warehouse/edit";
-import Create from "../../components/admin/warehouse/create";
+import { baseUrl } from "const/api";
+import Edit from "components/admin/warehouse/edit";
+import Create from "components/admin/warehouse/create";
 import tableIcons from "components/table_icon/icon";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
-
-
 
 const styles = {
   cardCategoryWhite: {
@@ -123,7 +120,6 @@ const TableList = observer(() => {
       ),
     },
   ];
-
 
   // handle edit
   const handleEdit = (row) => {
@@ -224,8 +220,6 @@ const TableList = observer(() => {
                   ]}
                   options={{
                     actionsColumnIndex: -1,
-
-                    // search: true,
                     pageSize: 12,
                     pageSizeOptions: [12],
                     padding: "dense",

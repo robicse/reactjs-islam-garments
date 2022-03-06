@@ -23,7 +23,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import { Box, Chip, Grid } from "@material-ui/core";
 import useSWR from "swr";
-import { baseUrl } from "../../const/api";
+import { baseUrl, webUrl } from "../../const/api";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import Edit from "../../components/admin/user/edit";
@@ -31,6 +31,7 @@ import Create from "../../components/admin/user/create";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
 import DeleteForeverTwoToneIcon from "@material-ui/icons/DeleteForeverTwoTone";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import Avatar from '@material-ui/core/Avatar';
 
 const styles = {
   cardCategoryWhite: {
@@ -108,6 +109,13 @@ const TableList = observer(() => {
   const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
 
   const columns = [
+    { title: 'Image', render: (rowData) => (
+
+      <Avatar alt='o'  variant="square"
+      src={`${webUrl}/uploads/users/${rowData?.image}`} 
+      
+      />
+    )},
     {
       title: "Name",
       field: "name",

@@ -44,6 +44,7 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
   const [store, setStore] = React.useState([]);
 
   const [userFor, setUserFor] = React.useState("Store");
+  const [image, setImage] = React.useState(null);
   console.log(userFor)
 
   let ware = `${baseUrl}/warehouse_list`;
@@ -139,11 +140,8 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                     return cogoToast.warn('Please Select Warehouse or Store',{position: 'top-right', bar:{size: '10px'}});
                   }
 
-                  setTimeout(() => {
-                    Axios.post(
-                      `${baseUrl}/${endpoint}`,
-                      {
-                        roles: values.roles,
+                  const body = {
+                    roles: values.roles,
                         name: values.name,
                         phone: values.phone,
                         email: values.email,
@@ -153,7 +151,18 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                         confirm_password: values.confirm_password,
                         warehouse_id: values.warehouse,
                         store_id: values.store,
-                      },
+                        image: image,
+                  };
+
+                  const formData = new FormData();
+                  Object.keys(body).forEach((key) =>
+                    formData.append(key, body[key])
+                  );
+
+                  setTimeout(() => {
+                    Axios.post(
+                      `${baseUrl}/${endpoint}`,
+                      formData,
                       {
                         headers: { Authorization: "Bearer " + token },
                       }
@@ -322,6 +331,20 @@ const Create = ({ token, modal, endpoint, mutate, user }) => {
                               type="password"
                               label="Confirm Password"
                               name="confirm_password"
+                            />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              // label="Image"
+                              name="image"
+                              onChange={(e) => {
+                                setImage(e.target.files[0]);
+                              }}
                             />
                           </GridItem>
 

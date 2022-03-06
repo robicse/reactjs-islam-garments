@@ -47,6 +47,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
 
 
   const [userFor, setUserFor] = React.useState(editData.user_for);
+  const [image, setImage] = React.useState(null);
 
   console.log(userFor)
   let ware = `${baseUrl}/warehouse_list`;
@@ -137,12 +138,8 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                     return cogoToast.warn('Please Select Warehouse or Store',{position: 'top-right', bar:{size: '10px'}});
                   }
 
-
-                  setTimeout(() => {
-                    Axios.post(
-                      `${baseUrl}/${endpoint}`,
-                      {
-                        user_id: editData.id,
+                  const body = {
+                    user_id: editData.id,
                         roles: values.role,
                         name: values.name,
                         phone: values.phone,
@@ -153,9 +150,22 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                         confirm_password: values.confirm_password,
                         warehouse_id: values.warehouse || 6,
                         store_id: values.store,
-                      },
+                        image: image,
+                  };
+
+                  const formData = new FormData();
+                  Object.keys(body).forEach((key) =>
+                    formData.append(key, body[key])
+                  );
+
+
+                  setTimeout(() => {
+                    Axios.post(
+                      `${baseUrl}/${endpoint}`,
+                      formData,
                       {
                         headers: { Authorization: "Bearer " + token },
+                        "Content-type": "multipart/form-data",
                       }
                     )
                       .then((res) => {
@@ -376,6 +386,21 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               </Field>
                             </GridItem>
                             )} */}
+
+                          <GridItem xs={12} sm={12} md={4}>
+                            <Field
+                              component={TextField}
+                              variant="outlined"
+                              margin="normal"
+                              fullWidth
+                              type="file"
+                              // label="Image"
+                              name="image"
+                              onChange={(e) => {
+                                setImage(e.target.files[0]);
+                              }}
+                            />
+                          </GridItem>
 
                           
 

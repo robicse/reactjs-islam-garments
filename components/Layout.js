@@ -7,7 +7,7 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import Menu from '@material-ui/core/Menu';
 import Avatar from '@material-ui/core/Avatar';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -44,12 +44,13 @@ const useStyles = makeStyles((theme) => ({
     // background:"#800080"
   },
   appBar: {
+
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    //  background:"#800080"
+ 
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -89,7 +90,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toolbar: {
-  //backgroundColor:"#2C384A",
+  //  backgroundColor: 'linear-gradient(180deg, #FFFFFF 0%, #000000 100%), linear-gradient(90deg, #FFFFFF 0%, #000000 100%), #00FFFF',
+   // backgroundColor:"#2C384A",
     //  boxShadow:"50px 1px #888888",
     display: 'flex',
     alignItems: 'center',
@@ -195,12 +197,14 @@ export const Layout = observer(({ children }) => {
       <CssBaseline />
       {router.pathname != '/login' && (
         <AppBar
-        color="inherit"
+        color="primary"
           position="fixed"
           className={clsx(classes.appBar, {
             [classes.appBarShift]: open,
           })}>
-          <Toolbar>
+          <Toolbar
+        // style={{background:'radial-gradient(65% 100% at 50% 0%, #00FF94 0%, rgba(0, 255, 148, 0.25) 100%), linear-gradient(230deg, #000000 25%, #170059 100%), linear-gradient(215deg, #FFEBB9 10%, #19004E 80%), radial-gradient(100% 245% at 100% 100%, #FFFFFF 0%, #000353 100%), linear-gradient(125deg, #1400FF 0%, #3A0000 100%), linear-gradient(225deg, #00F0FF 30%, #000B6F 45%, #00EBFC 45%, #001676 65%, #00E1F6 65%, #001676 85%, #00ECFD 85%, #001676 100%), linear-gradient(135deg, #00F0FF 0%, #000B6F 15%, #00EBFC 15%, #001676 35%, #00E1F6 35%, #001676 55%, #00ECFD 55%, #001676 100%)'}}
+           >
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -215,13 +219,23 @@ export const Layout = observer(({ children }) => {
               Welcome Back {user.name}  (Role: {user?.details?.role})
             </Typography>
 
+            <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleClick}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
 
-            <Avatar
+
+            {/* <Avatar
         sx={{ width: 24, height: 24 }}
              alt="Remy Sharp" 
              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReg_F1DaALJ6YrWo_QI0Uh3t7ZtXXCTwCMED__q3IoW9WcCrtsmOenkqBS54131SqIDmE&usqp=CAU" 
              onClick={handleClick}
-             />
+             /> */}
 
 
           </Toolbar>

@@ -93,16 +93,21 @@ const WarehouseStock = observer(() => {
 
   const columns = [
     {
-      title: "Warehouse Name",
+      title: "Warehouse",
       field: "warehouse_name",
     },
-    { title: "Product Code", field: "product_code" },
+    {
+      title: "Type",
+      field: "type",
+
+    },
+    { title: "Code", field: "product_code" },
     { title: "Category", field: "product_category_name" },
     { title: "Unit", field: "product_unit_name" },
     { title: "Size", field: "product_size_name" },
     { title: "Price", field: "purchase_price" },
     
-    { title: "Current Stock", field: "current_stock" },
+    { title: "Stock", field: "current_stock" },
   ];
 
   return (

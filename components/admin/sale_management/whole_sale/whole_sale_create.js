@@ -146,6 +146,22 @@ console.log(endpoint, modal, handleRefress)
     );
   };
 
+
+    // handle handdlePriceChange change
+    const handdlePriceChange = (prodId, price) => {
+      if (price < 0) {
+        return cogoToast.error("Enter Valid price", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+      }
+      setSelectedProduct(
+        selectedProductList.map((item) =>
+          item.id === prodId ? { ...item, purchase_price: price } : item
+        )
+      );
+    };
+
   // handle sitock in create
   const handleFinalStockInCreate = async () => {
     if (!selectedDate) {
@@ -316,6 +332,7 @@ console.log(endpoint, modal, handleRefress)
               products={selectedProductList}
               handdleproductRemove={handdleproductRemove}
               handdleQuantityChange={handdleQuantityChange}
+              handdlePriceChange={handdlePriceChange}
             />
           )}
         </GridItem>

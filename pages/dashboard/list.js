@@ -20,9 +20,10 @@ import InfoTable from 'components/dashboardCountInformation/infoTable'
  
 const useStyles = makeStyles((theme) => ({
   root: {
+    // background: 'linear-gradient(180deg, #FFFFFF 0%, #000000 100%), linear-gradient(90deg, #FFFFFF 0%, #000000 100%), #00FFFF'
     // display: "flex",
-    background:"#800080"
-      // 'linear-gradient(0deg, rgba(0,46,121,1) 0%, rgba(22,77,167,1) 27%, rgba(86,150,255,1) 100%)',
+    //  background:"#800080"
+    // background 'linear-gradient(0deg, rgba(0,46,121,1) 0%, rgba(22,77,167,1) 27%, rgba(86,150,255,1) 100%)',
   },
   details: {
     display: 'flex',
@@ -108,7 +109,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#3399FF" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -121,7 +122,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff' }}>
                        Total Supplier
                       </Typography>
                     </CardContent>
@@ -135,7 +136,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <PeopleIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -145,7 +146,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#321FDB" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -158,7 +159,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff' }}>
                         Total Customer
                       </Typography>
                     </CardContent>
@@ -172,7 +173,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <PeopleIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -182,7 +183,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#F9B115" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -195,7 +196,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff' }}>
                         Total Staff
                       </Typography>
                     </CardContent>
@@ -209,7 +210,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <PeopleIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -219,7 +220,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#E55353" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -232,7 +233,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff' }}>
                         Today Purchase
                       </Typography>
                     </CardContent>
@@ -246,7 +247,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -256,7 +257,7 @@ console.log('role',user?.details?.role)
        
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#4875B4" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -269,7 +270,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff' }}>
                         Total Purchase
                       </Typography>
                     </CardContent>
@@ -283,7 +284,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -293,7 +294,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#2EB85C" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -306,7 +307,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff' }}>
                         WH Stock
                       </Typography>
                     </CardContent>
@@ -320,7 +321,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -330,7 +331,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#84995c" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -343,7 +344,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff' }}>
                         WH Amount
                       </Typography>
                     </CardContent>
@@ -357,7 +358,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -367,7 +368,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#55bac9" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -380,7 +381,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color:  '#ffffff' }}>
                         Store Stock
                       </Typography>
                     </CardContent>
@@ -394,7 +395,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color:  '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -404,7 +405,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#967963" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -417,7 +418,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff'  }}>
                         Store Amount
                       </Typography>
                     </CardContent>
@@ -431,7 +432,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff' , fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -441,7 +442,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#266915" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -454,7 +455,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff' }}>
                         Today Sale
                       </Typography>
                     </CardContent>
@@ -468,7 +469,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <ShoppingCartRoundedIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>
@@ -478,7 +479,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
-              <Card className={classes.root} style={{ cursor: 'pointer' }}>
+              <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#156969" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
@@ -491,7 +492,7 @@ console.log('role',user?.details?.role)
                       <Typography
                         variant="subtitle1"
                         color="textSecondary"
-                        style={{ color: 'rgb(255, 169, 4)' }}>
+                        style={{ color: '#ffffff' }}>
                     Total Sale
                       </Typography>
                     </CardContent>
@@ -505,7 +506,7 @@ console.log('role',user?.details?.role)
                     justify="flex-start"
                     alignItems="center">
                     <MoneyIcon
-                      style={{ color: 'rgb(255, 169, 4)', fontSize: 65 }}
+                      style={{ color: '#ffffff', fontSize: 65 }}
                     />
                   </Grid>
                 </Grid>

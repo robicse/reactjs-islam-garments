@@ -265,9 +265,9 @@ const endpoint = {
                       ).then(resp => resp.json()).then(resp => {
             
                       resolve({
-                            data: resp.data?.data,
-                            page: resp?.data?.current_page - 1,
-                            totalCount: resp?.data?.total,
+                            data: resp.data,
+                            page: resp?.meta?.current_page - 1,
+                            totalCount: resp?.meta?.total,
                       });
                     })
         

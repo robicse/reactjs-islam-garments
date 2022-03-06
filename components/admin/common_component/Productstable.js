@@ -19,7 +19,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { webUrl } from "const/api";
 
-const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove }) => {
+const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove, handdlePriceChange }) => {
     return (
         <>
             <TableContainer
@@ -65,19 +65,40 @@ const ProductTable = ({ products, handdleQuantityChange, handdleproductRemove })
                                 <TableCell align="center">{product?.unit_name}</TableCell>
                                 <TableCell align="center">{product?.size_name}</TableCell>
                                 <TableCell align="center">{product?.product_code}</TableCell>
-                                <TableCell align="center">{product?.purchase_price}</TableCell>
+                                <TableCell align="center">
+
+                                <TextField
+                                        style={{ padding: "3px" }}
+                                        variant="outlined"
+                                        size="small"
+                                        id="standard-number"
+                                        disabled={product?.type == 'Own'}
+                                        type="number"
+                                        value={product?.purchase_price}
+                                        onChange={(e) => handdlePriceChange(product?.id, e.target.value)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                    
+                                    {/* {product?.purchase_price} */}
+                                    
+                                    
+                                    </TableCell>
 
                                 <TableCell align="center">
                                     <TextField
                                         style={{ padding: "3px" }}
                                         variant="outlined"
                                         size="small"
+                                    
                                         id="standard-number"
                                         type="number"
                                         value={product?.qty}
                                         onChange={(e) => handdleQuantityChange(product?.id,product?.current_stock, e.target.value)}
                                         InputLabelProps={{
                                             shrink: true,
+                                            
                                         }}
                                     />
                                 </TableCell>

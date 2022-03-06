@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    // background:"#800080"
+    //  background:"#800080"
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toolbar: {
-  //backgroundColor:"#800080",
+  //backgroundColor:"#2C384A",
     //  boxShadow:"50px 1px #888888",
     display: 'flex',
     alignItems: 'center',
@@ -100,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   toolba2: {
+    backgroundColor:"#2C384A",
     //  backgroundColor:"#800080",
     //  boxShadow:"50px 1px #888888",
     display: 'flex',
@@ -115,9 +116,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   activeRoute: {
-    backgroundColor: '#69aafd',
-    borderTopRightRadius: 25,
-    borderBottomRightRadius: 25,
+    backgroundColor: '#2C384A',
+    // borderTopRightRadius: 25,
+    // borderBottomRightRadius: 25,
     fontWeight: 'bold',
   },
 }));
@@ -254,7 +255,9 @@ export const Layout = observer(({ children }) => {
             </IconButton>
           </div>
           <Divider />
-          <List >
+
+          {/* sidebarcolor */}
+          <List style={{backgroundColor:"#3C4B64"}}>
             {admin_routes?.map((route, index) => (
               <>
              
@@ -269,16 +272,16 @@ export const Layout = observer(({ children }) => {
                     
                   <Tooltip title={route.name} placement="right">
                     <ListItemIcon>
-                      <route.icon color="primary" />
+                      <route.icon style={{color:"#E8E9EC"}}/>
                     </ListItemIcon>
                   </Tooltip>
 
 
-                  <ListItemText primary={route.name} disableTypography={true} />
+                  <ListItemText primary={route.name} disableTypography={true} style={{color:'#E8E9EC', marginLeft: !route.collapse? "-10px" :  "-16px"}}  />
      
                   {route.collapse && (
-                    <Box>
-                      {openList == route.path ? <RemoveIcon />  :  <AddIcon />}
+                    <Box mt={1} ml={2}>
+                      {openList == route.path ? <RemoveIcon style={{color:"#E8E9EC"}} />  :  <AddIcon   style={{color:"#E8E9EC"}}/>}
                     </Box>
                   )}
                 </ListItem>
@@ -306,12 +309,13 @@ export const Layout = observer(({ children }) => {
                               }>
                               <Tooltip title={child.name} placement="right">
                                 <ListItemIcon>
-                                  <child.icon color="primary" />
+                                  <child.icon style={{color:"#E8E9EC"}} />
                                 </ListItemIcon>
                               </Tooltip>
                               <ListItemText
                                 primary={child.name}
                                 disableTypography={true}
+                                style={{color:"#E8E9EC"}}
                               />
                             </ListItem>
                           </a>

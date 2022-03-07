@@ -351,6 +351,15 @@ const dashboardRoutes = [
       {
         id: 1,
         collapse: false,
+        path: '/accounts',
+        childPath: '/ledger',
+        permission: 'role',
+        name: 'Ledger',
+        icon: IndeterminateCheckBoxIcon,
+      },
+      {
+        id: 2,
+        collapse: false,
         path: '/report',
         childPath: '/trial_balance',
         permission: 'report',
@@ -358,7 +367,7 @@ const dashboardRoutes = [
         icon: AssessmentIcon,
       },
       {
-        id: 2,
+        id: 3,
         collapse: false,
         path: '/report',
         childPath: '/customer_due',
@@ -367,7 +376,7 @@ const dashboardRoutes = [
         icon: IndeterminateCheckBoxIcon,
       },
       {
-        id: 3,
+        id: 4,
         collapse: false,
         path: '/report',
         childPath: '/supplier_due',
@@ -450,15 +459,15 @@ const dashboardRoutes = [
         name: 'Posting',
         icon: IndeterminateCheckBoxIcon,
       },
-      {
-        id: 3,
-        collapse: false,
-        path: '/accounts',
-        childPath: '/ledger',
-        permission: 'role',
-        name: 'Ledger',
-        icon: IndeterminateCheckBoxIcon,
-      },
+      // {
+      //   id: 3,
+      //   collapse: false,
+      //   path: '/accounts',
+      //   childPath: '/ledger',
+      //   permission: 'role',
+      //   name: 'Ledger',
+      //   icon: IndeterminateCheckBoxIcon,
+      // },
 
     ],
   },

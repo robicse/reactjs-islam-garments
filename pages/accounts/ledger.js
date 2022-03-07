@@ -430,7 +430,7 @@ const LagerCom = observer(() => {
 
                         <TableCell>Debit</TableCell>
                         <TableCell>Credit</TableCell>
-                        <TableCell>Balance</TableCell>
+                        <TableCell>Balance(TK)</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>

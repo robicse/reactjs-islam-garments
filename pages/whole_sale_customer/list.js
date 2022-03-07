@@ -172,11 +172,11 @@ const TableList = observer(() => {
 
   const columns = [
     { title: "Name", field: "name" },
-    { title: "Shop Name", field: "shop_name" },
+    { title: "Shop", field: "shop_name" },
     { title: "Code", field: "code" },
     { title: "Phone", field: "phone" },
     { title: "Address", field: "address" },
-    { title: "Initial Due", field: "initial_due" },
+    { title: "Initial Due(TK)", field: "initial_due" },
     // { title: "Total Amount", field: "sale_total_amount" },
     {
       title: "Status",

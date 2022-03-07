@@ -133,12 +133,12 @@ const endpoint = {
 
   const columns = [
     { title: "Invoice No",   render: (rowData) => convertFristCharcapital(rowData.invoice_no)},
-    { title: "Warehouse Name", field: "warehouse_name" },
-    { title: "Store Name", field: "store_name" },
-    { title: "User Name", field: "user_name" },
-    { title: "Transfer Date Time", field: "date_time",render: (rowData) => dateFormatWithTime(rowData.date_time)},
+    { title: "Warehouse", field: "warehouse_name" },
+    { title: "Store", field: "store_name" },
+    { title: "User", field: "user_name" },
+    { title: "Date", field: "date_time",render: (rowData) => dateFormatWithTime(rowData.date_time)},
     {
-      title: "Grand Total",
+      title: "Total(TK)",
       field: "grand_total_amount",
     },
   ];

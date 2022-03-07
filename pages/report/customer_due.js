@@ -77,6 +77,7 @@ const CustomerSue = observer(() => {
   const [paid, setPaid] = useState(0);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [load, setLoad] = useState(false);
+
   const endpoint = {
     wholeSaleCustomerActiveListUrl: `${baseUrl}/whole_sale_customer_active_list`,
     headers: { headers: { Authorization: "Bearer " + user.details.token } },
@@ -126,6 +127,9 @@ const CustomerSue = observer(() => {
       console.log(error);
     }
   };
+
+
+  console.log(paymentTypeList)
 
   // return cogoToast.warn('Please select Warehouse/Store',{position: 'top-right', bar:{size: '10px'}});
   const handlePaidDue = (paidAmount) => {
@@ -288,9 +292,12 @@ const CustomerSue = observer(() => {
                     </Grid>
 
                     <Grid item xs={2} >
-                        <FormControl className={classes.formControl}>
-                          <InputLabel id="demo-controlled-open-select-label">Payment</InputLabel>
+                        {/* <FormControl className={classes.formControl}>
+                          <InputLabel id="demo-controlled-open-select-label">Payment</InputLabel> */}
                           <Select
+                          size="small"
+                          style={{height:"42px",marginTop:"15px"}}
+                             variant="outlined"
                             labelId="demo-controlled-open-select-label"
                             id="demo-controlled-open-select"
                             open={open}
@@ -298,11 +305,19 @@ const CustomerSue = observer(() => {
                             onOpen={handleOpen}
                             value={paymentType}
                             onChange={handleChange}
+                            value={paymentType}
+                          
                           >
+                         {/* <MenuItem value={1}>Payment Type</MenuItem> */}
+                            {/* {
+                              paymentTypeList && paymentTypeList.map((item)=>(
+                                <MenuItem value={item.value}>{item.name}</MenuItem>
+                              ))
+                            } */}
                             <MenuItem value={1}>Cash</MenuItem>
                             <MenuItem value={2}>Cheque</MenuItem>
                           </Select>
-                        </FormControl>
+                        {/* </FormControl> */}
                     </Grid>
 
                     <Grid item xs={2} >

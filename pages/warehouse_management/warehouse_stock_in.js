@@ -149,16 +149,16 @@ const WarehouseStockIn = observer(() => {
       title: "Invoice No",
       render: (rowData) => convertFristCharcapital(rowData.invoice_no),
     },
-    { title: "Warehouse Name", field: "warehouse_name" },
-    { title: "Supplier Name", field: "supplier_name" },
-    { title: "User Name", field: "user_name" },
+    { title: "Warehouse", field: "warehouse_name" },
+    { title: "Supplier", field: "supplier_name" },
+    { title: "User", field: "user_name" },
     {
-      title: "Purchase Date Time",
+      title: "Date",
       field: "purchase_date_time",
       render: (rowData) => dateFormatWithTime(rowData.purchase_date_time),
     },
     {
-      title: "Grand total",
+      title: "Total(TK)",
       field: "grand_total_amount",
     },
   ];

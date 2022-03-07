@@ -22,14 +22,10 @@ import { Box, Chip, Grid, TextField, Divider } from "@material-ui/core";
 import { baseUrl } from "../../const/api";
 import MuiAlert from "@material-ui/lab/Alert";
 
-
-
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
-
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 const styles = {
   cardCategoryWhite: {
@@ -80,7 +76,6 @@ const CustomerDue = observer(() => {
     headers: { headers: { Authorization: "Bearer " + user.details.token } },
     supplierDueApi: `${baseUrl}/supplier_current_total_due_by_supplier_id`,
     supplier_due_paid: `${baseUrl}/supplier_due_paid`,
-    
   };
 
   //loading when component run
@@ -99,7 +94,7 @@ const CustomerDue = observer(() => {
 
   const fetchReportData = async (id) => {
     try {
-      setLoad(false)
+      setLoad(false);
       setCurrentDue(0);
       setPaid(0);
       setDue(0);
@@ -113,7 +108,7 @@ const CustomerDue = observer(() => {
       console.log(result.data.data);
       setCurrentDue(result.data.data);
       setDue(result.data.data);
-      setLoad(true)
+      setLoad(true);
     } catch (error) {
       console.log(error);
     }
@@ -132,28 +127,23 @@ const CustomerDue = observer(() => {
     setDue(currentDue - paidAmount);
   };
 
-
   const handlePaymentSubmit = async (id) => {
-
     if (paid <= 0 || paid > currentDue) {
-        return cogoToast.warn("Please provide valid amount", {
-          position: "top-right",
-          bar: { size: "10px" },
-        });
-      }
+      return cogoToast.warn("Please provide valid amount", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
 
     try {
- console.log(
-      {
-      supplier_id: id,
-      paid_amount: paid,
-      due_amount: due,
-    }
-  
-  )
+      console.log({
+        supplier_id: id,
+        paid_amount: paid,
+        due_amount: due,
+      });
       const result = await axios.post(
         endpoint.supplier_due_paid,
-        { 
+        {
           supplier_id: id,
           paid_amount: paid,
           due_amount: due,
@@ -161,19 +151,11 @@ const CustomerDue = observer(() => {
         },
         endpoint.headers
       );
-      fetchReportData(id)
+      fetchReportData(id);
     } catch (error) {
       console.log(error);
     }
   };
-
-
-
-
-
-
-
-
 
   const [paymentType, setPaymentType] = React.useState(1);
   const [open, setOpen] = React.useState(false);
@@ -189,12 +171,6 @@ const CustomerDue = observer(() => {
   const handleOpen = () => {
     setOpen(true);
   };
-
-
-
-
-
-
 
   return (
     <div>
@@ -231,115 +207,107 @@ const CustomerDue = observer(() => {
                 variant="contained"
                 color="primary"
                 fullWidth={true}
-                onClick={()=>fetchReportData(selectedCustomer)}
+                onClick={() => fetchReportData(selectedCustomer)}
               >
                 Submit
               </Button>
             </Grid>
-
-        
           </Grid>
           <Card>
             <CardBody>
               <Grid container direction="column" style={{ padding: 20 }}>
                 <Box mt={1}>
-
-
-                    {!load && <Typography variant="h5" align="center">
-                     No Result
+                  {!load && (
+                    <Typography variant="h5" align="center">
+                      No Result
                     </Typography>
+                  )}
+                  {load && (
+                    <Grid container spacing={1} direction="row">
+                      <Grid item xs={2}></Grid>
 
-                    }
-                {load  && <Grid container spacing={1} direction="row">
-                 
-                <Grid item xs={2}>
-                    </Grid>
-                  
+                      <Grid item xs={2}>
+                        <TextField
+                          margin="normal"
+                          variant="outlined"
+                          size="small"
+                          type="number"
+                          label="Prevoius Due"
+                          value={parseFloat(currentDue)}
+                          InputProps={{
+                            className: classes.multilineColor,
+                            readOnly: true,
+                          }}
+                        />
+                      </Grid>
 
-                    <Grid item xs={2}>
-                      <TextField
-                        margin="normal"
-                        variant="outlined"
-                        size="small"
-                        type="number"
-                        label="Prevoius Due"
-                        value={parseFloat(currentDue)}
-                        InputProps={{
-                          className: classes.multilineColor,
-                          readOnly: true,
-                        }}
-                      />
-                    </Grid>
+                      <Grid item xs={2}>
+                        <TextField
+                          margin="normal"
+                          variant="outlined"
+                          size="small"
+                          type="number"
+                          label="Paid Amount"
+                          value={parseFloat(paid)}
+                          InputProps={{
+                            className: classes.multilineColor,
+                            readOnly: false,
+                          }}
+                          onChange={(e) => handlePaidDue(e.target.value)}
+                        />
+                      </Grid>
 
-                    <Grid item xs={2}>
-                      <TextField
-                        margin="normal"
-                        variant="outlined"
-                        size="small"
-                        type="number"
-                        label="Paid Amount"
-                        value={parseFloat(paid)}
-                        InputProps={{
-                          className: classes.multilineColor,
-                          readOnly: false,
-                        }}
-                        onChange={(e) => handlePaidDue(e.target.value)}
-                      />
-                    </Grid>
-
-                    <Grid item xs={2} >
-                      
-                        <FormControl className={classes.formControl}>
-                          <InputLabel id="demo-controlled-open-select-label">Payment</InputLabel>
-                          <Select
-                            labelId="demo-controlled-open-select-label"
-                            id="demo-controlled-open-select"
-                            open={open}
-                            onClose={handleClose}
-                            onOpen={handleOpen}
-                            value={paymentType}
-                            onChange={handleChange}
-                          >
-                            {/* <MenuItem value="">
+                      <Grid item xs={2}>
+                        <Select
+                             variant="outlined"
+                          style={{ height: "42px", marginTop: "15px" }}
+                          labelId="demo-controlled-open-select-label"
+                          id="demo-controlled-open-select"
+                          open={open}
+                          onClose={handleClose}
+                          onOpen={handleOpen}
+                          value={paymentType}
+                          onChange={handleChange}
+                        >
+                          {/* <MenuItem value="">
                               <em>None</em>
                             </MenuItem> */}
-                            <MenuItem value={1}>Cash</MenuItem>
-                            <MenuItem value={2}>Cheque</MenuItem>
-                          </Select>
-                        </FormControl>
+                          <MenuItem value={1}>Cash</MenuItem>
+                          <MenuItem value={2}>Cheque</MenuItem>
+                        </Select>
                       
-                    </Grid>
+                      </Grid>
 
-                    <Grid item xs={2} >
-                      <TextField
-                        margin="normal"
-                        variant="outlined"
-                        size="small"
-                        type="number"
-                        label="Current Due"
-                        value={parseFloat(due)}
-                        InputProps={{
-                          className: classes.multilineColor,
-                          readOnly: true,
-                        }}
-                      />
-                    </Grid>
+                      <Grid item xs={2}>
+                        <TextField
+                          margin="normal"
+                          variant="outlined"
+                          size="small"
+                          type="number"
+                          label="Current Due"
+                          value={parseFloat(due)}
+                          InputProps={{
+                            className: classes.multilineColor,
+                            readOnly: true,
+                          }}
+                        />
+                      </Grid>
 
-                    <Grid item xs={2} >
-                      <Button
-                        size="small"
-                        style={{ height: "39px",marginTop:"16px"}}
-                        variant="contained"
-                        color="primary"
-                        disabled={currentDue == 0 ? true: false}
-                        // fullWidth={true}
-                        onClick={()=>handlePaymentSubmit(selectedCustomer)}
-                      >
-                        Pay Now
-                      </Button>
+                      <Grid item xs={2}>
+                        <Button
+                          size="small"
+                          style={{ height: "39px", marginTop: "16px" }}
+                          variant="contained"
+                          color="primary"
+                          disabled={currentDue == 0 ? true : false}
+                          // fullWidth={true}
+                          onClick={() => handlePaymentSubmit(selectedCustomer)}
+                        >
+                          Pay Now
+                        </Button>
+                      </Grid>
                     </Grid>
-                  </Grid>
-}
+                  )}
                 </Box>
               </Grid>
             </CardBody>

@@ -142,12 +142,12 @@ const SuplierComponent = observer(() => {
         </Typography>
       ),
     },
-    { title: "Shop Name", field: "shop_name" },
+    { title: "Shop", field: "shop_name" },
     { title: "Code", field: "code" },
     { title: "Phone", field: "phone" },
     { title: "Email", field: "email" },
     { title: "Address", field: "address" },
-    { title: "Initial Due", field: "initial_due" },
+    { title: "Initial Due(TK)", field: "initial_due" },
   
     {
       title: "Status",

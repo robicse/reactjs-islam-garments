@@ -2,6 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { useAsyncEffect } from "use-async-effect";
 import tableIcons from "components/table_icon/icon";
 // core components
 import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
@@ -29,6 +31,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 import TrialBalancePrint from '../../components/admin/trial_balance/trial_balance_print'
 
 
@@ -74,9 +82,50 @@ const endpoint = {
 const TrialBalance = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
+
+  const [warehouseList, setWarehouseList] = React.useState([]);
+  const [storeList, setStoreList] = React.useState([]);
+  const [selectedWarehouse, setSelectedWarehouse] = React.useState(null);
+  const [selectedStore, setSelecteStore] = React.useState(null);
+  const [wareOrStore, setWareOrStore] = React.useState("None");
+  const [responseData, setResponseData] = useState(null);
+
   const [from, setFrom] = useState(null);
   const [to, setTo] = useState(null);
   const [trialData, setTrialData] = useState(null);
+  
+  
+  const title = "Ledger";
+  const subject = "ledger";
+  const endpoint = {
+    warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
+    storeActiveListUrl: `${baseUrl}/store_active_list`,
+    list: "trial_balance_report",
+    headers: { headers: { Authorization: "Bearer " + user.auth_token } },
+  };
+
+  //loading when component run
+  useAsyncEffect(async (isMounted) => {
+    try {
+      const warehouseRes = await axios.get(
+        endpoint.warehouseActiveListUrl,
+        endpoint.headers
+      );
+
+      const storeRes = await axios.get(
+        endpoint.storeActiveListUrl,
+        endpoint.headers
+      );
+
+      setWarehouseList(warehouseRes?.data?.data);
+      setStoreList(storeRes?.data?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  
+  
+  
   const fetchLedger = async () => {
     try {
       const result = await axios.post(
@@ -84,6 +133,8 @@ const TrialBalance = observer(() => {
         {
           from_date: from,
           to_date: to,
+          store_id: selectedStore,
+          warehouse_id: selectedWarehouse,
         },
         {
           headers: { Authorization: "Bearer " + user.auth_token },
@@ -121,9 +172,8 @@ const TrialBalance = observer(() => {
       </div> 
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
-          <Grid container spacing={1}>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={3}>
+        <Grid container spacing={1}>
+            <Grid item xs={2}>
               <Box>
                 <TextField
                   size="small"
@@ -136,7 +186,7 @@ const TrialBalance = observer(() => {
                 />
               </Box>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={2}>
               <Box>
                 <TextField
                   size="small"
@@ -149,21 +199,98 @@ const TrialBalance = observer(() => {
                 />
               </Box>
             </Grid>
-
-            <Grid item xs={3}>
-              <Button
+            <Grid item xs={2}>
+              <FormControl
+                component="fieldset"
                 size="small"
-                style={{ height: "39px" }}
+                style={{ marginLeft: "8px", marginTop: "-14px" }}
+              >
+                {/* <FormLabel component="legend">Gender</FormLabel> */}
+                <RadioGroup
+                  aria-label="gender"
+                  size="small"
+                  name="gender1"
+                  value={wareOrStore}
+                  onChange={(e) =>{
+                    setWareOrStore(e.target.value)
+                    setSelecteStore(null)
+                    setSelectedWarehouse(null)
+                  } }
+                >
+                   <FormControlLabel
+                    size="small"
+                    value="None"
+                    control={<Radio size="small" />}
+                    label="ALL"
+                  />
+                  <FormControlLabel
+                    size="small"
+                    value="Warehouse"
+                    control={<Radio size="small" />}
+                    label="Warehouse"
+                  />
+                  <FormControlLabel
+                    size="small"
+                    value="Store"
+                    control={<Radio size="small" />}
+                    label="Store"
+                  />
+                 
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+
+            <GridItem xs={12} sm={12} md={2}>
+              {wareOrStore == "Warehouse" && (
+                <Autocomplete
+                  size="small"
+                  fullWidth={true}
+                  // value={selectedWarehouse}
+                  id="combo-box-demo"
+                  options={warehouseList}
+                  getOptionLabel={(option) => option.name}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Warehouse"
+                      variant="outlined"
+                    />
+                  )}
+                  onChange={(e, v) => {
+                    setSelecteStore(null);
+                    setSelectedWarehouse(v.id);
+                  }}
+                />
+              )}
+              {wareOrStore == "Store" && (
+                <Autocomplete
+                  size="small"
+                  fullWidth={true}
+                  // value={selectedWarehouse}
+                  id="combo-box-demo"
+                  options={storeList}
+                  getOptionLabel={(option) => option.store_name}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Store" variant="outlined" />
+                  )}
+                  onChange={(e, v) => {
+                    setSelecteStore(v.id);
+                    setSelectedWarehouse(null);
+                  }}
+                />
+              )}
+            </GridItem>
+
+            <Grid item xs={2}>
+              <Button
                 variant="contained"
                 color="primary"
                 fullWidth={true}
                 onClick={fetchLedger}
               >
-                Search
+                Submit
               </Button>
             </Grid>
-
-            <Grid item xs={1}></Grid>
           </Grid>
           <Card>
             <CardBody>

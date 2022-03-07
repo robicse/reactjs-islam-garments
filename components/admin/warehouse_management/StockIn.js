@@ -229,7 +229,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
       );
       handleRefress();
       setButtonLoading(false);
-      // modal(false);
+      modal(false);
       // handleRefress();
     } catch (error) {
       AllApplicationErrorNotification(error);

@@ -204,7 +204,7 @@ console.log(endpoint, modal, handleRefress)
       grand_total_amount: grand,
       paid_amount: grand,
       due_amount: due,
-      payment_type_id: 1,
+      payment_type_id: paymentType,
     };
 
     // convert formdata

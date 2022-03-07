@@ -24,6 +24,14 @@ import MuiAlert from "@material-ui/lab/Alert";
 
 
 
+
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+
+
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -63,6 +71,7 @@ const CustomerSue = observer(() => {
   const { user } = useRootStore();
 
   const [customerList, setCustomerList] = React.useState([]);
+  const [paymentTypeList, setPaymentTypeList] = React.useState([]);
   const [currentDue, setCurrentDue] = useState(0);
   const [due, setDue] = useState(0);
   const [paid, setPaid] = useState(0);
@@ -73,6 +82,7 @@ const CustomerSue = observer(() => {
     headers: { headers: { Authorization: "Bearer " + user.details.token } },
     customerDueApi: `${baseUrl}/customer_current_total_due_by_customer_id`,
     customerDuePaidApi: `${baseUrl}/customer_due_paid`,
+    paymentTypeActiveListUrl: `${baseUrl}/payment_type_active_list`,
   };
 
   //loading when component run
@@ -83,7 +93,13 @@ const CustomerSue = observer(() => {
         endpoint.headers
       );
 
+      const paymentTypeRes = await axios.get(
+        endpoint.paymentTypeActiveListUrl,
+        endpoint.headers
+      );
+
       setCustomerList(customerRes?.data?.data);
+      setPaymentTypeList(paymentTypeRes?.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -142,6 +158,7 @@ const CustomerSue = observer(() => {
           customer_id: id,
           paid_amount: paid,
           due_amount: due,
+          payment_type_id: paymentType,
         },
         endpoint.headers
       );
@@ -150,6 +167,34 @@ const CustomerSue = observer(() => {
       console.log(error);
     }
   };
+
+
+
+
+
+  const [paymentType, setPaymentType] = React.useState(1);
+  const [open, setOpen] = React.useState(false);
+
+  const handleChange = (event) => {
+    setPaymentType(event.target.value);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+
+
+
+
+
+
+
+
 
   return (
     <div>
@@ -240,6 +285,24 @@ const CustomerSue = observer(() => {
                         }}
                         onChange={(e) => handlePaidDue(e.target.value)}
                       />
+                    </Grid>
+
+                    <Grid item xs={2} >
+                        <FormControl className={classes.formControl}>
+                          <InputLabel id="demo-controlled-open-select-label">Payment</InputLabel>
+                          <Select
+                            labelId="demo-controlled-open-select-label"
+                            id="demo-controlled-open-select"
+                            open={open}
+                            onClose={handleClose}
+                            onOpen={handleOpen}
+                            value={paymentType}
+                            onChange={handleChange}
+                          >
+                            <MenuItem value={1}>Cash</MenuItem>
+                            <MenuItem value={2}>Cheque</MenuItem>
+                          </Select>
+                        </FormControl>
                     </Grid>
 
                     <Grid item xs={2} >

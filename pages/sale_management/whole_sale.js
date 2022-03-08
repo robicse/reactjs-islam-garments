@@ -103,6 +103,12 @@ const wholesaleList = observer(() => {
     ProductdetailsUrl: `${baseUrl}/product_sale_details`,
     printUrl: `${baseUrl}/product_sale_details_print`,
     headers: { headers: { Authorization: "Bearer " + user.details.token } },
+    loginStore:{
+      id:user?.details?.store_id,
+      name: user?.details?.store_name,
+      role:user?.role
+    }
+
   };
 
   const [openCreateModal, setOpenCreateModal] = useState(false);

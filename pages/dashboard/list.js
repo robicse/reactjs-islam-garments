@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+import Link from 'next/link'
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -109,6 +110,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+               <Link href="/supplier/list" >
               <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#3399FF" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -141,11 +143,13 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+              </Link>
           </Grid>
           ) : ''}
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+              <Link href="/whole_sale_customer/list" >
               <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#321FDB" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -178,6 +182,8 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+              </Link>
+
           </Grid>
           ) : ''}
 
@@ -220,6 +226,7 @@ console.log('role',user?.details?.role)
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+              <Link href="/warehouse_management/warehouse_stock_in" >
               <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#E55353" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -252,11 +259,14 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+              </Link>
+
           </Grid>
           ) : ''}
        
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+               <Link href="/warehouse_management/warehouse_stock_in">
               <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#4875B4" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -289,11 +299,15 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+              </Link>
           </Grid>
+       
+
           ) : ''}
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+              <Link href="/warehouse_management/warehouse_stock">
               <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#2EB85C" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -326,11 +340,14 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+              </Link>
+
           </Grid>
           ) : ''}
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+            
               <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#84995c" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -363,11 +380,14 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+       
+
           </Grid>
           ) : ''}
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+                    <Link href="/store_management/store_stock">
               <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#55bac9" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -400,11 +420,13 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+              </Link>
           </Grid>
           ) : ''}
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+                    
               <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:"#967963" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -437,11 +459,13 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+          
           </Grid>
           ) : ''}
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+                     <Link href="/sale_management/whole_sale">
               <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#266915" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -474,11 +498,13 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+              </Link>
           </Grid>
           ) : ''}
 
           { user?.details?.role === 'Super Admin' ? (
           <Grid item xs={12} md={3}>
+            <Link href="/sale_management/whole_sale">
               <Card className={classes.root} style={{ cursor: 'pointer',backgroundColor:"#156969" }}>
                 <Grid container direction="row">
                   <Grid item xs={8} md={8}>
@@ -511,6 +537,7 @@ console.log('role',user?.details?.role)
                   </Grid>
                 </Grid>
               </Card>
+              </Link>
           </Grid>
           ) : ''}
 

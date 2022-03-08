@@ -40,7 +40,8 @@ const styles = {
 const useStyles = makeStyles(styles);
 const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
-console.log(endpoint, modal, handleRefress)
+  console.log(endpoint?.loginStore);
+// console.log(endpoint, modal, handleRefress)
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
   const [paid, setPaid] = React.useState();
@@ -59,7 +60,7 @@ console.log(endpoint, modal, handleRefress)
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedCustomer, setselectedCustomer] = React.useState(null);
-  const [selectedStore, setSelecteStore] = React.useState(null);
+  const [selectedStore, setSelecteStore] = React.useState(endpoint?.loginStore?.id);
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   // selected prodict state
@@ -252,27 +253,42 @@ console.log(endpoint, modal, handleRefress)
             style={{ width: "100%" }}
           />
         </GridItem>
-
         <GridItem xs={12} sm={3} md={3}>
-          <Autocomplete
-            size="small"
-            fullWidth={true}
-            // value={selectedWarehouse}
-            id="combo-box-demo"
-            options={storeList}
-            getOptionLabel={(option) => option.store_name}
-            renderInput={(params) => (
-              <TextField {...params} label="Store" variant="outlined" />
-            )}
-            onChange={(e, v) => setSelecteStore(v.id)}
-          />
+          {endpoint?.loginStore?.role == "Super Admin" && (
+            <Autocomplete
+              size="small"
+              fullWidth={true}
+              // value={selectedWarehouse}
+              id="combo-box-demo"
+              options={storeList}
+              getOptionLabel={(option) => option.store_name}
+              renderInput={(params) => (
+                <TextField {...params} label="Store" variant="outlined" />
+              )}
+              onChange={(e, v) => setSelecteStore(v.id)}
+            />
+          )}
+
+          {endpoint?.loginStore?.role !== "Super Admin" && (
+            <TextField
+              disabled={true}
+              size="small"
+              id="standard-basic"
+              variant="outlined"
+              type="text"
+              value={endpoint?.loginStore?.name}
+              style={{ width: "100%" }}
+            />
+          )}
+
+
         </GridItem>
 
 
         <GridItem
           xs={12}
           sm={3}
-          md={1}
+          md={2}
           style={{ textAlign: "center", marginTop: "10px" }}
         >
           <ArrowForwardIcon size="large" />

@@ -36,7 +36,7 @@ const styles = {
     color: "#FFFFFF",
     backgroundColor: "blue",
   },
-}; 
+};
 const useStyles = makeStyles(styles);
 const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
@@ -122,7 +122,7 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
   };
 
   // handle quantity change
-  const handdleQuantityChange = (prodId,current_stock, qty) => {
+  const handdleQuantityChange = (prodId, current_stock, qty) => {
     if (qty < 0) {
       return cogoToast.error("Enter Valid QTY", {
         position: "top-right",
@@ -143,20 +143,20 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
     );
   };
 
-      // handle handdlePriceChange change
-      const handdlePriceChange = (prodId, price) => {
-        if (price < 0) {
-          return cogoToast.error("Enter Valid price", {
-            position: "top-right",
-            bar: { size: "10px" },
-          });
-        }
-        setSelectedProduct(
-          selectedProductList.map((item) =>
-            item.id === prodId ? { ...item, purchase_price: price } : item
-          )
-        );
-      };
+  // handle handdlePriceChange change
+  const handdlePriceChange = (prodId, price) => {
+    if (price < 0) {
+      return cogoToast.error("Enter Valid price", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
+    setSelectedProduct(
+      selectedProductList.map((item) =>
+        item.id === prodId ? { ...item, purchase_price: price } : item
+      )
+    );
+  };
 
   // handle sitock in create
   const handleFinalStockInCreate = async () => {
@@ -217,7 +217,7 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
         position: "top-right",
         bar: { size: "10px" },
       });
-     await axios.post(
+      await axios.post(
         endpoint.stockInAPi,
         data,
         endpoint.headers,
@@ -225,7 +225,7 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
       handleRefress();
       setButtonLoading(false);
       modal(false);
-    
+
     } catch (error) {
       AllApplicationErrorNotification(error);
       setButtonLoading(false);
@@ -272,22 +272,22 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
         </GridItem>
 
         <GridItem xs={12} sm={3} md={3}>
-        {endpoint?.loginStore?.role == "Super Admin" && (
-           <Autocomplete
-            size="small"
-            fullWidth={true}
-            // value={selectedWarehouse}
-            id="combo-box-demo"
-            options={storeList}
-            getOptionLabel={(option) => option.store_name}
-            renderInput={(params) => (
-              <TextField {...params} label="Store" variant="outlined" />
-            )}
-            onChange={(e, v) => setSelecteStore(v.id)}
-          />
-        )}
+          {endpoint?.loginStore?.role == "Super Admin" && (
+            <Autocomplete
+              size="small"
+              fullWidth={true}
+              // value={selectedWarehouse}
+              id="combo-box-demo"
+              options={storeList}
+              getOptionLabel={(option) => option.store_name}
+              renderInput={(params) => (
+                <TextField {...params} label="Store" variant="outlined" />
+              )}
+              onChange={(e, v) => setSelecteStore(v.id)}
+            />
+          )}
 
-{endpoint?.loginStore?.role !== "Super Admin" && (
+          {endpoint?.loginStore?.role !== "Super Admin" && (
             <TextField
               disabled={true}
               size="small"
@@ -346,35 +346,35 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
           )}
         </GridItem>
 
-      
-          <GridItem xs={12} sm={12} md={12}>
-            {selectedProductList.length > 0 && (
-              <Calculation
-                products={selectedProductList}
-                subTotal={subTotal}
-                setSubTotal={setSubTotal}
-                grand={grand}
-                setGrand={setGrand}
-                paid={paid}
-                setPaid={setPaid}
-                due={due}
-                setDue={setDue}
-                discountAmount={discountAmount}
-                setDiscountAmount={setDiscountAmount}
-                discountType={discountType}
-                setDiscountType={setDiscountType}
-                discountParcent={discountParcent}
-                setDiscountParcent={setDiscountParcent}
-                afterDiscountAmount={afterDiscountAmount}
-                setAfterDiscountAmount={setAfterDiscountAmount}
-                paymentType={paymentType}
-                setPaymentType={setPaymentType}
-              />
-            )}
-          </GridItem>
-   
 
-          <GridItem
+        <GridItem xs={12} sm={12} md={12}>
+          {selectedProductList.length > 0 && (
+            <Calculation
+              products={selectedProductList}
+              subTotal={subTotal}
+              setSubTotal={setSubTotal}
+              grand={grand}
+              setGrand={setGrand}
+              paid={paid}
+              setPaid={setPaid}
+              due={due}
+              setDue={setDue}
+              discountAmount={discountAmount}
+              setDiscountAmount={setDiscountAmount}
+              discountType={discountType}
+              setDiscountType={setDiscountType}
+              discountParcent={discountParcent}
+              setDiscountParcent={setDiscountParcent}
+              afterDiscountAmount={afterDiscountAmount}
+              setAfterDiscountAmount={setAfterDiscountAmount}
+              paymentType={paymentType}
+              setPaymentType={setPaymentType}
+            />
+          )}
+        </GridItem>
+
+
+        <GridItem
           xs={12}
           sm={12}
           md={12}
@@ -386,8 +386,8 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
               variant="contained"
               color="primary"
               onClick={handleFinalStockInCreate}
-              // className={classes.button}
-              // endIcon={<Icon>send</Icon>}
+            // className={classes.button}
+            // endIcon={<Icon>send</Icon>}
             >
               {submitButtonLoading ? "loading" : "Submit"}
             </Button>

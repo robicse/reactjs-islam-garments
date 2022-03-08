@@ -55,15 +55,14 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-
 const WarehouseStock = observer(() => {
   const classes = useStyles();
   const tableRef = React.createRef();
   const handleRefress = () => {
     tableRef.current && tableRef.current.onQueryChange();
   };
-  const { user,role } = useRootStore();
-  const [warehouseId, setWarehouseId] = useState(null);
+  const { user, role } = useRootStore();
+  const [warehouseId, setWarehouseId] = useState(user?.details?.warehouse_id);
   const [warehouseList, setWarehouseList] = useState([]);
 
   const endpoint = {
@@ -71,13 +70,12 @@ const WarehouseStock = observer(() => {
     subject: "Warehouse Stock",
     warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
     stockListApi: `${baseUrl}/warehouse_current_stock_by_id`,
-    headers: { headers: { Authorization: "Bearer " + user.details.token } },
+    headers: { headers: { Authorization: "Bearer " + user?.details?.token } },
   };
 
   //warehouse active list fetch
 
-
-  console.log(user.role,role)
+  console.log(user.role, role);
 
   const warehouseListFetch = async () => {
     try {
@@ -102,14 +100,13 @@ const WarehouseStock = observer(() => {
     {
       title: "Type",
       field: "type",
-
     },
     { title: "Code", field: "product_code" },
     { title: "Category", field: "product_category_name" },
     { title: "Unit", field: "product_unit_name" },
     { title: "Size", field: "product_size_name" },
     { title: "Price(TK)", field: "purchase_price" },
-    
+
     { title: "Stock", field: "current_stock" },
   ];
 
@@ -138,8 +135,10 @@ const WarehouseStock = observer(() => {
                 Warehouse List
               </InputLabel>
               <Select
+              disabled={user?.role !== 'Super Admin'}
                 labelId="demo-simple-select-filled-label"
                 id="demo-simple-select-filled"
+                value={warehouseId}
                 onChange={(e) => {
                   setWarehouseId(e.target.value);
                   handleRefress();
@@ -181,28 +180,19 @@ const WarehouseStock = observer(() => {
                     fetch(url, requestOptions)
                       .then((resp) => resp.json())
                       .then((resp) => {
-                       
-
-
-  if (resp.data) {
-    resolve({
-      data: resp?.data?.data,
-      page:
-        resp?.current_page - 1,
-       totalCount:
-       resp?.data?.total,
-    });
-  }else{
-    resolve({
-      data:[],
-      page:  0,
-      totalCount:0,
-});
-  }
-
-                    
-
-
+                        if (resp.data) {
+                          resolve({
+                            data: resp?.data?.data,
+                            page: resp?.current_page - 1,
+                            totalCount: resp?.data?.total,
+                          });
+                        } else {
+                          resolve({
+                            data: [],
+                            page: 0,
+                            totalCount: 0,
+                          });
+                        }
                       });
                   })
                 }

@@ -83,7 +83,10 @@ const WarehouseStockIn = observer(() => {
     tableRef.current && tableRef.current.onQueryChange();
   };
 
-
+//  console.log({
+//   id:user?.details?.warehouse_id,
+//   name: user?.details?.warehouse_name
+// })
   const subject = "Warehouse Stock In";
   const endpoint = {
     title: "Warehouse Stock",
@@ -109,16 +112,21 @@ const WarehouseStockIn = observer(() => {
     printUrl: `${baseUrl}/product_purchase_details_print`,
     headers: {
       headers: {
-        Authorization: "Bearer " + user.details.token,
+        Authorization: "Bearer " + user?.details?.token,
         "Content-type": "application/javascript",
       },
     },
     FrpmDataheaders: {
       headers: {
-        Authorization: "Bearer " + user.details.token,
+        Authorization: "Bearer " + user?.details?.token,
         "Content-type": "multipart/form-data",
       },
     },
+    loginWarehouse:{
+      id:user?.details?.warehouse_id,
+      name: user?.details?.warehouse_name,
+      role:user?.role
+    }
    
   };
 
@@ -154,8 +162,8 @@ const WarehouseStockIn = observer(() => {
     { title: "User", field: "user_name" },
     {
       title: "Date",
-      field: "purchase_date_time",
-      render: (rowData) => dateFormatWithTime(rowData.purchase_date_time),
+      field: "date_time",
+      render: (rowData) => dateFormatWithTime(rowData.date_time),
     },
     {
       title: "Total(TK)",

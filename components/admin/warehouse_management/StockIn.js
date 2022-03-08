@@ -51,10 +51,10 @@ const styles = {
 const useStyles = makeStyles(styles);
 const Create = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
-
+  console.log(endpoint?.loginWarehouse);
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
-  const [paid, setPaid] = React.useState();
+  const [paid, setPaid] = React.useState(0);
   const [due, setDue] = React.useState(0);
   const [discountAmount, setDiscountAmount] = React.useState(0);
   const [grand, setGrand] = React.useState(0);
@@ -68,7 +68,9 @@ const Create = ({ endpoint, modal, handleRefress }) => {
 
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
-  const [selectedWarehouse, setSelectedWarehouse] = React.useState(null);
+  const [selectedWarehouse, setSelectedWarehouse] = React.useState(
+    endpoint?.loginWarehouse?.id
+  );
   const [selectedSupplyer, setSelectedSupplyer] = React.useState(null);
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
@@ -134,7 +136,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   };
 
   // handle quantity change
-  const handdleQuantityChange = (prodId,current_stock, qty) => {
+  const handdleQuantityChange = (prodId, current_stock, qty) => {
     if (qty < 0) {
       return cogoToast.error("Enter Valid QTY", {
         position: "top-right",
@@ -155,22 +157,20 @@ const Create = ({ endpoint, modal, handleRefress }) => {
     );
   };
 
-
-    // handle handdlePriceChange change
-    const handdlePriceChange = (prodId, price) => {
-      if (price < 0) {
-        return cogoToast.error("Enter Valid price", {
-          position: "top-right",
-          bar: { size: "10px" },
-        });
-      }
-      setSelectedProduct(
-        selectedProductList.map((item) =>
-          item.id === prodId ? { ...item, purchase_price: price } : item
-        )
-      );
-    };
-
+  // handle handdlePriceChange change
+  const handdlePriceChange = (prodId, price) => {
+    if (price < 0) {
+      return cogoToast.error("Enter Valid price", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
+    setSelectedProduct(
+      selectedProductList.map((item) =>
+        item.id === prodId ? { ...item, purchase_price: price } : item
+      )
+    );
+  };
 
   // handle sitock in create
   const handleFinalStockInCreate = async () => {
@@ -210,7 +210,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
       due_amount: due,
       payment_type_id: paymentType,
     };
-    console.log(body)
+    console.log(body);
 
     // convert formdata
     const data = new FormData();
@@ -252,7 +252,6 @@ const Create = ({ endpoint, modal, handleRefress }) => {
           />
         </GridItem>
 
-
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
             fullWidth={true}
@@ -278,21 +277,36 @@ const Create = ({ endpoint, modal, handleRefress }) => {
         </GridItem>
 
         <GridItem xs={12} sm={3} md={3}>
-          <Autocomplete
-            size="small"
-            fullWidth={true}
-            // value={selectedWarehouse}
-            id="combo-box-demo"
-            options={warehouseList}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => (
-              <TextField {...params} label="Warehouse" variant="outlined" />
-            )}
-            onChange={(e, v) => setSelectedWarehouse(v.id)}
-          />
+          {endpoint?.loginWarehouse?.role == "Super Admin" && (
+            <Autocomplete
+              size="small"
+              // disabled={endpoint?.loginWarehouse?.role !== 'Super Admin'}
+              fullWidth={true}
+              // value={{name: endpoint?.loginWarehouse?.name}}
+              id="combo-box-demo"
+              options={warehouseList}
+              getOptionLabel={(option) => option?.name}
+              renderInput={(params) => (
+                <TextField {...params} label="Warehouse" variant="outlined" />
+              )}
+              onChange={(e, v) => setSelectedWarehouse(v.id)}
+            />
+          )}
+
+          {endpoint?.loginWarehouse?.role !== "Super Admin" && (
+            <TextField
+              disabled={true}
+              size="small"
+              id="standard-basic"
+              variant="outlined"
+              type="text"
+              value={endpoint?.loginWarehouse?.name}
+              style={{ width: "100%" }}
+            />
+          )}
         </GridItem>
-     
-{/* 
+
+        {/* 
         <GridItem xs={12} sm={3} md={3}>
           <div style={{ marginTop: "-8px" }}>
             <Productsearch
@@ -307,7 +321,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
         <GridItem xs={12} sm={12} md={12}>
           <div style={{ marginTop: "15px" }}>
             <ProductSelectByDropdown
-               idRequired={false}
+              idRequired={false}
               endpoint={endpoint}
               handleProductAdd={handleProductAdd}
             />

@@ -16,6 +16,7 @@ const UserInfo = types.model('UserInfo', {
   warehouse_id: types.maybeNull(types.number),
   store_id: types.maybeNull(types.number),
   store_name: types.maybeNull(types.string),
+  warehouse_name: types.maybeNull(types.string),
   permissions: types.array(Permissions),
 });
 

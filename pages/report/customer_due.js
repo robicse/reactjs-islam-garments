@@ -77,6 +77,7 @@ const CustomerSue = observer(() => {
   const [paid, setPaid] = useState(0);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [load, setLoad] = useState(false);
+  const [paymentComent, setPaymentComment] = useState('');
 
   const endpoint = {
     wholeSaleCustomerActiveListUrl: `${baseUrl}/whole_sale_customer_active_list`,
@@ -163,6 +164,7 @@ const CustomerSue = observer(() => {
           paid_amount: paid,
           due_amount: due,
           payment_type_id: paymentType,
+          description: paymentComent  
         },
         endpoint.headers
       );
@@ -256,9 +258,7 @@ const CustomerSue = observer(() => {
                     }
                 {load  && <Grid container spacing={1} direction="row">
                  
-                <Grid item xs={2}>
-                    </Grid>
-                  
+             
 
                     <Grid item xs={2}>
                       <TextField
@@ -295,8 +295,9 @@ const CustomerSue = observer(() => {
                         {/* <FormControl className={classes.formControl}>
                           <InputLabel id="demo-controlled-open-select-label">Payment</InputLabel> */}
                           <Select
+                           margin="normal"
                           size="small"
-                          style={{height:"42px",marginTop:"15px"}}
+                          style={{height:"42px",marginTop:"15px",width:"100%"}}
                              variant="outlined"
                             labelId="demo-controlled-open-select-label"
                             id="demo-controlled-open-select"
@@ -335,10 +336,26 @@ const CustomerSue = observer(() => {
                       />
                     </Grid>
 
+                    <Grid item xs={2}>
+                      <TextField
+                        margin="normal"
+                        variant="outlined"
+                        size="small"
+                        type="text"
+                        label="Comment"
+                        value={paymentComent}
+                        InputProps={{
+                          className: classes.multilineColor,
+                          readOnly: false,
+                        }}
+                        onChange={(e)=>setPaymentComment(e.target.value)}
+                      />
+                    </Grid>
+
                     <Grid item xs={2} >
                       <Button
                         size="small"
-                        style={{ height: "39px",marginTop:"16px"}}
+                        style={{ height: "39px",marginTop:"16px",width:"100%"}}
                         variant="contained"
                         color="primary"
                         disabled={currentDue == 0 ? true: false}

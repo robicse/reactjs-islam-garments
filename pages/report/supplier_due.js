@@ -71,6 +71,8 @@ const CustomerDue = observer(() => {
   const [paid, setPaid] = useState(0);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [load, setLoad] = useState(false);
+  const [paymentComent, setPaymentComment] = useState('');
+
   const endpoint = {
     supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
     headers: { headers: { Authorization: "Bearer " + user.details.token } },
@@ -148,6 +150,7 @@ const CustomerDue = observer(() => {
           paid_amount: paid,
           due_amount: due,
           payment_type_id: paymentType,
+          description: paymentComent  
         },
         endpoint.headers
       );
@@ -224,8 +227,7 @@ const CustomerDue = observer(() => {
                   )}
                   {load && (
                     <Grid container spacing={1} direction="row">
-                      <Grid item xs={2}></Grid>
-
+                    
                       <Grid item xs={2}>
                         <TextField
                           margin="normal"
@@ -260,7 +262,7 @@ const CustomerDue = observer(() => {
                       <Grid item xs={2}>
                         <Select
                              variant="outlined"
-                          style={{ height: "42px", marginTop: "15px" }}
+                             style={{height:"42px",marginTop:"15px",width:"100%"}}
                           labelId="demo-controlled-open-select-label"
                           id="demo-controlled-open-select"
                           open={open}
@@ -292,6 +294,22 @@ const CustomerDue = observer(() => {
                           }}
                         />
                       </Grid>
+
+                      <Grid item xs={2}>
+                      <TextField
+                        margin="normal"
+                        variant="outlined"
+                        size="small"
+                        type="text"
+                        label="Comment"
+                        value={paymentComent}
+                        InputProps={{
+                          className: classes.multilineColor,
+                          readOnly: false,
+                        }}
+                        onChange={(e)=>setPaymentComment(e.target.value)}
+                      />
+                    </Grid>
 
                       <Grid item xs={2}>
                         <Button

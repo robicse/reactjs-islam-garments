@@ -89,4 +89,10 @@ export const User = types
       const store_details={id:self.details.store_id,name:self.details.store_name}
       return store_details;
     },
+    get role() {
+      if (!self.details) {
+        return undefined;
+      }
+      return self.details.role;
+    },
   }));

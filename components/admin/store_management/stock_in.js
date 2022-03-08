@@ -36,11 +36,11 @@ const styles = {
     color: "#FFFFFF",
     backgroundColor: "blue",
   },
-};
+}; 
 const useStyles = makeStyles(styles);
 const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
-console.log(endpoint, modal, handleRefress)
+  console.log(endpoint?.loginStore);
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
   const [paid, setPaid] = React.useState();
@@ -59,7 +59,7 @@ console.log(endpoint, modal, handleRefress)
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedWarehouse, setSelectedWarehouse] = React.useState(null);
-  const [selectedStore, setSelecteStore] = React.useState(null);
+  const [selectedStore, setSelecteStore] = React.useState(endpoint?.loginStore?.id);
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   // selected prodict state
@@ -265,14 +265,15 @@ console.log(endpoint, modal, handleRefress)
         <GridItem
           xs={12}
           sm={3}
-          md={1}
+          md={2}
           style={{ textAlign: "center", marginTop: "10px" }}
         >
           <ArrowForwardIcon size="large" />
         </GridItem>
 
         <GridItem xs={12} sm={3} md={3}>
-          <Autocomplete
+        {endpoint?.loginStore?.role == "Super Admin" && (
+           <Autocomplete
             size="small"
             fullWidth={true}
             // value={selectedWarehouse}
@@ -284,6 +285,21 @@ console.log(endpoint, modal, handleRefress)
             )}
             onChange={(e, v) => setSelecteStore(v.id)}
           />
+        )}
+
+{endpoint?.loginStore?.role !== "Super Admin" && (
+            <TextField
+              disabled={true}
+              size="small"
+              id="standard-basic"
+              variant="outlined"
+              type="text"
+              value={endpoint?.loginStore?.name}
+              style={{ width: "100%" }}
+            />
+          )}
+
+
         </GridItem>
 
         {/* <GridItem xs={12} sm={3} md={3}>

@@ -238,6 +238,7 @@ console.log(nidFront,nidBack,image,bank_detail_image)
                             <GridItem xs={12} sm={12} md={4}>
                             <Field
                               component={TextField}
+                              disabled
                               variant="outlined"
                               margin="normal"
                               fullWidth

@@ -229,6 +229,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
 
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
+                            disabled
                               component={TextField}
                               variant="outlined"
                               margin="normal"

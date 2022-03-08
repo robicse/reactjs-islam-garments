@@ -264,12 +264,44 @@ console.log(endpoint, modal, handleRefress)
         <GridItem
           xs={12}
           sm={3}
-          md={1}
+          md={2}
           style={{ textAlign: "center", marginTop: "10px" }}
         >
           <ArrowForwardIcon size="large" />
         </GridItem>
 
+
+        <GridItem xs={12} sm={3} md={3}>
+        {endpoint?.loginStore?.role == "Super Admin" && (
+           <Autocomplete
+            size="small"
+            fullWidth={true}
+            // value={selectedWarehouse}
+            id="combo-box-demo"
+            options={storeList}
+            getOptionLabel={(option) => option.store_name}
+            renderInput={(params) => (
+              <TextField {...params} label="Store" variant="outlined" />
+            )}
+            onChange={(e, v) => setSelecteStore(v.id)}
+          />
+        )}
+
+{endpoint?.loginStore?.role !== "Super Admin" && (
+            <TextField
+              disabled={true}
+              size="small"
+              id="standard-basic"
+              variant="outlined"
+              type="text"
+              value={endpoint?.loginStore?.name}
+              style={{ width: "100%" }}
+            />
+          )}
+
+
+        </GridItem>
+{/* 
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
             size="small"
@@ -283,7 +315,7 @@ console.log(endpoint, modal, handleRefress)
             )}
             onChange={(e, v) => setSelecteStore(v.id)}
           />
-        </GridItem>
+        </GridItem> */}
 
         {/* <GridItem xs={12} sm={3} md={3}>
           <div style={{ marginTop: "-8px" }}>

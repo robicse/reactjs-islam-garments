@@ -73,11 +73,10 @@ const StoreStockComponent = observer(() => {
     tableRef.current && tableRef.current.onQueryChange();
   };
   const { user } = useRootStore();
-  const [storeId, setStoreId] = useState(null);
+
+  console.log(user?.details?.store_id)
+  const [storeId, setStoreId] = useState(user?.details?.store_id);
   const [storeList, setStoreList] = useState([]);
-
-  
-
 
 
   const endpoint = {
@@ -92,7 +91,7 @@ const StoreStockComponent = observer(() => {
 
 const subject = "Store Stock";
 
-//store active list fetch
+console.log(user.role,'jjjj');
 
 const storeListFetch = async()=>{
     try {
@@ -109,7 +108,7 @@ React.useEffect(()=>{
 },[])
 
 
-
+ 
 
   const columns = [
     { title: "Store", field: "store_name" },
@@ -174,6 +173,8 @@ React.useEffect(()=>{
               <Select
                 labelId="demo-simple-select-filled-label"
                 id="demo-simple-select-filled"
+                value={storeId}
+                disabled={user?.role !== 'Super Admin'}
                 onChange={(e) => {
                   setStoreId(e.target.value);
                   handleRefress();

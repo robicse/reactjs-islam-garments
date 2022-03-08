@@ -61,7 +61,7 @@ const WarehouseStock = observer(() => {
   const handleRefress = () => {
     tableRef.current && tableRef.current.onQueryChange();
   };
-  const { user, role } = useRootStore();
+  const { user } = useRootStore();
   const [warehouseId, setWarehouseId] = useState(user?.details?.warehouse_id);
   const [warehouseList, setWarehouseList] = useState([]);
 
@@ -75,7 +75,7 @@ const WarehouseStock = observer(() => {
 
   //warehouse active list fetch
 
-  console.log(user.role, role);
+  console.log(user.role);
 
   const warehouseListFetch = async () => {
     try {

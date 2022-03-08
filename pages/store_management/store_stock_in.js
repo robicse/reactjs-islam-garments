@@ -106,6 +106,11 @@ const endpoint = {
   headers: { headers: { Authorization: "Bearer " + user.details.token }},
   printUrl: `${baseUrl}/stock_transfer_details_print`,
   subUnitActiveListUrl:`${baseUrl}/product_sub_unit_list`,
+  loginStore:{
+    id:user?.details?.store_id,
+    name: user?.details?.store_name,
+    role:user?.role
+  }
 };
 
   const [openCreateModal, setOpenCreateModal] = useState(false);;

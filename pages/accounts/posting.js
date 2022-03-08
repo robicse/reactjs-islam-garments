@@ -151,7 +151,7 @@ const PostingCom = observer(() => {
     {
       title: "Transaction Date",
       field: "transaction_date",
-      render: (rowData) => dateFormatWithoutTime(rowData.transaction_date_time),
+      // render: (rowData) => dateFormatWithoutTime(rowData.transaction_date),
     },
     { title: "Voucher Name", field: "voucher_type_name" },
     {

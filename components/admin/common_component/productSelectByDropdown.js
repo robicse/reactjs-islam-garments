@@ -22,6 +22,7 @@ export default function SearchByDrpdown({
   handleProductAdd,
   idRequired,
   endpoint,
+  productType
 }) {
   const [sizeList, setSizeList] = React.useState([]);
   const [unitList, setUnitList] = React.useState([]);
@@ -29,7 +30,7 @@ export default function SearchByDrpdown({
   const [subunitList, setSubUnitList] = React.useState([]);
   const [productCodeList, setProductCodeList] = React.useState([]);
 
-  const [selectedType, setSelectedType] = React.useState('Own');
+  const [selectedType, setSelectedType] = React.useState(productType);
   const [selectedSize, setSelectedSize] = React.useState('');
   const [selectedUnit, setSelectedUnit] = React.useState('');
   const [selectedCategory, setSelectedCategory] = React.useState('');
@@ -108,7 +109,7 @@ export default function SearchByDrpdown({
         endpoint.headers
       );
 
-      handleProductAdd(response?.data?.data[0]);
+      handleProductAdd({...response?.data?.data[0], temptotalPrice:0});
     } catch (error) {
       console.log(error);
       cogoToast.info("Product Not Found", {
@@ -200,7 +201,7 @@ export default function SearchByDrpdown({
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={3} md={2}>
+        {/* <GridItem xs={12} sm={3} md={2}>
           <Autocomplete
             size="small"
             fullWidth={true}
@@ -228,7 +229,7 @@ export default function SearchByDrpdown({
               setSelectedType(v?.name);
             }}
           />
-        </GridItem>
+        </GridItem> */}
 
         <GridItem xs={12} sm={3} md={2}>
           <Autocomplete

@@ -30,7 +30,7 @@ import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
 import tableIcons from "components/table_icon/icon";
 import { useReactToPrint } from "react-to-print";
 // custom component
-import StockInComponent from "components/admin/warehouse_management/StockIn";
+import StockInComponent from "components/admin/warehouse_management/stockInTab";
 import Details from "components/admin/common_component/details";
 import StockInPrint from "components/admin/common_component/invoicePrint";
 // utils component

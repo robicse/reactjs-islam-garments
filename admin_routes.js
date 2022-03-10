@@ -412,15 +412,15 @@ const dashboardRoutes = [
     name: 'Return',
     icon: KeyboardReturnIcon,
     childs: [
-      {
-        id: 1,
-        collapse: false,
-        path: '/return',
-        childPath: '/add',
-        permission: 'return',
-        name: 'Add',
-        icon: KeyboardReturnIcon,
-      },
+      // {
+      //   id: 1,
+      //   collapse: false,
+      //   path: '/return',
+      //   childPath: '/add',
+      //   permission: 'return',
+      //   name: 'Add',
+      //   icon: KeyboardReturnIcon,
+      // },
       {
         id: 2,
         collapse: false,

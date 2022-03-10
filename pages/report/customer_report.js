@@ -7,6 +7,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useAsyncEffect } from "use-async-effect";
 import tableIcons from "components/table_icon/icon";
 // core components
+import Typography from "@material-ui/core/Typography";
 import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -19,8 +20,7 @@ import Button from "@material-ui/core/Button";
 import { Box, Chip, Grid, TextField, Divider } from "@material-ui/core";
 import { baseUrl } from "../../const/api";
 import { useReactToPrint } from "react-to-print";
-
-//import TrialBalancePrint from '../../components/admin/trial_balance/trial_balance_print'
+import PrintSupplierHistory from "components/admin/common_component/printSupplierHistory";
 
 const styles = {
   cardCategoryWhite: {
@@ -142,12 +142,13 @@ const SupplierReport = () => {
   return (
     <div>
       <div style={{ display: "none" }}>
-        {/* <TrialBalancePrint
+      <PrintSupplierHistory
+          defaultprintData={true}
           ref={componentRef}
-          trialData={trialData}
+          invoiceTitle="Supplier History"
           from={from}
           to={to}
-        /> */}
+        />
       </div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
@@ -219,7 +220,21 @@ const SupplierReport = () => {
           </Grid>
           <Card>
             <CardBody>
-              <Grid container direction="column" style={{ padding: 20 }}>
+            <Box mt={1}>
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  // alignItems="center"
+                >
+                  <Typography variant="h5" align="center">
+                    Customer History
+                  </Typography>
+                  <Typography align="right" style={{ cursor: "pointer" }}>
+                    <PrintTwoToneIcon onClick={handlePrint} color="white" />
+                  </Typography>
+                </Grid>
+              </Box>
                 <MaterialTable
                   icons={tableIcons}
                   title={`Total Amount ${totalcount}`}
@@ -297,7 +312,7 @@ const SupplierReport = () => {
                     padding: "dense",
                   }}
                 />
-              </Grid>
+            
             </CardBody>
           </Card>
         </GridItem>

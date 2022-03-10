@@ -6,22 +6,14 @@ import TextField from "@material-ui/core/TextField";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import cogoToast from "cogo-toast";
-import Grid from "@material-ui/core/Grid";
-import {
-  Box,
-  Button,
-  LinearProgress,
-  MenuItem,
-  Typography,
-  Select,
-} from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { useAsyncEffect } from "use-async-effect";
 import axios from "axios";
-import AllApplicationErrorNotification from "../../utils/errorNotification";
-import Productsearch from "../common_component/productsearch";
-import Productstable from "../common_component/buyProductTable";
-import Calculation from "../common_component/buyProductCalculation";
-import ProductSelectByDropdown from "../common_component/productSelectByDropdown";
+import AllApplicationErrorNotification from "../../../utils/errorNotification";
+import Productsearch from "../../common_component/productsearch";
+import Productstable from "../../common_component/Productstable";
+import Calculation from "../../common_component/calculation";
+import ProductSelectByDropdown from "../../common_component/productSaleDropdown";
 
 const styles = {
   cardCategoryWhite: {
@@ -44,16 +36,15 @@ const styles = {
     color: "#FFFFFF",
     backgroundColor: "blue",
   },
-  submit: {
-    marginTop: "15px",
-  },
 };
 const useStyles = makeStyles(styles);
-const Create = ({ endpoint, modal, handleRefress }) => {
+const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
+  console.log(endpoint?.loginStore);
+// console.log(endpoint, modal, handleRefress)
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
-  const [paid, setPaid] = React.useState(0);
+  const [paid, setPaid] = React.useState();
   const [due, setDue] = React.useState(0);
   const [discountAmount, setDiscountAmount] = React.useState(0);
   const [grand, setGrand] = React.useState(0);
@@ -62,43 +53,36 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   const [discountParcent, setDiscountParcent] = React.useState(0);
   const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
 
-  const [lessAmount, setLessAmount] = React.useState(0);
-  const [afterLessAmount, setAfterLessAmount] = React.useState(0);
-
-  
   //initial load state
-  const [warehouseList, setWarehouseList] = React.useState([]);
-  const [supplyerList, setSupplyerList] = React.useState([]);
+  const [customerList, setCustomerList] = React.useState([]);
+  const [storeList, setStoreList] = React.useState([]);
 
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
-  const [selectedWarehouse, setSelectedWarehouse] = React.useState(
-    endpoint?.loginWarehouse?.id
-  );
-  const [memoNumner, setMemoNumber] = React.useState('');
-  const [selectedSupplyer, setSelectedSupplyer] = React.useState(null);
+  const [selectedCustomer, setselectedCustomer] = React.useState(null);
+  const [selectedStore, setSelecteStore] = React.useState(endpoint?.loginStore?.id);
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   // selected prodict state
   const [selectedProductList, setSelectedProduct] = React.useState([]);
-  // product Type
 
 
-  // load warehouse and supplier
+  console.log(paymentType)
+  //loading when component run
   useAsyncEffect(async (isMounted) => {
     try {
-      const warehouseRes = await axios.get(
-        endpoint.warehouseActiveListUrl,
-        endpoint.headers
-      );
-      
-      const supplyerRes = await axios.get(
-        endpoint.supplyerActiveListUrl,
+      const customerRes = await axios.get(
+        endpoint.wholeSaleCustomerActiveListUrl,
         endpoint.headers
       );
 
-      setWarehouseList(warehouseRes?.data?.data);
-      setSupplyerList(supplyerRes?.data?.data);
+      const storeRes = await axios.get(
+        endpoint.storeActiveListUrl,
+        endpoint.headers
+      );
+
+      setCustomerList(customerRes?.data?.data);
+      setStoreList(storeRes?.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -131,7 +115,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
 
   // handle product remove
   const handdleproductRemove = (proId) => {
- 
+    console.log("remove done");
     const filterList = selectedProductList.filter((item) => item.id !== proId);
     setSelectedProduct(filterList);
     cogoToast.success("Removed", {
@@ -141,14 +125,23 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   };
 
   // handle quantity change
-  const handdleQuantityChange = (prodId, qty) => {
+  const handdleQuantityChange = (prodId,current_stock, qty) => {
     if (qty < 0) {
       return cogoToast.error("Enter Valid QTY", {
         position: "top-right",
         bar: { size: "10px" },
       });
     }
-console.log(qty)
+
+    // if (qty > current_stock) {
+    //   return cogoToast.error("Stock Not Match", {
+    //     position: "top-right",
+    //     bar: { size: "10px" },
+    //   });
+    // }
+
+  
+
     setSelectedProduct(
       selectedProductList.map((item) =>
         item.id === prodId ? { ...item, qty: qty } : item
@@ -156,21 +149,21 @@ console.log(qty)
     );
   };
 
-  // handle handdlePriceChange change
-  const handdletotalPriceChange = (prodId, price) => {
 
-    if (price < 0) {
-      return cogoToast.error("Enter Valid price", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-    }
-    setSelectedProduct(
-      selectedProductList.map((item) =>
-        item.id === prodId ? { ...item, temptotalPrice: price } : item
-      )
-    );
-  };
+    // handle handdlePriceChange change
+    const handdlePriceChange = (prodId, price) => {
+      if (price < 0) {
+        return cogoToast.error("Enter Valid price", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+      }
+      setSelectedProduct(
+        selectedProductList.map((item) =>
+          item.id === prodId ? { ...item, purchase_price: price } : item
+        )
+      );
+    };
 
   // handle sitock in create
   const handleFinalStockInCreate = async () => {
@@ -181,8 +174,15 @@ console.log(qty)
       });
     }
 
-    if (!selectedSupplyer) {
-      return cogoToast.warn("Please Select Supplier", {
+    if (!selectedCustomer) {
+      return cogoToast.warn("Please Select customer", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
+
+    if (!selectedStore) {
+      return cogoToast.warn("Please Select Store", {
         position: "top-right",
         bar: { size: "10px" },
       });
@@ -194,16 +194,15 @@ console.log(qty)
         bar: { size: "10px" },
       });
     }
-//  console.log(selectedProductList)
-//  const finalP = selectedProductList.map((item)=>{
-//  const singleAmount = item.temptotalPrice / item.temptotalPrice
-//  return item
-//  })
+
     const body = {
       date: selectedDate,
-      supplier_id: selectedSupplyer,
-      warehouse_id: selectedWarehouse,
+      customer_id: selectedCustomer,
+      store_id: selectedStore,
       products: JSON.stringify(selectedProductList),
+      miscellaneous_comment: "",
+      miscellaneous_charge: "",
+      sub_total_amount: subTotal,
       discount_type: discountType,
       discount_percent: discountParcent,
       discount_amount: discountAmount,
@@ -213,11 +212,7 @@ console.log(qty)
       paid_amount: paid,
       due_amount: due,
       payment_type_id: paymentType,
-      less_amount: lessAmount,
-      after_less_amount: afterLessAmount,
-      supplier_invoice_no: memoNumner
     };
-    // console.log(body);
 
     // convert formdata
     const data = new FormData();
@@ -230,14 +225,14 @@ console.log(qty)
         bar: { size: "10px" },
       });
       const submitResponse = await axios.post(
-        endpoint.stockInAPi,
+        endpoint.wholeSaleStockOutAPi,
         data,
-        endpoint.FrpmDataheaders
+        endpoint.headers,
       );
       handleRefress();
       setButtonLoading(false);
       modal(false);
-      // handleRefress();
+     
     } catch (error) {
       AllApplicationErrorNotification(error);
       setButtonLoading(false);
@@ -246,8 +241,8 @@ console.log(qty)
 
   return (
     <div>
-      <GridContainer style={{ padding: "15px", marginTop: 250 }}>
-        <GridItem xs={12} sm={3} md={2}>
+      <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
+        <GridItem xs={12} sm={3} md={3}>
           <TextField
             size="small"
             id="standard-basic"
@@ -258,34 +253,38 @@ console.log(qty)
             style={{ width: "100%" }}
           />
         </GridItem>
-
         <GridItem xs={12} sm={3} md={3}>
-          <Autocomplete
-            fullWidth={true}
-            size="small"
-            id="combo-box-demo"
-            // value={selectedSupplyer}
-            options={supplyerList}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => (
-              <TextField {...params} label="Supplyer" variant="outlined" />
-            )}
-            onChange={(e, v) => setSelectedSupplyer(v.id)}
-          />
+          {endpoint?.loginStore?.role == "Super Admin" && (
+            <Autocomplete
+              size="small"
+              fullWidth={true}
+              // value={selectedWarehouse}
+              id="combo-box-demo"
+              options={storeList}
+              getOptionLabel={(option) => option.store_name}
+              renderInput={(params) => (
+                <TextField {...params} label="Store" variant="outlined" />
+              )}
+              onChange={(e, v) => setSelecteStore(v.id)}
+            />
+          )}
+
+          {endpoint?.loginStore?.role !== "Super Admin" && (
+            <TextField
+              disabled={true}
+              size="small"
+              id="standard-basic"
+              variant="outlined"
+              type="text"
+              value={endpoint?.loginStore?.name}
+              style={{ width: "100%" }}
+            />
+          )}
+
+
         </GridItem>
 
-        <GridItem xs={12} sm={3} md={2}>
-        <TextField
-            size="small"
-            id="standard-basic"
-            variant="outlined"
-            type="text"
-            label="Memo Number"
-            value={memoNumner}
-            onChange={(e) => setMemoNumber(e.target.value)}
-            style={{ width: "100%" }}
-          />
-        </GridItem>
+
         <GridItem
           xs={12}
           sm={3}
@@ -295,44 +294,46 @@ console.log(qty)
           <ArrowForwardIcon size="large" />
         </GridItem>
 
+    
         <GridItem xs={12} sm={3} md={3}>
-          {endpoint?.loginWarehouse?.role == "Super Admin" && (
-            <Autocomplete
-              size="small"
-              // disabled={endpoint?.loginWarehouse?.role !== 'Super Admin'}
-              fullWidth={true}
-              // value={{name: endpoint?.loginWarehouse?.name}}
-              id="combo-box-demo"
-              options={warehouseList}
-              getOptionLabel={(option) => option?.name}
-              renderInput={(params) => (
-                <TextField {...params} label="Warehouse" variant="outlined" />
-              )}
-              onChange={(e, v) => setSelectedWarehouse(v.id)}
-            />
-          )}
-
-          {endpoint?.loginWarehouse?.role !== "Super Admin" && (
-            <TextField
-              disabled={true}
-              size="small"
-              id="standard-basic"
-              variant="outlined"
-              type="text"
-              value={endpoint?.loginWarehouse?.name}
-              style={{ width: "100%" }}
-            />
-          )}
+          <Autocomplete
+            size="small"
+            fullWidth={true}
+            // value={selectedWarehouse}
+            id="combo-box-demo"
+            options={customerList}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => (
+              <TextField {...params} label="Customer" variant="outlined" />
+            )}
+            onChange={(e, v) => setselectedCustomer(v.id)}
+          />
         </GridItem>
+
+        {/* <GridItem xs={12} sm={3} md={3}>
+          <div style={{ marginTop: "-8px" }}>
+            <Productsearch
+              searchUrl={endpoint.productsearchForStockIn}
+              headerds={endpoint.headers}
+              handleProductAdd={handleProductAdd}
+              searchBody={{ store_id: selectedStore }}
+                warehouseIdRequired={false}
+              storeidRequired={true}
+               idRequired={true}
+            />
+          </div>
+        </GridItem> */}
 
 
         <GridItem xs={12} sm={12} md={12}>
           <div style={{ marginTop: "15px" }}>
             <ProductSelectByDropdown
-              idRequired={false}
               endpoint={endpoint}
               handleProductAdd={handleProductAdd}
-              productType="Buy"
+              idRequired={true}
+            //   warehouseIdRequired={false}
+            //   storeidRequired={true}
+              searchBody={{ store_id: selectedStore }}
             />
           </div>
         </GridItem>
@@ -350,42 +351,40 @@ console.log(qty)
               products={selectedProductList}
               handdleproductRemove={handdleproductRemove}
               handdleQuantityChange={handdleQuantityChange}
-              handdletotalPriceChange={handdletotalPriceChange}
+              handdlePriceChange={handdlePriceChange}
             />
           )}
         </GridItem>
 
-        <GridItem xs={12} sm={12} md={12}>
-          {selectedProductList.length > 0 && (
-            <Calculation
-              products={selectedProductList}
-              subTotal={subTotal}
-              setSubTotal={setSubTotal}
-              grand={grand}
-              setGrand={setGrand}
-              paid={paid}
-              setPaid={setPaid}
-              due={due}
-              setDue={setDue}
-              discountAmount={discountAmount}
-              setDiscountAmount={setDiscountAmount}
-              discountType={discountType}
-              setDiscountType={setDiscountType}
-              discountParcent={discountParcent}
-              setDiscountParcent={setDiscountParcent}
-              afterDiscountAmount={afterDiscountAmount}
-              setAfterDiscountAmount={setAfterDiscountAmount}
-              paymentType={paymentType}
-              setPaymentType={setPaymentType}
-              lessAmount={lessAmount}
-              setLessAmount={setLessAmount}
-              afterLessAmount={afterLessAmount}
-              setAfterLessAmount={setAfterLessAmount}
-            />
-          )}
-        </GridItem>
+      
+          <GridItem xs={12} sm={12} md={12}>
+            {selectedProductList.length > 0 && (
+              <Calculation
+                products={selectedProductList}
+                subTotal={subTotal}
+                setSubTotal={setSubTotal}
+                grand={grand}
+                setGrand={setGrand}
+                paid={paid}
+                setPaid={setPaid}
+                due={due}
+                setDue={setDue}
+                discountAmount={discountAmount}
+                setDiscountAmount={setDiscountAmount}
+                discountType={discountType}
+                setDiscountType={setDiscountType}
+                discountParcent={discountParcent}
+                setDiscountParcent={setDiscountParcent}
+                afterDiscountAmount={afterDiscountAmount}
+                setAfterDiscountAmount={setAfterDiscountAmount}
+                paymentType={paymentType}
+                setPaymentType={setPaymentType}
+              />
+            )}
+          </GridItem>
+   
 
-        <GridItem
+          <GridItem
           xs={12}
           sm={12}
           md={12}
@@ -409,4 +408,4 @@ console.log(qty)
   );
 };
 
-export default Create;
+export default StockOutComponent;

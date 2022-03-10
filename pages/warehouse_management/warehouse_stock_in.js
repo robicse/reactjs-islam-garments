@@ -32,7 +32,8 @@ import { useReactToPrint } from "react-to-print";
 // custom component
 import StockInComponent from "components/admin/warehouse_management/stockInTab";
 import Details from "components/admin/common_component/details";
-import StockInPrint from "components/admin/common_component/invoicePrint";
+// import StockInPrint from "components/admin/common_component/warehouseStockInInvoicePrint";
+import StockInPrint from "components/admin/common_component/warehouseStockInInvoicePrint";
 // utils component
 import { convertFristCharcapital } from "helper/getMonthToNumber";
 import { dateFormatWithTime } from "helper/dateFormat";

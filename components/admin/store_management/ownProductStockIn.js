@@ -18,11 +18,9 @@ import {
 import { useAsyncEffect } from "use-async-effect";
 import axios from "axios";
 import AllApplicationErrorNotification from "../../utils/errorNotification";
-import Productsearch from "../common_component/productsearch";
-import Productstable from "../common_component/buyProductTable";
-import Calculation from "../common_component/buyProductCalculation";
+import Productstable from "../common_component/ownProductTable";
 import ProductSelectByDropdown from "../common_component/productSelectByDropdown";
-
+ 
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -49,60 +47,46 @@ const styles = {
   },
 };
 const useStyles = makeStyles(styles);
-const Create = ({ endpoint, modal, handleRefress }) => {
+const OwnProductStockIn = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
-  // calculation statte
-  const [subTotal, setSubTotal] = React.useState(0);
-  const [paid, setPaid] = React.useState(0);
-  const [due, setDue] = React.useState(0);
-  const [discountAmount, setDiscountAmount] = React.useState(0);
-  const [grand, setGrand] = React.useState(0);
-  const [discountType, setDiscountType] = React.useState("Flat");
-  const [paymentType, setPaymentType] = React.useState(1);
-  const [discountParcent, setDiscountParcent] = React.useState(0);
-  const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
 
-  const [lessAmount, setLessAmount] = React.useState(0);
-  const [afterLessAmount, setAfterLessAmount] = React.useState(0);
-
-  
   //initial load state
   const [warehouseList, setWarehouseList] = React.useState([]);
-  const [supplyerList, setSupplyerList] = React.useState([]);
+  const [storeList, setStoreList] = React.useState([]);
+
 
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
-  const [selectedWarehouse, setSelectedWarehouse] = React.useState(
-    endpoint?.loginWarehouse?.id
-  );
-  const [memoNumner, setMemoNumber] = React.useState('');
-  const [selectedSupplyer, setSelectedSupplyer] = React.useState(null);
+
+  const [selectedWarehouse, setSelectedWarehouse] = React.useState(null);
+  const [selectedStore, setSelecteStore] = React.useState(endpoint?.loginStore?.id);
+
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   // selected prodict state
   const [selectedProductList, setSelectedProduct] = React.useState([]);
-  // product Type
+ 
 
-
-  // load warehouse and supplier
+  //loading when component run
   useAsyncEffect(async (isMounted) => {
     try {
       const warehouseRes = await axios.get(
         endpoint.warehouseActiveListUrl,
         endpoint.headers
       );
-      
-      const supplyerRes = await axios.get(
-        endpoint.supplyerActiveListUrl,
+
+      const storeRes = await axios.get(
+        endpoint.storeActiveListUrl,
         endpoint.headers
       );
 
       setWarehouseList(warehouseRes?.data?.data);
-      setSupplyerList(supplyerRes?.data?.data);
+      setStoreList(storeRes?.data?.data);
     } catch (error) {
       console.log(error);
     }
   }, []);
+
 
   // handle product add
   const handleProductAdd = (prod) => {
@@ -131,7 +115,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
 
   // handle product remove
   const handdleproductRemove = (proId) => {
- 
+    console.log("remove done");
     const filterList = selectedProductList.filter((item) => item.id !== proId);
     setSelectedProduct(filterList);
     cogoToast.success("Removed", {
@@ -141,33 +125,16 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   };
 
   // handle quantity change
-  const handdleQuantityChange = (prodId, qty) => {
+  const handdleQuantityChange = (prodId, current_stock, qty) => {
     if (qty < 0) {
       return cogoToast.error("Enter Valid QTY", {
         position: "top-right",
         bar: { size: "10px" },
       });
     }
-console.log(qty)
     setSelectedProduct(
       selectedProductList.map((item) =>
         item.id === prodId ? { ...item, qty: qty } : item
-      )
-    );
-  };
-
-  // handle handdlePriceChange change
-  const handdletotalPriceChange = (prodId, price) => {
-
-    if (price < 0) {
-      return cogoToast.error("Enter Valid price", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-    }
-    setSelectedProduct(
-      selectedProductList.map((item) =>
-        item.id === prodId ? { ...item, temptotalPrice: price } : item
       )
     );
   };
@@ -181,43 +148,22 @@ console.log(qty)
       });
     }
 
-    if (!selectedSupplyer) {
-      return cogoToast.warn("Please Select Supplier", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-    }
-
-    if (subTotal < 0) {
-      return cogoToast.warn("Please Input Valid Amount", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-    }
-//  console.log(selectedProductList)
-//  const finalP = selectedProductList.map((item)=>{
-//  const singleAmount = item.temptotalPrice / item.temptotalPrice
-//  return item
-//  })
     const body = {
       date: selectedDate,
-      supplier_id: selectedSupplyer,
+      store_id: selectedStore,
       warehouse_id: selectedWarehouse,
       products: JSON.stringify(selectedProductList),
-      discount_type: discountType,
-      discount_percent: discountParcent,
-      discount_amount: discountAmount,
-      after_discount_amount: afterDiscountAmount,
-      sub_total_amount: subTotal,
-      grand_total_amount: grand,
-      paid_amount: paid,
-      due_amount: due,
-      payment_type_id: paymentType,
-      less_amount: lessAmount,
-      after_less_amount: afterLessAmount,
-      supplier_invoice_no: memoNumner
+      discount_type: "",
+      discount_percent: 0,
+      discount_amount: 0,
+      after_discount_amount: 0,
+      sub_total_amount: 0,
+      grand_total_amount: 0,
+      paid_amount: 0,
+      due_amount: 0,
+      payment_type_id: "",
     };
-    // console.log(body);
+    console.log(body);
 
     // convert formdata
     const data = new FormData();
@@ -247,7 +193,7 @@ console.log(qty)
   return (
     <div>
       <GridContainer style={{ padding: "15px", marginTop: 250 }}>
-        <GridItem xs={12} sm={3} md={2}>
+      <GridItem xs={12} sm={3} md={3}>
           <TextField
             size="small"
             id="standard-basic"
@@ -261,31 +207,19 @@ console.log(qty)
 
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
-            fullWidth={true}
             size="small"
+            fullWidth={true}
+            // value={selectedWarehouse}
             id="combo-box-demo"
-            // value={selectedSupplyer}
-            options={supplyerList}
+            options={warehouseList}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
-              <TextField {...params} label="Supplyer" variant="outlined" />
+              <TextField {...params} label="Warehouse" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedSupplyer(v.id)}
+            onChange={(e, v) => setSelectedWarehouse(v.id)}
           />
         </GridItem>
 
-        <GridItem xs={12} sm={3} md={2}>
-        <TextField
-            size="small"
-            id="standard-basic"
-            variant="outlined"
-            type="text"
-            label="Memo Number"
-            value={memoNumner}
-            onChange={(e) => setMemoNumber(e.target.value)}
-            style={{ width: "100%" }}
-          />
-        </GridItem>
         <GridItem
           xs={12}
           sm={3}
@@ -296,35 +230,35 @@ console.log(qty)
         </GridItem>
 
         <GridItem xs={12} sm={3} md={3}>
-          {endpoint?.loginWarehouse?.role == "Super Admin" && (
+          {endpoint?.loginStore?.role == "Super Admin" && (
             <Autocomplete
               size="small"
-              // disabled={endpoint?.loginWarehouse?.role !== 'Super Admin'}
               fullWidth={true}
-              // value={{name: endpoint?.loginWarehouse?.name}}
+              // value={selectedWarehouse}
               id="combo-box-demo"
-              options={warehouseList}
-              getOptionLabel={(option) => option?.name}
+              options={storeList}
+              getOptionLabel={(option) => option.store_name}
               renderInput={(params) => (
-                <TextField {...params} label="Warehouse" variant="outlined" />
+                <TextField {...params} label="Store" variant="outlined" />
               )}
-              onChange={(e, v) => setSelectedWarehouse(v.id)}
+              onChange={(e, v) => setSelecteStore(v.id)}
             />
           )}
 
-          {endpoint?.loginWarehouse?.role !== "Super Admin" && (
+          {endpoint?.loginStore?.role !== "Super Admin" && (
             <TextField
               disabled={true}
               size="small"
               id="standard-basic"
               variant="outlined"
               type="text"
-              value={endpoint?.loginWarehouse?.name}
+              value={endpoint?.loginStore?.name}
               style={{ width: "100%" }}
             />
           )}
-        </GridItem>
 
+
+        </GridItem>
 
         <GridItem xs={12} sm={12} md={12}>
           <div style={{ marginTop: "15px" }}>
@@ -332,7 +266,7 @@ console.log(qty)
               idRequired={false}
               endpoint={endpoint}
               handleProductAdd={handleProductAdd}
-              productType="Buy"
+              productType="Own"
             />
           </div>
         </GridItem>
@@ -350,37 +284,7 @@ console.log(qty)
               products={selectedProductList}
               handdleproductRemove={handdleproductRemove}
               handdleQuantityChange={handdleQuantityChange}
-              handdletotalPriceChange={handdletotalPriceChange}
-            />
-          )}
-        </GridItem>
-
-        <GridItem xs={12} sm={12} md={12}>
-          {selectedProductList.length > 0 && (
-            <Calculation
-              products={selectedProductList}
-              subTotal={subTotal}
-              setSubTotal={setSubTotal}
-              grand={grand}
-              setGrand={setGrand}
-              paid={paid}
-              setPaid={setPaid}
-              due={due}
-              setDue={setDue}
-              discountAmount={discountAmount}
-              setDiscountAmount={setDiscountAmount}
-              discountType={discountType}
-              setDiscountType={setDiscountType}
-              discountParcent={discountParcent}
-              setDiscountParcent={setDiscountParcent}
-              afterDiscountAmount={afterDiscountAmount}
-              setAfterDiscountAmount={setAfterDiscountAmount}
-              paymentType={paymentType}
-              setPaymentType={setPaymentType}
-              lessAmount={lessAmount}
-              setLessAmount={setLessAmount}
-              afterLessAmount={afterLessAmount}
-              setAfterLessAmount={setAfterLessAmount}
+              //   handdlePriceChange={handdlePriceChange}
             />
           )}
         </GridItem>
@@ -397,8 +301,6 @@ console.log(qty)
               variant="contained"
               color="primary"
               onClick={handleFinalStockInCreate}
-              // className={classes.button}
-              // endIcon={<Icon>send</Icon>}
             >
               {submitButtonLoading ? "loading" : "Submit"}
             </Button>
@@ -409,4 +311,4 @@ console.log(qty)
   );
 };
 
-export default Create;
+export default OwnProductStockIn;

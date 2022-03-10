@@ -173,6 +173,8 @@ const TrialBalance = observer(() => {
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
         <Grid container spacing={1}>
+        <Grid item xs={1}>
+          </Grid>
             <Grid item xs={2}>
               <Box>
                 <TextField

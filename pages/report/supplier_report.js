@@ -8,6 +8,7 @@ import { useAsyncEffect } from "use-async-effect";
 import tableIcons from "components/table_icon/icon";
 // core components
 import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
+import Typography from "@material-ui/core/Typography";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
@@ -19,8 +20,7 @@ import Button from "@material-ui/core/Button";
 import { Box, Chip, Grid, TextField, Divider } from "@material-ui/core";
 import { baseUrl } from "../../const/api";
 import { useReactToPrint } from "react-to-print";
-
-//import TrialBalancePrint from '../../components/admin/trial_balance/trial_balance_print'
+import PrintSupplierHistory from "components/admin/common_component/printSupplierHistory";
 
 const styles = {
   cardCategoryWhite: {
@@ -142,12 +142,13 @@ const SupplierReport = () => {
   return (
     <div>
       <div style={{ display: "none" }}>
-        {/* <TrialBalancePrint
+        <PrintSupplierHistory
+          defaultprintData={true}
           ref={componentRef}
-          trialData={trialData}
+          invoiceTitle="Supplier History"
           from={from}
           to={to}
-        /> */}
+        />
       </div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
@@ -219,85 +220,99 @@ const SupplierReport = () => {
           </Grid>
           <Card>
             <CardBody>
-              <Grid container direction="column" style={{ padding: 20 }}>
-                <MaterialTable
-                  icons={tableIcons}
-                  title={`Total Amount ${totalcount}`}
-                  tableRef={tableRef}
-                  columns={columns}
-                  data={(query) =>
-                    new Promise((resolve, reject) => {
-                      let url = `${endpoint.supplierReportListAPi}?`;
-                      let data = new FormData();
-                      data.append(
-                        "supplier_id",
-                        JSON.stringify(selectedSupplier)
-                      );
-                      data.append("from_date", from);
-                      data.append("to_date", to);
-                      data.append("search", invoiceNumber);
+              <Box mt={1}>
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  // alignItems="center"
+                >
+                  <Typography variant="h5" align="center">
+                    Supplier History
+                  </Typography>
+                  <Typography align="right" style={{ cursor: "pointer" }}>
+                    <PrintTwoToneIcon onClick={handlePrint} color="white" />
+                  </Typography>
+                </Grid>
+              </Box>
 
-                      const requestOptions = {
-                        method: "POST",
-                        headers: {
-                          Authorization: "Bearer " + user.auth_token,
-                        },
-                        body: data,
-                      };
+              <MaterialTable
+                icons={tableIcons}
+                title={`Total Amount ${totalcount}`}
+                tableRef={tableRef}
+                columns={columns}
+                data={(query) =>
+                  new Promise((resolve, reject) => {
+                    let url = `${endpoint.supplierReportListAPi}?`;
+                    let data = new FormData();
+                    data.append(
+                      "supplier_id",
+                      JSON.stringify(selectedSupplier)
+                    );
+                    data.append("from_date", from);
+                    data.append("to_date", to);
+                    data.append("search", invoiceNumber);
 
-                      //searching
-                      if (query.search) {
-                        url += `search=${query.search}`;
-                      }
+                    const requestOptions = {
+                      method: "POST",
+                      headers: {
+                        Authorization: "Bearer " + user.auth_token,
+                      },
+                      body: data,
+                    };
 
-                      url += `&page=${query.page + 1}`;
+                    //searching
+                    if (query.search) {
+                      url += `search=${query.search}`;
+                    }
 
-                      selectedSupplier &&
-                        from &&
-                        to &&
-                        fetch(url, requestOptions)
-                          .then((resp) => resp.json())
-                          .then((resp) => {
-                            if (resp.data) {
-                              resolve({
-                                data: resp?.data?.data,
-                                page: resp?.data?.current_page - 1,
-                                totalCount: resp?.data?.total,
-                              });
-                              console.log(resp?.data.current_page);
+                    url += `&page=${query.page + 1}`;
 
-                              setTotalcount(resp.total_amount);
-                            } else {
-                              resolve({
-                                data: [],
-                                page: 0,
-                                totalCount: 0,
-                              });
-                              setTotalcount(0);
-                            }
-                          });
-                    })
-                  }
-                  actions={
-                    [
-                      //   {
-                      //     icon: RefreshIcon,
-                      //     tooltip: "Refresh Data",
-                      //     isFreeAction: true,
-                      //     onClick: () => handleRefress(),
-                      //   },
-                    ]
-                  }
-                  options={{
-                    actionsColumnIndex: -1,
+                    selectedSupplier &&
+                      from &&
+                      to &&
+                      fetch(url, requestOptions)
+                        .then((resp) => resp.json())
+                        .then((resp) => {
+                          if (resp.data) {
+                            resolve({
+                              data: resp?.data?.data,
+                              page: resp?.data?.current_page - 1,
+                              totalCount: resp?.data?.total,
+                            });
+                            console.log(resp?.data.current_page);
 
-                    pageSize: 12,
-                    pageSizeOptions: [12],
+                            setTotalcount(resp.total_amount);
+                          } else {
+                            resolve({
+                              data: [],
+                              page: 0,
+                              totalCount: 0,
+                            });
+                            setTotalcount(0);
+                          }
+                        });
+                  })
+                }
+                actions={
+                  [
+                    //   {
+                    //     icon: RefreshIcon,
+                    //     tooltip: "Refresh Data",
+                    //     isFreeAction: true,
+                    //     onClick: () => handleRefress(),
+                    //   },
+                  ]
+                }
+                options={{
+                  actionsColumnIndex: -1,
 
-                    padding: "dense",
-                  }}
-                />
-              </Grid>
+                  pageSize: 12,
+                  pageSizeOptions: [12],
+
+                  padding: "dense",
+                }}
+              />
             </CardBody>
           </Card>
         </GridItem>

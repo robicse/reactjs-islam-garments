@@ -13,7 +13,7 @@ import AllApplicationErrorNotification from "../../utils/errorNotification";
 import Productsearch from "../common_component/productsearch";
 import Productstable from "../common_component/Productstable";
 import Calculation from "../common_component/calculation";
-import ProductSelectByDropdown from "../common_component/productSelectByDropdown";
+import ProductSelectByDropdown from "../common_component/productSaleDropdown";
 
 const styles = {
   cardCategoryWhite: {

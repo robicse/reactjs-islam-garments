@@ -13,12 +13,12 @@ import {
   LinearProgress,
   MenuItem,
   Typography,
-  Select,
+  Select, 
 } from "@material-ui/core";
 import { useAsyncEffect } from "use-async-effect";
 import axios from "axios";
 import AllApplicationErrorNotification from "../../utils/errorNotification";
-import Productsearch from "../common_component/productsearch";
+// import Productsearch from "../common_component/productsearch";
 import Productstable from "../common_component/buyProductTable";
 import Calculation from "../common_component/buyProductCalculation";
 import ProductSelectByDropdown from "../common_component/productSelectByDropdown";
@@ -68,15 +68,13 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   
   //initial load state
   const [warehouseList, setWarehouseList] = React.useState([]);
-  const [supplyerList, setSupplyerList] = React.useState([]);
+  const [storeList, setStoreList] = React.useState([]);
 
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
-  const [selectedWarehouse, setSelectedWarehouse] = React.useState(
-    endpoint?.loginWarehouse?.id
-  );
-  const [memoNumner, setMemoNumber] = React.useState('');
-  const [selectedSupplyer, setSelectedSupplyer] = React.useState(null);
+
+  const [selectedWarehouse, setSelectedWarehouse] = React.useState(null);
+  const [selectedStore, setSelecteStore] = React.useState(endpoint?.loginStore?.id);
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   // selected prodict state
@@ -84,21 +82,21 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   // product Type
 
 
-  // load warehouse and supplier
+  //loading when component run
   useAsyncEffect(async (isMounted) => {
     try {
       const warehouseRes = await axios.get(
         endpoint.warehouseActiveListUrl,
         endpoint.headers
       );
-      
-      const supplyerRes = await axios.get(
-        endpoint.supplyerActiveListUrl,
+
+      const storeRes = await axios.get(
+        endpoint.storeActiveListUrl,
         endpoint.headers
       );
 
       setWarehouseList(warehouseRes?.data?.data);
-      setSupplyerList(supplyerRes?.data?.data);
+      setStoreList(storeRes?.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -148,7 +146,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
         bar: { size: "10px" },
       });
     }
-console.log(qty)
+
     setSelectedProduct(
       selectedProductList.map((item) =>
         item.id === prodId ? { ...item, qty: qty } : item
@@ -181,27 +179,23 @@ console.log(qty)
       });
     }
 
-    if (!selectedSupplyer) {
-      return cogoToast.warn("Please Select Supplier", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-    }
+    if (!selectedWarehouse) {
+        return cogoToast.warn("Please Select Warehouse", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+      }
+  
+      if (!selectedStore) {
+        return cogoToast.warn("Please Select Store", {
+          position: "top-right",
+          bar: { size: "10px" },
+        });
+      }
 
-    if (subTotal < 0) {
-      return cogoToast.warn("Please Input Valid Amount", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-    }
-//  console.log(selectedProductList)
-//  const finalP = selectedProductList.map((item)=>{
-//  const singleAmount = item.temptotalPrice / item.temptotalPrice
-//  return item
-//  })
     const body = {
       date: selectedDate,
-      supplier_id: selectedSupplyer,
+      store_id: selectedStore,
       warehouse_id: selectedWarehouse,
       products: JSON.stringify(selectedProductList),
       discount_type: discountType,
@@ -215,7 +209,7 @@ console.log(qty)
       payment_type_id: paymentType,
       less_amount: lessAmount,
       after_less_amount: afterLessAmount,
-      supplier_invoice_no: memoNumner
+     
     };
     // console.log(body);
 
@@ -247,7 +241,7 @@ console.log(qty)
   return (
     <div>
       <GridContainer style={{ padding: "15px", marginTop: 250 }}>
-        <GridItem xs={12} sm={3} md={2}>
+      <GridItem xs={12} sm={3} md={3}>
           <TextField
             size="small"
             id="standard-basic"
@@ -261,31 +255,19 @@ console.log(qty)
 
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
-            fullWidth={true}
             size="small"
+            fullWidth={true}
+            // value={selectedWarehouse}
             id="combo-box-demo"
-            // value={selectedSupplyer}
-            options={supplyerList}
+            options={warehouseList}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
-              <TextField {...params} label="Supplyer" variant="outlined" />
+              <TextField {...params} label="Warehouse" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedSupplyer(v.id)}
+            onChange={(e, v) => setSelectedWarehouse(v.id)}
           />
         </GridItem>
 
-        <GridItem xs={12} sm={3} md={2}>
-        <TextField
-            size="small"
-            id="standard-basic"
-            variant="outlined"
-            type="text"
-            label="Memo Number"
-            value={memoNumner}
-            onChange={(e) => setMemoNumber(e.target.value)}
-            style={{ width: "100%" }}
-          />
-        </GridItem>
         <GridItem
           xs={12}
           sm={3}
@@ -296,33 +278,34 @@ console.log(qty)
         </GridItem>
 
         <GridItem xs={12} sm={3} md={3}>
-          {endpoint?.loginWarehouse?.role == "Super Admin" && (
+          {endpoint?.loginStore?.role == "Super Admin" && (
             <Autocomplete
               size="small"
-              // disabled={endpoint?.loginWarehouse?.role !== 'Super Admin'}
               fullWidth={true}
-              // value={{name: endpoint?.loginWarehouse?.name}}
+              // value={selectedWarehouse}
               id="combo-box-demo"
-              options={warehouseList}
-              getOptionLabel={(option) => option?.name}
+              options={storeList}
+              getOptionLabel={(option) => option.store_name}
               renderInput={(params) => (
-                <TextField {...params} label="Warehouse" variant="outlined" />
+                <TextField {...params} label="Store" variant="outlined" />
               )}
-              onChange={(e, v) => setSelectedWarehouse(v.id)}
+              onChange={(e, v) => setSelecteStore(v.id)}
             />
           )}
 
-          {endpoint?.loginWarehouse?.role !== "Super Admin" && (
+          {endpoint?.loginStore?.role !== "Super Admin" && (
             <TextField
               disabled={true}
               size="small"
               id="standard-basic"
               variant="outlined"
               type="text"
-              value={endpoint?.loginWarehouse?.name}
+              value={endpoint?.loginStore?.name}
               style={{ width: "100%" }}
             />
           )}
+
+
         </GridItem>
 
 
@@ -378,9 +361,7 @@ console.log(qty)
               paymentType={paymentType}
               setPaymentType={setPaymentType}
               lessAmount={lessAmount}
-              setLessAmount={setLessAmount}
               afterLessAmount={afterLessAmount}
-              setAfterLessAmount={setAfterLessAmount}
             />
           )}
         </GridItem>

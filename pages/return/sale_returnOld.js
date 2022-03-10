@@ -1,17 +1,16 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import cogoToast from "cogo-toast";
-import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
+import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import CloseIcon from "@material-ui/icons/Close";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import RefreshIcon from "@material-ui/icons/Refresh";
+import cogoToast from "cogo-toast";
 import Card from "components/Card/Card.js";
+import axios from "axios";
+import { useReactToPrint } from "react-to-print";
 import CardHeader from "components/Card/CardHeader.js";
+import RefreshIcon from "@material-ui/icons/Refresh";
 import CardBody from "components/Card/CardBody.js";
 import Gurd from "../../components/guard/Gurd";
-import axios from "axios";
 import { useRootStore } from "../../models/root-store-provider";
 import { observer } from "mobx-react-lite";
 import MaterialTable from "material-table";
@@ -21,20 +20,21 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
+import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import { Box, Chip, Grid } from "@material-ui/core";
 import { baseUrl } from "../../const/api";
-import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
+// import Snackbar from "@material-ui/core/Snack
+import useStatePromise from "hooks/use-state-promise";
 import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
+import MuiAlert from "@material-ui/lab/Alert";
+// import ProductDetails from "../../components/admin/sale_return/customer_to_van_route/customer_return_details";
 import tableIcons from "components/table_icon/icon";
-import { useReactToPrint } from "react-to-print";
-// custom component
-import StockOutPOS from "components/admin/sale_management/whole_sale/wholesaleRetun";
+// import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
+import ListAltTwoToneIcon from "@material-ui/icons/ListAltTwoTone";
+import { convertFristCharcapital } from "../../helper/getMonthToNumber";
 import Details from "components/admin/common_component/details";
 import StockOutPrint from "components/admin/common_component/invoicePrint";
-// utils component
-import { convertFristCharcapital } from "helper/getMonthToNumber";
-import { dateFormatWithTime } from "helper/dateFormat";
 
 const styles = {
   cardCategoryWhite: {
@@ -71,64 +71,33 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const title = "Sale Return";
+
+
+const title = "Sale Return Customer To Van";
 const subject = "Whole Sale";
 
-const wholesaleList = observer(() => {
+const CustomerReturnList = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
+  const [editData, setEditData] = useState(null);
+  const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [defaultprintData, setDefaultPrintData] = useState(null);
+  const [printData, setPrintData] = useState(null);
+  
+  const endpoint = {
+    productWholeSaleReturnListApi: `${baseUrl}/product_sale_return_list_with_search`,
+    ProductdetailsUrl: `${baseUrl}/product_sale_details`,
+    printUrl: `${baseUrl}/product_sale_details_print`,
+    headers: { headers: { Authorization: "Bearer " + user.details.token } },
+};
+
   const tableRef = React.createRef();
   const handleRefress = () => {
     tableRef.current && tableRef.current.onQueryChange();
   };
 
-  const endpoint = {
-    title: "Stock Out (POS)",
-    subject: "Whole Sale",
-    storeActiveListUrl: `${baseUrl}/store_active_list`,
-    sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
-    unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
-    categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
-    subUnitActiveListUrl: `${baseUrl}/product_sub_unit_list`,
-    wholeSaleCustomerActiveListUrl: `${baseUrl}/whole_sale_customer_active_list`,
-    paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
-    wholeSaleStockOutAPi: `${baseUrl}/product_sale_return_create`,
-    // by dropdown
-    productFintByDeopDownItemAPi: `${baseUrl}/product_search_for_sale_by_store_id`,
-    //by search filed
-    productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
-    productWholeSaleListApi: `${baseUrl}/product_sale_return_list_pagination_with_search`,
-    ProductdetailsUrl: `${baseUrl}/product_sale_return_details`,
-    printUrl: `${baseUrl}/product_sale_return_details_print`,
-    headers: { headers: { Authorization: "Bearer " + user.details.token } },
-    loginStore:{
-      id:user?.details?.store_id,
-      name: user?.details?.store_name,
-      role:user?.role
-    }
-
-  };
-
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [defaultprintData, setDefaultPrintData] = useState(null);
-  const [printData, setPrintData] = useState(null);
-  const [editData, setEditData] = useState(null);
-
-  // const handleClickOpenCreate = () => {
-  //   setOpenCreateModal(true);
-  // };
-  const handleCloseCreate = () => {
-    setOpenCreateModal(false);
-  };
-
-  const handleCloseDetails = () => {
+  const handleCloseDetail = () => {
     setOpenDetailModal(false);
-  };
-
-  const handleDetails = (row) => {
-    setEditData(row);
-    setOpenDetailModal(true);
   };
 
   const columns = [
@@ -136,27 +105,23 @@ const wholesaleList = observer(() => {
       title: "Invoice No",
       render: (rowData) => convertFristCharcapital(rowData.invoice_no),
     },
-    { title: "Store Name", field: "store_name" },
-    { title: "Customer Name", field: "customer_name" },
-
-    { title: "Saller Name", field: "user_name" },
-    {
-      title: "Sale Date Time",
-      field: "date_time",
-      render: (rowData) => dateFormatWithTime(rowData.date_time),
-    },
-    {
-      title: "Grand Total",
-      field: "grand_total_amount",
-    },
   ];
+
+  const handleDetail = (row) => {
+    setEditData({
+      ...row,
+      user_name: row.sales_man_user_name,
+      sale_date: row.product_sale_return_date,
+    });
+    setOpenDetailModal(true);
+  };
 
   const componentRef = React.useRef(null);
 
   const handlePrint = async (row) => {
     try {
       let data = new FormData();
-      data.append("product_sale_return_id", JSON.stringify(row.id));
+      data.append("product_sale_id", JSON.stringify(row.id));
       const result = await axios.post(
         endpoint.printUrl,
         data,
@@ -172,7 +137,7 @@ const wholesaleList = observer(() => {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (printData && defaultprintData) {
       console.log(printData);
       handlePrintInvoice();
@@ -183,29 +148,18 @@ const wholesaleList = observer(() => {
     content: () => componentRef.current,
   });
 
-  // handle create
-  const handleCreate = () => {
-    if (!user.can("Create", subject)) {
-      cogoToast.error("You don't  have Create permission!", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-      return null;
-    }
-    setOpenCreateModal(true);
-  };
- 
   return (
-     <Gurd subject={subject}>
-  
+    <Gurd subject={subject}>
       <div style={{ display: "none" }}>
-        <StockOutPrint
+        {/* <SalesReturnPrint 
           ref={componentRef}
-          defaultprintData={defaultprintData}
-          printData={printData}
-          invoiceTitle="Store Stock Out"
-        />
+          inv={invoiceData}
+          invoiceProduct={invoiceProduct}
+
+          buniessDetails={businessDetails}
+        /> */}
       </div>
+
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -213,25 +167,10 @@ const wholesaleList = observer(() => {
               <Grid container spacing={1}>
                 <Grid container item xs={6} spacing={3} direction="column">
                   <Box p={2}>
-                    <h4 className={classes.cardTitleWhite}>{title} List</h4>
+                    <h4 className={classes.cardTitleWhite}>
+                      Sale Return Invoice List
+                    </h4>
                   </Box>
-                </Grid>
-                <Grid
-                  container
-                  item
-                  xs={6}
-                  spacing={3}
-                  direction="row"
-                  justify="flex-end"
-                  alignItems="center"
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleCreate}
-                  >
-                    Create {title}
-                  </Button>
                 </Grid>
               </Grid>
             </CardHeader>
@@ -239,11 +178,11 @@ const wholesaleList = observer(() => {
               <MaterialTable
                 icons={tableIcons}
                 title="List"
-                columns={columns}
                 tableRef={tableRef}
+                columns={columns}
                 data={(query) =>
                   new Promise((resolve, reject) => {
-                    let url = `${endpoint.productWholeSaleListApi}?`;
+                    let url = `${endpoint.productWholeSaleReturnListApi}?`;
                     //searching
                     if (query.search) {
                       url += `search=${query.search}`;
@@ -251,15 +190,15 @@ const wholesaleList = observer(() => {
 
                     url += `&page=${query.page + 1}`;
                     fetch(url, {
-                      method: "post",
+                      method: "POST",
                       headers: { Authorization: "Bearer " + user.auth_token },
                     })
                       .then((resp) => resp.json())
                       .then((resp) => {
                         resolve({
-                          data: resp.data?.data,
-                          page: resp?.data?.current_page - 1,
-                          totalCount: resp?.data?.total,
+                          data: resp?.data,
+                          page: resp?.meta?.current_page - 1,
+                          totalCount: resp?.meta?.total,
                         });
                       });
                   })
@@ -272,11 +211,11 @@ const wholesaleList = observer(() => {
                         variant="contained"
                         color="primary"
                       >
-                        <PrintTwoToneIcon fontSize="small" color="white" />
+                        <ListAltTwoToneIcon fontSize="small" color="white" />
                       </Button>
                     ),
-                    tooltip: "Print",
-                    onClick: (event, rowData) => handlePrint(rowData),
+                    tooltip: "Show Products",
+                    onClick: (event, rowData) => handleDetail(rowData),
                   },
 
                   {
@@ -286,11 +225,11 @@ const wholesaleList = observer(() => {
                         variant="contained"
                         color="primary"
                       >
-                        <ListAltTwoToneIcon fontSize="small" color="white" />
+                        <PrintTwoToneIcon fontSize="small" color="white" />
                       </Button>
                     ),
-                    tooltip: "Show Products",
-                    onClick: (event, rowData) => handleDetails(rowData),
+                    tooltip: "Print",
+                    onClick: (event, rowData) => handlePrint(rowData, false),
                   },
 
                   {
@@ -302,9 +241,10 @@ const wholesaleList = observer(() => {
                 ]}
                 options={{
                   actionsColumnIndex: -1,
-
+                  search: true,
                   pageSize: 12,
                   pageSizeOptions: [12],
+
                   padding: "dense",
                 }}
               />
@@ -312,62 +252,32 @@ const wholesaleList = observer(() => {
           </Card>
 
           <Dialog
-            fullScreen
-            open={openCreateModal}
-            onClose={handleCloseCreate}
-            TransitionComponent={Transition}
-          >
-            <AppBar style={{ position: "relative" }}>
-              <Toolbar>
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  onClick={handleCloseCreate}
-                  aria-label="close"
-                >
-                  <CloseIcon />
-                </IconButton>
-                <Typography variant="h6" style={{ flex: 1 }}>
-                  Stock Out (POS)
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <StockOutPOS
-              modal={setOpenCreateModal}
-              endpoint={endpoint}
-              handleRefress={handleRefress}
-            />
-          </Dialog>
-
-          <Dialog
             open={openDetailModal}
-            onClose={handleCloseDetails}
+            onClose={handleCloseDetail}
             TransitionComponent={Transition}
             fullWidth={true}
-            maxWidth="lg"
+            maxWidth={true}
           >
             <AppBar style={{ position: "relative" }}>
               <Toolbar>
                 <IconButton
                   edge="start"
                   color="inherit"
-                  onClick={handleCloseDetails}
+                  onClick={handleCloseDetail}
                   aria-label="close"
                 >
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ flex: 1 }}>
-                  Stock Out Product details
+                  Details
                 </Typography>
               </Toolbar>
             </AppBar>
-            <Details
-              modal={setOpenDetailModal}
-              id={editData?.id}
-              endpoint={endpoint}
+            {/* <ProductDetails
+              token={user.auth_token}
+            //   modal={setOpenDetailModal}
               editData={editData}
-              idType="product_sale_return_id"
-            />
+            /> */}
           </Dialog>
         </GridItem>
       </GridContainer>
@@ -375,4 +285,4 @@ const wholesaleList = observer(() => {
   );
 });
 
-export default wholesaleList;
+export default CustomerReturnList;

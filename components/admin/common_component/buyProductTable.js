@@ -77,7 +77,7 @@ const ProductTable = ({
                       onChange={(e) =>
                         handdleQuantityChange(
                           product?.id,
-                          product?.current_stock,
+                       
                           e.target.value
                         )
                       }

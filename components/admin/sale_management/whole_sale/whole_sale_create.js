@@ -12,7 +12,7 @@ import axios from "axios";
 import AllApplicationErrorNotification from "../../../utils/errorNotification";
 import Productsearch from "../../common_component/productsearch";
 import Productstable from "../../common_component/Productstable";
-import Calculation from "../../common_component/calculation";
+import Calculation from "../../common_component/wholeSaleCalculation";
 import ProductSelectByDropdown from "../../common_component/productSaleDropdown";
 
 const styles = {
@@ -41,6 +41,7 @@ const useStyles = makeStyles(styles);
 const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
   console.log(endpoint?.loginStore);
+
 // console.log(endpoint, modal, handleRefress)
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
@@ -52,10 +53,13 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const [paymentType, setPaymentType] = React.useState(1);
   const [discountParcent, setDiscountParcent] = React.useState(0);
   const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
-
+const [checkIssueDate, setCheckIssueDate] = React.useState('');
+const [lessAmount, setLessAmount] = React.useState(0);
+const [afterLessAmount, setAfterLessAmount] = React.useState(0);
   //initial load state
   const [customerList, setCustomerList] = React.useState([]);
   const [storeList, setStoreList] = React.useState([]);
+
 
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
@@ -212,6 +216,10 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
       paid_amount: paid,
       due_amount: due,
       payment_type_id: paymentType,
+      cheque_date: checkIssueDate,
+
+
+
     };
 
     // convert formdata
@@ -360,25 +368,31 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
           <GridItem xs={12} sm={12} md={12}>
             {selectedProductList.length > 0 && (
               <Calculation
-                products={selectedProductList}
-                subTotal={subTotal}
-                setSubTotal={setSubTotal}
-                grand={grand}
-                setGrand={setGrand}
-                paid={paid}
-                setPaid={setPaid}
-                due={due}
-                setDue={setDue}
-                discountAmount={discountAmount}
-                setDiscountAmount={setDiscountAmount}
-                discountType={discountType}
-                setDiscountType={setDiscountType}
-                discountParcent={discountParcent}
-                setDiscountParcent={setDiscountParcent}
-                afterDiscountAmount={afterDiscountAmount}
-                setAfterDiscountAmount={setAfterDiscountAmount}
-                paymentType={paymentType}
-                setPaymentType={setPaymentType}
+              products={selectedProductList}
+              subTotal={subTotal}
+              setSubTotal={setSubTotal}
+              grand={grand}
+              setGrand={setGrand}
+              paid={paid}
+              setPaid={setPaid}
+              due={due}
+              setDue={setDue}
+              discountAmount={discountAmount}
+              setDiscountAmount={setDiscountAmount}
+              discountType={discountType}
+              setDiscountType={setDiscountType}
+              discountParcent={discountParcent}
+              setDiscountParcent={setDiscountParcent}
+              afterDiscountAmount={afterDiscountAmount}
+              setAfterDiscountAmount={setAfterDiscountAmount}
+              paymentType={paymentType}
+              setPaymentType={setPaymentType}
+              lessAmount={lessAmount}
+              setLessAmount={setLessAmount}
+              afterLessAmount={afterLessAmount}
+              setAfterLessAmount={setAfterLessAmount}
+              checkIssueDate={checkIssueDate}
+              setCheckIssueDate={setCheckIssueDate}
               />
             )}
           </GridItem>

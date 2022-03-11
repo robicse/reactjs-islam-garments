@@ -61,6 +61,7 @@ const Create = ({ endpoint, modal, handleRefress }) => {
   const [paymentType, setPaymentType] = React.useState(1);
   const [discountParcent, setDiscountParcent] = React.useState(0);
   const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
+  const [checkIssueDate, setCheckIssueDate] = React.useState('');
 
   const [lessAmount, setLessAmount] = React.useState(0);
   const [afterLessAmount, setAfterLessAmount] = React.useState(0);
@@ -215,7 +216,11 @@ console.log(qty)
       payment_type_id: paymentType,
       less_amount: lessAmount,
       after_less_amount: afterLessAmount,
-      supplier_invoice_no: memoNumner
+      supplier_invoice_no: memoNumner,
+      cheque_date: checkIssueDate,
+
+      
+
     };
     // console.log(body);
 
@@ -381,6 +386,8 @@ console.log(qty)
               setLessAmount={setLessAmount}
               afterLessAmount={afterLessAmount}
               setAfterLessAmount={setAfterLessAmount}
+              checkIssueDate={checkIssueDate}
+              setCheckIssueDate={setCheckIssueDate}
             />
           )}
         </GridItem>

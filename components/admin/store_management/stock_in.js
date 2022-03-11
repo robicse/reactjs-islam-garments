@@ -40,17 +40,17 @@ const styles = {
 const useStyles = makeStyles(styles);
 const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
-  console.log(endpoint?.loginStore);
+  // console.log(endpoint?.loginStore);
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
-  const [paid, setPaid] = React.useState();
-  const [due, setDue] = React.useState(0);
-  const [discountAmount, setDiscountAmount] = React.useState(0);
-  const [grand, setGrand] = React.useState(0);
-  const [discountType, setDiscountType] = React.useState("Flat");
-  const [paymentType, setPaymentType] = React.useState(1);
-  const [discountParcent, setDiscountParcent] = React.useState(0);
-  const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
+  // const [paid, setPaid] = React.useState();
+  // const [due, setDue] = React.useState(0);
+  // const [discountAmount, setDiscountAmount] = React.useState(0);
+  // const [grand, setGrand] = React.useState(0);
+  // const [discountType, setDiscountType] = React.useState("Flat");
+  // const [paymentType, setPaymentType] = React.useState(1);
+  // const [discountParcent, setDiscountParcent] = React.useState(0);
+  // const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
 
   //initial load state
   const [warehouseList, setWarehouseList] = React.useState([]);
@@ -84,6 +84,20 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
       console.log(error);
     }
   }, []);
+
+
+
+  
+ // subtotal calculation
+  React.useEffect(() => {
+    let tempAMount = 0;
+    selectedProductList && selectedProductList.map(
+      (prd) =>
+        (tempAMount = tempAMount + parseFloat(prd.purchase_price) * prd.qty)
+    );
+    setSubTotal(tempAMount);
+  }, [selectedProductList]);
+
 
   // handle product add
   const handleProductAdd = (prod) => {
@@ -123,6 +137,7 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
 
   // handle quantity change
   const handdleQuantityChange = (prodId, current_stock, qty) => {
+    console.log(prodId, current_stock, qty)
     if (qty < 0) {
       return cogoToast.error("Enter Valid QTY", {
         position: "top-right",
@@ -130,12 +145,12 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
       });
     }
 
-    if (qty > current_stock) {
-      return cogoToast.error("Stock Not Match", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-    }
+    // if (qty > current_stock) {
+    //   return cogoToast.error("Stock Not Match", {
+    //     position: "top-right",
+    //     bar: { size: "10px" },
+    //   });
+    // }
     setSelectedProduct(
       selectedProductList.map((item) =>
         item.id === prodId ? { ...item, qty: qty } : item
@@ -197,14 +212,13 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
       miscellaneous_comment: "",
       miscellaneous_charge: "",
       sub_total_amount: subTotal,
-      discount_type: discountType,
-      discount_percent: discountParcent,
-      discount_amount: discountAmount,
-      after_discount_amount: afterDiscountAmount,
-      grand_total_amount: grand,
-      paid_amount: grand,
-      due_amount: due,
-      payment_type_id: paymentType,
+      discount_type: '',
+      discount_percent: '',
+      discount_amount: 0,
+      after_discount_amount: 0,
+      grand_total_amount: subTotal,
+      paid_amount: subTotal,
+      due_amount: 0,
     };
 
     // convert formdata
@@ -347,8 +361,36 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
         </GridItem>
 
 
-        <GridItem xs={12} sm={12} md={12}>
-          {selectedProductList.length > 0 && (
+        {/* <GridItem xs={6} sm={6} md={12}>
+
+
+        </GridItem> */}
+
+        <GridItem
+         xs={12}
+         sm={12}
+         md={12}
+         style={{ textAlign: "right", marginTop: "10px" }}>
+
+          <TextField
+          
+          // style={{backgroundColor:"red",alignContent:"end"}}
+            // style={{textAlign:"right"}}
+            size="small"
+            variant="filled"
+            type="number"
+            label="Sub Total"
+            value={parseFloat(subTotal)}
+            InputProps={{
+              className: classes.multilineColor,
+              readOnly: true,
+            }}
+          />
+     
+
+               
+
+          {/* {selectedProductList.length > 0 && (
             <Calculation
               products={selectedProductList}
               subTotal={subTotal}
@@ -370,7 +412,7 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
               paymentType={paymentType}
               setPaymentType={setPaymentType}
             />
-          )}
+          )} */}
         </GridItem>
 
 
@@ -382,6 +424,8 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
         >
           {selectedProductList.length > 0 && (
             <Button
+            
+              // fullWidth="true"
               size="large"
               variant="contained"
               color="primary"

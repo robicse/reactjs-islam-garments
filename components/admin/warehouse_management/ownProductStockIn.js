@@ -267,30 +267,36 @@ const OwnProductStockIn = ({ endpoint, modal, handleRefress }) => {
           )}
         </GridItem>
 
+        {selectedProductList.length > 0 && (
+           <GridItem
+           xs={12}
+           sm={12}
+           md={12}
+           style={{ textAlign: "right", marginTop: "10px" }}>
+  
+            <TextField
+            
+            // style={{backgroundColor:"red",alignContent:"end"}}
+              // style={{textAlign:"right"}}
+              size="small"
+              variant="filled"
+              type="number"
+              label="Sub Total"
+              value={parseFloat(subTotal)}
+              InputProps={{
+                className: classes.multilineColor,
+                readOnly: true,
+              }}
+            />
+  
+            </GridItem>
+  
+  
 
+         )}
 
-        <GridItem
-         xs={12}
-         sm={12}
-         md={12}
-         style={{ textAlign: "right", marginTop: "10px" }}>
+       
 
-          <TextField
-          
-          // style={{backgroundColor:"red",alignContent:"end"}}
-            // style={{textAlign:"right"}}
-            size="small"
-            variant="filled"
-            type="number"
-            label="Sub Total"
-            value={parseFloat(subTotal)}
-            InputProps={{
-              className: classes.multilineColor,
-              readOnly: true,
-            }}
-          />
-
-          </GridItem>
 
         <GridItem
           xs={12}

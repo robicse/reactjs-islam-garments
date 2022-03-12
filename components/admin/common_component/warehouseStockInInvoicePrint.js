@@ -26,8 +26,7 @@ const InvoicePrint = React.forwardRef(
     console.log(defaultprintData);
     const classes = useStyles();
 
-    const productType = printData?.data[0]?.type
-
+    const productType = printData?.data[0]?.type;
 
     const stockOutRender = (renData) => {
       const clienObj = {
@@ -146,8 +145,13 @@ const InvoicePrint = React.forwardRef(
                 SL#
               </TableCell>
               <TableCell width="65%">Description</TableCell>
-              <TableCell>QTY</TableCell>
               <TableCell>Unit</TableCell>
+              <TableCell>QTY</TableCell>
+        
+              <TableCell>Price</TableCell>
+              <TableCell>Total(TK)</TableCell>
+            
+              
             </TableRow>
           </TableHead>
 
@@ -165,105 +169,174 @@ const InvoicePrint = React.forwardRef(
                   >
                     {prd.product_name?.slice(0, 55)}
                   </TableCell>
-                  <TableCell align="right">{prd.qty}</TableCell>
                   <TableCell align="right">{prd.product_unit_name}</TableCell>
+                  <TableCell align="right">{prd.qty}</TableCell>
+                  <TableCell align="right">{prd.purchase_price}</TableCell>
+                  <TableCell align="right">
+                    {prd.purchase_price * prd.qty}
+                  </TableCell>
                 </TableRow>
               ))}
+
+<TableRow>
+              <TableCell align="right" colSpan={5}>
+                Sub Total
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.grand_total_amount}
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       );
     };
 
-
     const buyProductTable = (renData) => {
-        return (
-            <Table
-            aria-label="simple table"
-            size="small"
-            className={classes.table}
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ padding: "1px", textAlign: "center" }}>
-                  SL#
-                </TableCell>
-                <TableCell width="65%">Description</TableCell>
-                <TableCell>QTY</TableCell>
-                <TableCell>Unit</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Total</TableCell>
-              </TableRow>
-            </TableHead>
+      return (
+        <Table aria-label="simple table" size="small" className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ padding: "1px", textAlign: "center" }}>
+                SL#
+              </TableCell>
+              <TableCell width="65%">Description</TableCell>
+              <TableCell>Unit</TableCell>
+              <TableCell>QTY</TableCell>
+        
+              <TableCell>Price</TableCell>
+              <TableCell>Total(TK)</TableCell>
+            </TableRow>
+          </TableHead>
 
-            <TableBody>
-              {!!printData?.data &&
-                printData?.data?.map((prd, index) => (
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      style={{ fontSize: "12px" }}
-                    >
-                      {prd.product_name?.slice(0, 55)}
-                    </TableCell>
-                    <TableCell align="right">{prd.qty}</TableCell>
-                    <TableCell align="right">
-                      {prd.product_unit_name}
-                    </TableCell>
-                    <TableCell align="right">
-                      {prd.purchase_price}
-                    </TableCell>
-                    <TableCell align="right">
-                      {prd.purchase_price * prd.qty}
-                    </TableCell>
-                  </TableRow>
-                ))}
+          <TableBody>
+            {!!printData?.data &&
+              printData?.data?.map((prd, index) => (
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    style={{ fontSize: "12px" }}
+                  >
+                    {prd.product_name?.slice(0, 55)}
+                  </TableCell>
+                  <TableCell align="right">{prd.product_unit_name}</TableCell>
+                  <TableCell align="right">{prd.qty}</TableCell>
+               
+                  <TableCell align="right">{prd.purchase_price}</TableCell>
+                  <TableCell align="right">
+                    {prd.purchase_price * prd.qty}
+                  </TableCell>
+                </TableRow>
+              ))}
 
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Sub Total
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.grand_total_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Discount
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.discount_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                After Discount
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.after_discount_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Less Amount
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.less_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                After Less
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.after_less_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+               Grand Total
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.grand_total_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Payment Type
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.payment_type}
+              </TableCell>
+            </TableRow>
+
+            {defaultprintData.payment_type == "Cheque" && (
               <TableRow>
                 <TableCell align="right" colSpan={5}>
-                  Sub Total
+                  Cheque Approved Status
                 </TableCell>
                 <TableCell align="right">
-                  {defaultprintData?.grand_total_amount}
+                  {defaultprintData?.cheque_approved_status}
                 </TableCell>
               </TableRow>
+            )}
 
+            {defaultprintData.payment_type == "Cheque" && (
               <TableRow>
                 <TableCell align="right" colSpan={5}>
-                  Payment Type
+                  Cheque Date
                 </TableCell>
                 <TableCell align="right">
-                  {defaultprintData?.payment_type}
+                  {defaultprintData?.cheque_date}
                 </TableCell>
               </TableRow>
+            )}
 
-              <TableRow>
-                <TableCell align="right" colSpan={5}>
-                 Paid
-                </TableCell>
-                <TableCell align="right">
-                  {defaultprintData?.paid_amount}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="right" colSpan={5}>
-               Due
-                </TableCell>
-                <TableCell align="right">
-                  {defaultprintData?.due_amount}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        );
-      };
-  
-
-
-
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Paid
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.paid_amount}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Due
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.due_amount}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      );
+    };
 
     return (
       <div ref={ref}>
@@ -325,24 +398,20 @@ const InvoicePrint = React.forwardRef(
             </Box>
 
             <Box mt={4}>
+              {productType == "Own" && ownProductTable()}
 
-           {productType== 'Own' && (ownProductTable())}
-
-           {productType== 'Buy' && (buyProductTable())}
-
+              {productType == "Buy" && buyProductTable()}
             </Box>
 
-
-            {productType== 'Buy' && (
-                   <Box mt={2}>
-                   <Typography variants="body1" style={{ fontWeight: "bold" }}>
-                     In Words:
-                     {curencyNumbertoWordTwo(defaultprintData?.grand_total_amount)}.
-                   </Typography>
-                 </Box>
-
+            {productType == "Buy" && (
+              <Box mt={2}>
+                <Typography variants="body1" style={{ fontWeight: "bold" }}>
+                  In Words:
+                  {curencyNumbertoWordTwo(defaultprintData?.grand_total_amount)}
+                  .
+                </Typography>
+              </Box>
             )}
-         
 
             <Box mt={10}>
               <Grid

@@ -246,17 +246,110 @@ console.log(defaultprintData)
                       </TableRow>
                     ))}
 
-                  <TableRow>
-                    <TableCell align="right" colSpan={5}>
-                      Sub Total
-                    </TableCell>
-                    <TableCell align="right">
-                      {defaultprintData?.grand_total_amount}
-                    </TableCell>
-                  </TableRow>
+<TableRow>
+              <TableCell align="right" colSpan={5}>
+                Sub Total
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.grand_total_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Discount
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.discount_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                After Discount
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.after_discount_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Less Amount
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.less_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                After Less
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.after_less_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+               Grand Total
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.grand_total_amount}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Payment Type
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.payment_type}
+              </TableCell>
+            </TableRow>
+
+            {defaultprintData.payment_type == "Cheque" && (
+              <TableRow>
+                <TableCell align="right" colSpan={5}>
+                  Cheque Approved Status
+                </TableCell>
+                <TableCell align="right">
+                  {defaultprintData?.cheque_approved_status}
+                </TableCell>
+              </TableRow>
+            )}
+
+            {defaultprintData.payment_type == "Cheque" && (
+              <TableRow>
+                <TableCell align="right" colSpan={5}>
+                  Cheque Date
+                </TableCell>
+                <TableCell align="right">
+                  {defaultprintData?.cheque_date}
+                </TableCell>
+              </TableRow>
+            )}
+
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Paid
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.paid_amount}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell align="right" colSpan={5}>
+                Due
+              </TableCell>
+              <TableCell align="right">
+                {defaultprintData?.due_amount}
+              </TableCell>
+            </TableRow>
 
 
-
+ 
 
                 </TableBody>
               </Table>

@@ -361,59 +361,34 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
         </GridItem>
 
 
-        {/* <GridItem xs={6} sm={6} md={12}>
-
-
-        </GridItem> */}
+        
+        {selectedProductList.length > 0 && (
 
         <GridItem
-         xs={12}
-         sm={12}
-         md={12}
-         style={{ textAlign: "right", marginTop: "10px" }}>
+        xs={12}
+        sm={12}
+        md={12}
+        style={{ textAlign: "right", marginTop: "10px" }}>
 
-          <TextField
-          
-          // style={{backgroundColor:"red",alignContent:"end"}}
-            // style={{textAlign:"right"}}
-            size="small"
-            variant="filled"
-            type="number"
-            label="Sub Total"
-            value={parseFloat(subTotal)}
-            InputProps={{
-              className: classes.multilineColor,
-              readOnly: true,
-            }}
-          />
-     
+         <TextField
+         
+         // style={{backgroundColor:"red",alignContent:"end"}}
+           // style={{textAlign:"right"}}
+           size="small"
+           variant="filled"
+           type="number"
+           label="Sub Total"
+           value={parseFloat(subTotal)}
+           InputProps={{
+             className: classes.multilineColor,
+             readOnly: true,
+           }}
+         />
 
-               
+       </GridItem>
 
-          {/* {selectedProductList.length > 0 && (
-            <Calculation
-              products={selectedProductList}
-              subTotal={subTotal}
-              setSubTotal={setSubTotal}
-              grand={grand}
-              setGrand={setGrand}
-              paid={paid}
-              setPaid={setPaid}
-              due={due}
-              setDue={setDue}
-              discountAmount={discountAmount}
-              setDiscountAmount={setDiscountAmount}
-              discountType={discountType}
-              setDiscountType={setDiscountType}
-              discountParcent={discountParcent}
-              setDiscountParcent={setDiscountParcent}
-              afterDiscountAmount={afterDiscountAmount}
-              setAfterDiscountAmount={setAfterDiscountAmount}
-              paymentType={paymentType}
-              setPaymentType={setPaymentType}
-            />
-          )} */}
-        </GridItem>
+        )}
+
 
 
         <GridItem

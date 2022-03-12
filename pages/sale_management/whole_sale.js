@@ -31,7 +31,7 @@ import { useReactToPrint } from "react-to-print";
 // custom component
 import StockOutPOS from "components/admin/sale_management/whole_sale/whole_sale_create";
 import Details from "components/admin/common_component/details";
-import StockOutPrint from "components/admin/common_component/invoicePrint";
+import StockOutPrint from "components/admin/common_component/salePrint"; 
 // utils component
 import { convertFristCharcapital } from "helper/getMonthToNumber";
 import { dateFormatWithTime } from "helper/dateFormat";

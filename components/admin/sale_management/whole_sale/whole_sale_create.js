@@ -79,7 +79,9 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedCustomer, setselectedCustomer] = React.useState(null);
-  const [selectedCustomerShop, setselectedCustomerShop] = React.useState(null);
+  const [selectedCustomerData, setSelectedCustomerData] = React.useState(null);
+
+  console.log(selectedCustomerData)
   const [selectedStore, setSelecteStore] = React.useState(
     endpoint?.loginStore?.id
   );
@@ -88,7 +90,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   // selected prodict state
   const [selectedProductList, setSelectedProduct] = React.useState([]);
 
-  console.log(paymentType);
+
   //loading when component run
   useAsyncEffect(async (isMounted) => {
     try {
@@ -325,18 +327,27 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
           <Autocomplete
             size="small"
             fullWidth={true}
-            // value={selectedWarehouse}
+            selectOnFocus={true}
+            // value={selectedCustomerData?.name}
             id="combo-box-demo"
             options={customerList}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
               <TextField {...params} label="Customer" variant="outlined" />
             )}
-            onChange={(e, v) =>{
+            onChange={(e,v) =>{
+              // console.log(v)
+              if(!v){
+                setselectedCustomer(null)
+                setSelectedCustomerData({shop_name: 'Not Found'})
+               return null
+              }
               setselectedCustomer(v?.id)
-              setselectedCustomerShop(v?.shop_name)
+              setSelectedCustomerData(v)
             } 
+           
           }
+     
           />
            <AddIcon onClick={handleClickOpenCreate} style={{marginTop:"0px",backgroundColor: "gray", fontSize:"39px",borderRadius:"5px",marginLeft:"3px"}}/>
             </div>
@@ -349,7 +360,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
               id="standard-basic"
               variant="outlined"
               type="text"
-              value={selectedCustomerShop}
+              value={selectedCustomerData?.shop_name}
               // style={{ width: "100%" }}
             />
    </GridItem>
@@ -476,6 +487,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
             <CreateWholesaleCustomer
               headers={ endpoint.headers}
               modal={setOpenCreateModal}
+              setSelectedCustomerData={setSelectedCustomerData}
               setselectedCustomer={setselectedCustomer}
               // mutate={handleRefress}
               // endpoint={endpoint}

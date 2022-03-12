@@ -38,7 +38,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
  
-function CreateParty({ token, modal,setselectedCustomer}) {
+function CreateParty({ headers, modal,setSelectedCustomerData,setselectedCustomer}) {
   const classes = useStyles();
 
 
@@ -87,6 +87,7 @@ function CreateParty({ token, modal,setselectedCustomer}) {
                     email: values.email,
                     address: values.address,
                     status: values.status,
+                    initial_due:0,
                     // nid_front: nidFront,
                     // nid_back: nidBack,
                     // image: image,
@@ -108,14 +109,17 @@ function CreateParty({ token, modal,setselectedCustomer}) {
                     Axios.post(
                       `${baseUrl}/whole_customer_create`, 
                         formData, 
-                        token
+                        headers
                     )
                     
                     .then((res) => {
                       console.log(res);
+                      console.log(res.data?.data)
+                     setSelectedCustomerData(res.data?.data)
+                     setselectedCustomer(res.data?.data?.id)
                       setSubmitting(false);
                       modal(false);
-                    //   setselectedCustomer()
+                 
                       cogoToast.success('Create Success',{position: 'top-right', bar:{size: '10px'}})
                     })
                     .catch(function (error) {

@@ -7,10 +7,21 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import cogoToast from "cogo-toast";
 import { Button, Typography } from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add';
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Dialog from "@material-ui/core/Dialog";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import Slide from "@material-ui/core/Slide";
 import { useAsyncEffect } from "use-async-effect";
 import axios from "axios";
 import AllApplicationErrorNotification from "../../../utils/errorNotification";
 // import Productsearch from "../../common_component/productsearch";
+import CreateWholesaleCustomer from "components/admin/whole_sale_customer/quickCustomerCreate";
 import Productstable from "../../common_component/Productstable";
 import Calculation from "../../common_component/wholeSaleCalculation";
 import ProductSelectByDropdown from "../../common_component/productSaleDropdown";
@@ -38,10 +49,15 @@ const styles = {
   },
 };
 const useStyles = makeStyles(styles);
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
 const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
   console.log(endpoint?.loginStore);
-
+  const [openCreateModal, setOpenCreateModal] = React.useState(false);
   // console.log(endpoint, modal, handleRefress)
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
@@ -63,6 +79,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedCustomer, setselectedCustomer] = React.useState(null);
+  const [selectedCustomerShop, setselectedCustomerShop] = React.useState(null);
   const [selectedStore, setSelecteStore] = React.useState(
     endpoint?.loginStore?.id
   );
@@ -93,7 +110,13 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   }, []);
 
 
-  
+  const handleClickOpenCreate = () => {
+    setOpenCreateModal(true);
+  };
+  const handleCloseCreate = () => {
+    setOpenCreateModal(false);
+  };
+
 
   // handle product add
   const handleProductAdd = (prod) => {
@@ -291,13 +314,14 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
         <GridItem
           xs={12}
           sm={3}
-          md={2}
+          md={1}
           style={{ textAlign: "center", marginTop: "10px" }}
         >
           <ArrowForwardIcon size="large" />
         </GridItem>
 
         <GridItem xs={12} sm={3} md={3}>
+          <div style={{display:"flex"}}>
           <Autocomplete
             size="small"
             fullWidth={true}
@@ -308,10 +332,27 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
             renderInput={(params) => (
               <TextField {...params} label="Customer" variant="outlined" />
             )}
-            onChange={(e, v) => setselectedCustomer(v.id)}
+            onChange={(e, v) =>{
+              setselectedCustomer(v?.id)
+              setselectedCustomerShop(v?.shop_name)
+            } 
+          }
           />
+           <AddIcon onClick={handleClickOpenCreate} style={{marginTop:"0px",backgroundColor: "gray", fontSize:"39px",borderRadius:"5px",marginLeft:"3px"}}/>
+            </div>
+          
         </GridItem>
-
+        <GridItem xs={12} sm={3} md={2}>
+        <TextField
+              disabled={true}
+              size="small"
+              id="standard-basic"
+              variant="outlined"
+              type="text"
+              value={selectedCustomerShop}
+              // style={{ width: "100%" }}
+            />
+   </GridItem>
         {/* <GridItem xs={12} sm={3} md={3}>
           <div style={{ marginTop: "-8px" }}>
             <Productsearch
@@ -408,7 +449,40 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
             </Button>
           )}
         </GridItem>
-      </GridContainer>
+      </GridContainer> 
+
+
+      <Dialog
+            // fullScreen
+            open={openCreateModal}
+            onClose={handleCloseCreate}
+            TransitionComponent={Transition}
+          >
+            <AppBar style={{ position: "relative" }}>
+              <Toolbar>
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  onClick={handleCloseCreate}
+                  aria-label="close"
+                >
+                  <CloseIcon />
+                </IconButton>
+                <Typography variant="h6" style={{ flex: 1 }}>
+                  Create Wholesale Customer
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <CreateWholesaleCustomer
+              headers={ endpoint.headers}
+              modal={setOpenCreateModal}
+              setselectedCustomer={setselectedCustomer}
+              // mutate={handleRefress}
+              // endpoint={endpoint}
+            />
+          </Dialog>
+
+
     </div>
   );
 };

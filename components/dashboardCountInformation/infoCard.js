@@ -1,18 +1,19 @@
 import React from "react";
 import Link from 'next/link'
-import Card from '@material-ui/core/Card';
+import { Card, Grid} from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
 
-const Card = (
-  ({ link, backgroundColor,Icon,title,value}) => {
-  
+const InFoCard = (
+  ({ link, backgroundColor,iconData,title,value}) => {
 
     return (
-        <Link href={link}>
-                <Card className={classes.root} style={{ cursor: 'pointer', backgroundColor:backgroundColor }}>
-                <Grid container direction="row">
+      <div>
+
+<Link href={link}>
+               <Card  style={{ cursor: 'pointer', backgroundColor:backgroundColor }}>
+               <Grid container direction="row">
                   <Grid item xs={8} md={8}>
                     <CardContent>
                       <Typography
@@ -37,13 +38,15 @@ const Card = (
                     direction="row"
                     justify="flex-start"
                     alignItems="center">
-                    <Icon/>
+                    {iconData}
                   </Grid>
                 </Grid>
               </Card>
-              </Link>
+              </Link> 
+        </div>
+   
     );
   }
 )
 
-export default TableList;
+export default InFoCard;

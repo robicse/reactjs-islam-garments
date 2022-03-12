@@ -40,7 +40,7 @@ const styles = {
 const useStyles = makeStyles(styles);
 const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
-  console.log(endpoint?.loginStore);
+  //console.log(endpoint?.loginStore);
 // console.log(endpoint, modal, handleRefress)
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
@@ -356,7 +356,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
           )}
         </GridItem>
 
-      
+{/*       
           <GridItem xs={12} sm={12} md={12}>
             {selectedProductList.length > 0 && (
               <Calculation
@@ -381,7 +381,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
                 setPaymentType={setPaymentType}
               />
             )}
-          </GridItem>
+          </GridItem> */}
    
 
           <GridItem

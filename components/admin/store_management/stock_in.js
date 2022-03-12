@@ -12,7 +12,7 @@ import axios from "axios";
 import AllApplicationErrorNotification from "../../utils/errorNotification";
 import Productsearch from "../common_component/productsearch";
 import Productstable from "../common_component/Productstable";
-import Calculation from "../common_component/calculation";
+// import Calculation from "../common_component/calculation";
 import ProductSelectByDropdown from "../common_component/productSaleDropdown";
 
 const styles = {
@@ -392,21 +392,20 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
 
 
         <GridItem
-          xs={12}
-          sm={12}
+          xs={4}
+          sm={4}
           md={12}
           style={{ textAlign: "right", marginTop: "5px" }}
         >
           {selectedProductList.length > 0 && (
             <Button
-            
+            //  style={{width:"100px"}}
               // fullWidth="true"
               size="large"
               variant="contained"
               color="primary"
               onClick={handleFinalStockInCreate}
-            // className={classes.button}
-            // endIcon={<Icon>send</Icon>}
+  
             >
               {submitButtonLoading ? "loading" : "Submit"}
             </Button>

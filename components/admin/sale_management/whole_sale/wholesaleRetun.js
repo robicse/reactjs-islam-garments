@@ -209,7 +209,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
       after_discount_amount: afterDiscountAmount,
       sub_total_amount: subTotal,
       grand_total_amount: grand,
-      paid_amount: paid,
+      paid_amount: paid ? paid : 0,
       due_amount: due,
       payment_type_id: paymentType,
     };

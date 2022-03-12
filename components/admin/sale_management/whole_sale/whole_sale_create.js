@@ -10,7 +10,7 @@ import { Button, Typography } from "@material-ui/core";
 import { useAsyncEffect } from "use-async-effect";
 import axios from "axios";
 import AllApplicationErrorNotification from "../../../utils/errorNotification";
-import Productsearch from "../../common_component/productsearch";
+// import Productsearch from "../../common_component/productsearch";
 import Productstable from "../../common_component/Productstable";
 import Calculation from "../../common_component/wholeSaleCalculation";
 import ProductSelectByDropdown from "../../common_component/productSaleDropdown";
@@ -42,7 +42,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
   console.log(endpoint?.loginStore);
 
-// console.log(endpoint, modal, handleRefress)
+  // console.log(endpoint, modal, handleRefress)
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
   const [paid, setPaid] = React.useState();
@@ -53,25 +53,25 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const [paymentType, setPaymentType] = React.useState(1);
   const [discountParcent, setDiscountParcent] = React.useState(0);
   const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
-const [checkIssueDate, setCheckIssueDate] = React.useState('');
-const [lessAmount, setLessAmount] = React.useState(0);
-const [afterLessAmount, setAfterLessAmount] = React.useState(0);
+  const [checkIssueDate, setCheckIssueDate] = React.useState("");
+  const [lessAmount, setLessAmount] = React.useState(0);
+  const [afterLessAmount, setAfterLessAmount] = React.useState(0);
   //initial load state
   const [customerList, setCustomerList] = React.useState([]);
   const [storeList, setStoreList] = React.useState([]);
 
-
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedCustomer, setselectedCustomer] = React.useState(null);
-  const [selectedStore, setSelecteStore] = React.useState(endpoint?.loginStore?.id);
+  const [selectedStore, setSelecteStore] = React.useState(
+    endpoint?.loginStore?.id
+  );
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   // selected prodict state
   const [selectedProductList, setSelectedProduct] = React.useState([]);
 
-
-  console.log(paymentType)
+  console.log(paymentType);
   //loading when component run
   useAsyncEffect(async (isMounted) => {
     try {
@@ -91,6 +91,9 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
       console.log(error);
     }
   }, []);
+
+
+  
 
   // handle product add
   const handleProductAdd = (prod) => {
@@ -129,7 +132,7 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
   };
 
   // handle quantity change
-  const handdleQuantityChange = (prodId,current_stock, qty) => {
+  const handdleQuantityChange = (prodId, current_stock, qty) => {
     if (qty < 0) {
       return cogoToast.error("Enter Valid QTY", {
         position: "top-right",
@@ -144,8 +147,6 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
       });
     }
 
-  
-
     setSelectedProduct(
       selectedProductList.map((item) =>
         item.id === prodId ? { ...item, qty: qty } : item
@@ -153,21 +154,20 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
     );
   };
 
-
-    // handle handdlePriceChange change
-    const handdlePriceChange = (prodId, price) => {
-      if (price < 0) {
-        return cogoToast.error("Enter Valid price", {
-          position: "top-right",
-          bar: { size: "10px" },
-        });
-      }
-      setSelectedProduct(
-        selectedProductList.map((item) =>
-          item.id === prodId ? { ...item, purchase_price: price } : item
-        )
-      );
-    };
+  // handle handdlePriceChange change
+  const handdlePriceChange = (prodId, price) => {
+    if (price < 0) {
+      return cogoToast.error("Enter Valid price", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
+    setSelectedProduct(
+      selectedProductList.map((item) =>
+        item.id === prodId ? { ...item, purchase_price: price } : item
+      )
+    );
+  };
 
   // handle sitock in create
   const handleFinalStockInCreate = async () => {
@@ -213,13 +213,12 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
       after_discount_amount: afterDiscountAmount,
       sub_total_amount: subTotal,
       grand_total_amount: grand,
-      paid_amount: paid,
+      paid_amount: paid ? paid : 0,
       due_amount: due,
       payment_type_id: paymentType,
       cheque_date: checkIssueDate,
-
-
-
+      less_amount: lessAmount,
+      after_less_amount: afterLessAmount,
     };
 
     // convert formdata
@@ -235,12 +234,11 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
       const submitResponse = await axios.post(
         endpoint.wholeSaleStockOutAPi,
         data,
-        endpoint.headers,
+        endpoint.headers
       );
       handleRefress();
       setButtonLoading(false);
       modal(false);
-     
     } catch (error) {
       AllApplicationErrorNotification(error);
       setButtonLoading(false);
@@ -288,10 +286,7 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
               style={{ width: "100%" }}
             />
           )}
-
-
         </GridItem>
-
 
         <GridItem
           xs={12}
@@ -302,7 +297,6 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
           <ArrowForwardIcon size="large" />
         </GridItem>
 
-    
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
             size="small"
@@ -332,15 +326,14 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
           </div>
         </GridItem> */}
 
-
         <GridItem xs={12} sm={12} md={12}>
           <div style={{ marginTop: "15px" }}>
             <ProductSelectByDropdown
               endpoint={endpoint}
               handleProductAdd={handleProductAdd}
               idRequired={true}
-            //   warehouseIdRequired={false}
-            //   storeidRequired={true}
+              //   warehouseIdRequired={false}
+              //   storeidRequired={true}
               searchBody={{ store_id: selectedStore }}
             />
           </div>
@@ -364,10 +357,9 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
           )}
         </GridItem>
 
-      
-          <GridItem xs={12} sm={12} md={12}>
-            {selectedProductList.length > 0 && (
-              <Calculation
+        <GridItem xs={12} sm={12} md={12}>
+          {selectedProductList.length > 0 && (
+            <Calculation
               products={selectedProductList}
               subTotal={subTotal}
               setSubTotal={setSubTotal}
@@ -393,12 +385,11 @@ const [afterLessAmount, setAfterLessAmount] = React.useState(0);
               setAfterLessAmount={setAfterLessAmount}
               checkIssueDate={checkIssueDate}
               setCheckIssueDate={setCheckIssueDate}
-              />
-            )}
-          </GridItem>
-   
+            />
+          )}
+        </GridItem>
 
-          <GridItem
+        <GridItem
           xs={12}
           sm={12}
           md={12}

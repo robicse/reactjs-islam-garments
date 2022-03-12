@@ -12,9 +12,9 @@ import axios from "axios";
 import AllApplicationErrorNotification from "../../utils/errorNotification";
 import Productsearch from "../common_component/productsearch";
 import Productstable from "../common_component/Productstable";
-import Calculation from "../common_component/calculation";
-import ProductSelectByDropdown from "../common_component/productSelectByDropdown";
-
+// import Calculation from "../common_component/calculation";
+import ProductSelectByDropdown from "../common_component/productSaleDropdown";
+ 
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -43,14 +43,14 @@ const StockRequestCom = ({ endpoint, modal, handleRefress }) => {
 console.log(endpoint, modal, handleRefress)
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
-  const [paid, setPaid] = React.useState();
-  const [due, setDue] = React.useState(0);
-  const [discountAmount, setDiscountAmount] = React.useState(0);
-  const [grand, setGrand] = React.useState(0);
-  const [discountType, setDiscountType] = React.useState("Flat");
-  const [paymentType, setPaymentType] = React.useState(1);
-  const [discountParcent, setDiscountParcent] = React.useState(0);
-  const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
+  // const [paid, setPaid] = React.useState();
+  // const [due, setDue] = React.useState(0);
+  // const [discountAmount, setDiscountAmount] = React.useState(0);
+  // const [grand, setGrand] = React.useState(0);
+  // const [discountType, setDiscountType] = React.useState("Flat");
+  // const [paymentType, setPaymentType] = React.useState(1);
+  // const [discountParcent, setDiscountParcent] = React.useState(0);
+  // const [afterDiscountAmount, setAfterDiscountAmount] = React.useState(0);
 
   //initial load state
   const [warehouseList, setWarehouseList] = React.useState([]);
@@ -84,6 +84,17 @@ console.log(endpoint, modal, handleRefress)
       console.log(error);
     }
   }, []);
+
+   // subtotal calculation
+   React.useEffect(() => {
+    let tempAMount = 0;
+    selectedProductList && selectedProductList.map(
+      (prd) =>
+        (tempAMount = tempAMount + parseFloat(prd.purchase_price) * prd.qty)
+    );
+    setSubTotal(tempAMount);
+  }, [selectedProductList]);
+
 
   // handle product add
   const handleProductAdd = (prod) => {
@@ -193,17 +204,16 @@ console.log(endpoint, modal, handleRefress)
       request_to_warehouse_id: selectedWarehouse,
       request_from_store_id: selectedStore,
       products: JSON.stringify(selectedProductList),
-      miscellaneous_comment: "",
+         miscellaneous_comment: "",
       miscellaneous_charge: "",
       sub_total_amount: subTotal,
-      discount_type: discountType,
-      discount_percent: discountParcent,
-      discount_amount: discountAmount,
-      after_discount_amount: afterDiscountAmount,
-      grand_total_amount: grand,
-      paid_amount: grand,
-      due_amount: due,
-      payment_type_id: 1,
+      discount_type: '',
+      discount_percent: '',
+      discount_amount: 0,
+      after_discount_amount: 0,
+      grand_total_amount: subTotal,
+      paid_amount: subTotal,
+      due_amount: 0,
     };
 
     // convert formdata
@@ -270,24 +280,23 @@ console.log(endpoint, modal, handleRefress)
           <ArrowForwardIcon size="large" />
         </GridItem>
 
-
         <GridItem xs={12} sm={3} md={3}>
-        {endpoint?.loginStore?.role == "Super Admin" && (
-           <Autocomplete
-            size="small"
-            fullWidth={true}
-            // value={selectedWarehouse}
-            id="combo-box-demo"
-            options={storeList}
-            getOptionLabel={(option) => option.store_name}
-            renderInput={(params) => (
-              <TextField {...params} label="Store" variant="outlined" />
-            )}
-            onChange={(e, v) => setSelecteStore(v.id)}
-          />
-        )}
+          {endpoint?.loginStore?.role == "Super Admin" && (
+            <Autocomplete
+              size="small"
+              fullWidth={true}
+              // value={selectedWarehouse}
+              id="combo-box-demo"
+              options={storeList}
+              getOptionLabel={(option) => option.store_name}
+              renderInput={(params) => (
+                <TextField {...params} label="Store" variant="outlined" />
+              )}
+              onChange={(e, v) => setSelecteStore(v.id)}
+            />
+          )}
 
-{endpoint?.loginStore?.role !== "Super Admin" && (
+          {endpoint?.loginStore?.role !== "Super Admin" && (
             <TextField
               disabled={true}
               size="small"
@@ -298,10 +307,8 @@ console.log(endpoint, modal, handleRefress)
               style={{ width: "100%" }}
             />
           )}
-
-
         </GridItem>
-{/* 
+        {/* 
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
             size="small"
@@ -329,7 +336,6 @@ console.log(endpoint, modal, handleRefress)
             />
           </div>
         </GridItem> */}
-
 
         <GridItem xs={12} sm={12} md={12}>
           <div style={{ marginTop: "15px" }}>
@@ -361,7 +367,30 @@ console.log(endpoint, modal, handleRefress)
           )}
         </GridItem>
 
-      
+        {selectedProductList.length > 0 && (
+          <GridItem
+            xs={12}
+            sm={12}
+            md={12}
+            style={{ textAlign: "right", marginTop: "10px" }}
+          >
+            <TextField
+              // style={{backgroundColor:"red",alignContent:"end"}}
+              // style={{textAlign:"right"}}
+              size="small"
+              variant="filled"
+              type="number"
+              label="Sub Total"
+              value={parseFloat(subTotal)}
+              InputProps={{
+                className: classes.multilineColor,
+                readOnly: true,
+              }}
+            />
+          </GridItem>
+        )}
+
+        {/*       
           <GridItem xs={12} sm={12} md={12}>
             {selectedProductList.length > 0 && (
               <Calculation
@@ -386,23 +415,23 @@ console.log(endpoint, modal, handleRefress)
                 setPaymentType={setPaymentType}
               />
             )}
-          </GridItem>
-   
+          </GridItem> */}
 
-          <GridItem
-          xs={12}
-          sm={12}
+<GridItem
+          xs={4}
+          sm={4}
           md={12}
           style={{ textAlign: "right", marginTop: "5px" }}
         >
           {selectedProductList.length > 0 && (
             <Button
+               style={{width:"225px"}}
+              // fullWidth="true"
               size="large"
               variant="contained"
               color="primary"
               onClick={handleFinalStockInCreate}
-              // className={classes.button}
-              // endIcon={<Icon>send</Icon>}
+  
             >
               {submitButtonLoading ? "loading" : "Submit"}
             </Button>

@@ -182,8 +182,9 @@ const ClaculationComponent = ({
   };
 
   const clearHandle = () => {
-    console.log("jjj");
+
     setPaid(0);
+    setDue(0)
     setLessAmount(0);
     setDiscountPoint(0);
     setDiscountAmount(0);
@@ -385,7 +386,7 @@ const ClaculationComponent = ({
             type="date"
             // label="paid Amount"
             name="dispoint"
-            helperText="Please set paid amount"
+            helperText="Issue Date"
             value={checkIssueDate}
             onChange={(e) => setCheckIssueDate(e.target.value)}
             InputProps={{
@@ -397,27 +398,6 @@ const ClaculationComponent = ({
           }
 
 
-     {/* {
-       paymentType == '2' && (
-        <GridItem xs={12} sm={3} md={2}  style={{marginTop:"-40px",backgroundColor:"red"}} >
-        <TextField
-          style={{marginTop:"-50px",backgroundColor:"green"}}
-          size="small"
-          helperText="Check Issue Date"
-          margin="normal"
-          variant="outlined"
-          size="small"
-          id="standard-basic"
-          variant="outlined"
-          type="date"
-            value={checkIssueDate}
-          onChange={(e) => setCheckIssueDate(e.target.value)}
-          style={{ width: "100%" }}
-        />
-      </GridItem>
-
-       )
-     }    */}
 
 
         <Grid item xs={2}>
@@ -441,7 +421,7 @@ const ClaculationComponent = ({
 
         
 
-        <Grid item xs={2}>
+        <Grid item xs={2} style={{marginTop:"50px"}}>
           <Button
             style={{ marginTop: "-86px", width: "100%", height: "40px" }}
             variant="contained"

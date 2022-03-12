@@ -86,7 +86,7 @@ const StoreStockOutComponent = observer(() => {
 
 
 const endpoint = {
-  title:"Store Stock",
+  title:"Store Stock In",
   subject: "Store Stock",
   warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
   supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
@@ -346,7 +346,7 @@ const endpoint = {
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ flex: 1 }}>
-                  Stock In
+                  {endpoint.title}
                 </Typography>
               </Toolbar>
             </AppBar>

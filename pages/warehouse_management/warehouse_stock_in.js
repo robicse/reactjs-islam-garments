@@ -361,7 +361,7 @@ const WarehouseStockIn = observer(() => {
                   <CloseIcon />
                 </IconButton>
                 <Typography variant="h6" style={{ flex: 1 }}>
-                  Stock In
+                  Warehouse Stock In
                 </Typography>
               </Toolbar>
             </AppBar>

@@ -18,7 +18,7 @@ import {
 import { useAsyncEffect } from "use-async-effect";
 import axios from "axios";
 import AllApplicationErrorNotification from "../../utils/errorNotification";
-import Productstable from "../common_component/ownProductTable";
+import Productstable from "../common_component/Productstable";
 import ProductSelectByDropdown from "../common_component/productSelectByDropdown";
 
 const styles = {
@@ -78,6 +78,19 @@ const OwnProductStockIn = ({ endpoint, modal, handleRefress }) => {
       console.log(error);
     }
   }, []);
+
+
+   // subtotal calculation
+   React.useEffect(() => {
+    let tempAMount = 0;
+    selectedProductList && selectedProductList.map(
+      (prd) =>
+        (tempAMount = tempAMount + parseFloat(prd.purchase_price) * prd.qty)
+    );
+    setSubTotal(tempAMount);
+  }, [selectedProductList]);
+
+
 
   // handle product add
   const handleProductAdd = (prod) => {
@@ -147,9 +160,9 @@ const OwnProductStockIn = ({ endpoint, modal, handleRefress }) => {
       discount_percent: 0,
       discount_amount: 0,
       after_discount_amount: 0,
-      sub_total_amount: 0,
-      grand_total_amount: 0,
-      paid_amount: 0,
+      sub_total_amount: subTotal,
+      grand_total_amount: subTotal,
+      paid_amount: subTotal,
       due_amount: 0,
       payment_type_id: "",
     };
@@ -253,6 +266,31 @@ const OwnProductStockIn = ({ endpoint, modal, handleRefress }) => {
             />
           )}
         </GridItem>
+
+
+
+        <GridItem
+         xs={12}
+         sm={12}
+         md={12}
+         style={{ textAlign: "right", marginTop: "10px" }}>
+
+          <TextField
+          
+          // style={{backgroundColor:"red",alignContent:"end"}}
+            // style={{textAlign:"right"}}
+            size="small"
+            variant="filled"
+            type="number"
+            label="Sub Total"
+            value={parseFloat(subTotal)}
+            InputProps={{
+              className: classes.multilineColor,
+              readOnly: true,
+            }}
+          />
+
+          </GridItem>
 
         <GridItem
           xs={12}

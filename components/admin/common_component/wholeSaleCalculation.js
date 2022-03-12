@@ -88,17 +88,19 @@ const ClaculationComponent = ({
   let tempAMount = 0;
 
   useEffect(() => {
+
     products.map(
-      (prd) => (tempAMount = tempAMount + parseFloat(prd.temptotalPrice))
+      (prd) =>
+        (tempAMount = tempAMount + parseFloat(prd.purchase_price) * prd.qty)
     );
+
     // set subtotal
     setSubTotal(tempAMount);
     // discount
     const afterDisCal = tempAMount - parseFloat(discountAmount);
     setAfterDiscountAmount(afterDisCal);
     //less
-    let l = parseFloat(lessAmount) || 0
-    const aftrlesCal = afterDisCal - l;
+    const aftrlesCal = afterDisCal - parseFloat(lessAmount);
     setGrand(aftrlesCal);
     //set paid
     const p = paid || 0;
@@ -112,7 +114,6 @@ const ClaculationComponent = ({
     discountAmount,
     lessAmount,
     setPaid,
-    lessAmount,
     setLessAmount,
     setDiscountAmount,
   ]);

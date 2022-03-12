@@ -94,7 +94,8 @@ const ClaculationComponent = ({
     const afterDisCal = tempAMount - parseFloat(discountAmount);
     setAfterDiscountAmount(afterDisCal);
     //less
-    const aftrlesCal = afterDisCal - parseFloat(lessAmount);
+    let l = parseFloat(lessAmount) || 0
+    const aftrlesCal = afterDisCal - l;
     setGrand(aftrlesCal);
     //set paid
     const p = paid || 0;
@@ -107,6 +108,7 @@ const ClaculationComponent = ({
     afterDiscountAmount,
     discountAmount,
     setPaid,
+    lessAmount,
     setLessAmount,
     setDiscountAmount,
   ]);

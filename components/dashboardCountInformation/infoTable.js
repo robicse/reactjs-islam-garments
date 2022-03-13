@@ -203,10 +203,10 @@ const TableList = observer(
                     </TableCell>
 
                     <TableCell align="right">
-                      {totalForWarehouse.warehouse_today_cash_purchase_amount}
+                      {totalForWarehouse?.warehouse_today_cash_purchase_amount}
                     </TableCell>
                     <TableCell align="right">
-                      {totalForWarehouse.warehouse_total_cash_purchase_amount}
+                      {totalForWarehouse?.warehouse_total_cash_purchase_amount}
                     </TableCell>
 
                     <TableCell align="right">
@@ -324,10 +324,10 @@ const TableList = observer(
                     </TableCell>
 
                     <TableCell align="right">
-                          {totalForStore.store_today_cash_sale_amount}
+                          {totalForStore?.store_today_cash_sale_amount}
                         </TableCell>
                         <TableCell align="right">
-                          {totalForStore.store_total_cash_sale_amount}
+                          {totalForStore?.store_total_cash_sale_amount}
                         </TableCell>
 
                     <TableCell align="right">

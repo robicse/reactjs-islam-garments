@@ -80,6 +80,7 @@ const Dashboard = observer(() => {
   //   setTotalStaff(totalStaffRes)
   // },[])
 
+
   const fetcher = (url, auth) =>
     axios
       .get(url, {
@@ -163,6 +164,35 @@ const Dashboard = observer(() => {
                 backgroundColor="#4875B4"
                 title="Total Purchase"
                 value={data?.response?.totalPurchase}
+              />
+            </Grid>
+
+
+            <Grid item xs={12} md={3}>
+              <InfoCard
+                link="/warehouse_management/warehouse_stock_in"
+                iconData={
+                  <ShoppingCartRoundedIcon
+                    style={{ color: "#ffffff", fontSize: 65 }}
+                  />
+                }
+                backgroundColor="#E55353"
+                title="Today Cash Pur"
+                value={data?.response?.todayCashPurchase}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={3}>
+              <InfoCard
+                link="/warehouse_management/warehouse_stock_in"
+                iconData={
+                  <ShoppingCartRoundedIcon
+                    style={{ color: "#ffffff", fontSize: 65 }}
+                  />
+                }
+                backgroundColor="#4875B4"
+                title="Total Cash Pur"
+                value={data?.response?.totalCashPurchase}
               />
             </Grid>
 
@@ -259,6 +289,21 @@ const Dashboard = observer(() => {
                 value={data?.response?.totalCashSale}
               />
             </Grid>
+
+
+            <Grid item xs={12} md={3}>
+              <InfoCard
+                link="/sale_management/whole_sale"
+                iconData={
+                  <MoneyIcon style={{ color: "#ffffff", fontSize: 65 }} />
+                }
+                backgroundColor="#156969"
+                title="Today Cash Sale"
+                value={data?.response?.todayCashSale}
+              />
+            </Grid>
+
+
           </Grid>
         )}
 

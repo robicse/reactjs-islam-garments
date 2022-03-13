@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 });
 const InvoicePrint = React.forwardRef(
   ({ defaultprintData, printData, invoiceTitle }, ref) => {
-console.log(defaultprintData)
+    console.log(defaultprintData);
     const classes = useStyles();
 
     const stockOutRender = (renData) => {
@@ -42,7 +42,7 @@ console.log(defaultprintData)
         <Grid container>
           <GridItem xs="6" style={{ textAlign: "start" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              invoice To
+              Invoice To
             </Typography>
             <Typography variant="body2">{clienObj?.name}</Typography>
             <Typography variant="body2">{clienObj?.phone}</Typography>
@@ -51,7 +51,7 @@ console.log(defaultprintData)
 
           <GridItem xs="6" style={{ textAlign: "end" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-            Invoice From
+              Invoice From
             </Typography>
 
             <Typography variant="body2">{adminObj?.name}</Typography>
@@ -64,9 +64,9 @@ console.log(defaultprintData)
 
     const stockInRender = (renData) => {
       const clienObj = {
-        name: renData?.stores_name,
-        phone: renData?.stores_phone,
-        address: renData?.stores_address,
+        name: renData?.store_name,
+        phone: renData?.store_phone,
+        address: renData?.store_address,
       };
 
       const adminObj = {
@@ -78,7 +78,7 @@ console.log(defaultprintData)
         <Grid container>
           <GridItem xs="6" style={{ textAlign: "start" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              invoice To
+              Invoice To
             </Typography>
             <Typography variant="body2">{clienObj?.name}</Typography>
             <Typography variant="body2">{clienObj?.phone}</Typography>
@@ -87,7 +87,7 @@ console.log(defaultprintData)
 
           <GridItem xs="6" style={{ textAlign: "end" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-            Invoice From
+              Invoice From
             </Typography>
 
             <Typography variant="body2">{adminObj?.name}</Typography>
@@ -114,7 +114,7 @@ console.log(defaultprintData)
         <Grid container>
           <GridItem xs="6" style={{ textAlign: "start" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              invoice To
+              Invoice To
             </Typography>
             <Typography variant="body2">{clienObj?.name}</Typography>
             <Typography variant="body2">{clienObj?.phone}</Typography>
@@ -134,9 +134,6 @@ console.log(defaultprintData)
       );
     };
 
-
-
- 
     return (
       <div ref={ref}>
         {defaultprintData && (
@@ -172,8 +169,7 @@ console.log(defaultprintData)
             >
               <GridItem xs="6">
                 <Typography style={{ fontWeight: "bold" }} align="left">
-                  date:{" "}
-                  {dateFormatWithoutTime(defaultprintData.date_time)}
+                  Date: {dateFormatWithoutTime(defaultprintData.date_time)}
                 </Typography>
               </GridItem>
               <GridItem xs="6">
@@ -193,11 +189,8 @@ console.log(defaultprintData)
               {invoiceTitle == "Warehouse Stock In" &&
                 stockInWarehouseRender(printData?.info)}
 
-
-{invoiceTitle == "Store Stock Request" &&
+              {invoiceTitle == "Store Stock Request" &&
                 stockInRender(printData?.info)}
-
-
             </Box>
 
             <Box mt={4}>
@@ -211,11 +204,13 @@ console.log(defaultprintData)
                     <TableCell style={{ padding: "1px", textAlign: "center" }}>
                       SL#
                     </TableCell>
-                    <TableCell width="65%">Description</TableCell>
-                    <TableCell>QTY</TableCell>
-                    <TableCell>Unit</TableCell>
-                    <TableCell>Price</TableCell>
-                    <TableCell>Total</TableCell>
+              
+                    <TableCell>Category</TableCell>
+              <TableCell>Unit</TableCell>
+              <TableCell>Product Size</TableCell>
+              <TableCell>QTY</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Total(TK)</TableCell>
                   </TableRow>
                 </TableHead>
 
@@ -226,38 +221,26 @@ console.log(defaultprintData)
                         <TableCell component="th" scope="row">
                           {index + 1}
                         </TableCell>
-                        <TableCell
-                          component="th"
-                          scope="row"
-                          style={{ fontSize: "12px" }}
-                        >
-                          {prd.product_name?.slice(0, 55)}
-                        </TableCell>
-                        <TableCell align="right">{prd.qty}</TableCell>
-                        <TableCell align="right">
-                          {prd.product_unit_name}
-                        </TableCell>
-                        <TableCell align="right">
-                          {prd.purchase_price}
-                        </TableCell>
-                        <TableCell align="right">
-                          {prd.purchase_price * prd.qty}
-                        </TableCell>
+                     
+                  <TableCell>{prd.product_category_name}</TableCell>
+                  <TableCell>{prd.product_unit_name}</TableCell>
+                  <TableCell>{prd.product_size_name}</TableCell>
+                  <TableCell align="right">{prd.qty}</TableCell>
+                  <TableCell align="right">{prd.purchase_price}</TableCell>
+                  <TableCell align="right">
+                    {prd.purchase_price * prd.qty}
+                  </TableCell>
                       </TableRow>
                     ))}
 
                   <TableRow>
-                    <TableCell align="right" colSpan={5}>
+                    <TableCell align="right" colSpan={6}>
                       Sub Total
                     </TableCell>
                     <TableCell align="right">
                       {defaultprintData?.grand_total_amount}
                     </TableCell>
                   </TableRow>
-
-
-
-
                 </TableBody>
               </Table>
             </Box>

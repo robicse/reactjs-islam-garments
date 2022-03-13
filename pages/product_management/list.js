@@ -112,7 +112,7 @@ const TableList = observer(() => {
     subunitUrl: `${baseUrl}/product_sub_unit_list`,
     categoryUrl: `${baseUrl}/product_category_list`,
     productDuplicateSearchUrl: `${baseUrl}/check_exists_product`,
-    headers: { headers: { Authorization: "Bearer " + user.details.token } },
+    headers: { headers: { Authorization: "Bearer " + user?.details?.token } },
   };
   const handleRefress = () => {
     tableRef.current && tableRef.current.onQueryChange();

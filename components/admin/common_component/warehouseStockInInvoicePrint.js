@@ -7,7 +7,7 @@ import TableRow from "@material-ui/core/TableRow";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { curencyNumbertoWordTwo } from "helper/currenctConvert";
-import {
+import { 
   convertFristCharcapital,
   dateFormatIssueDate,
 } from "helper/getMonthToNumber";
@@ -25,7 +25,7 @@ const InvoicePrint = React.forwardRef(
   ({ defaultprintData, printData, invoiceTitle }, ref) => {
     console.log(defaultprintData);
     const classes = useStyles();
-
+    console.log(printData?.data);
     const productType = printData?.data[0]?.type;
 
     const stockOutRender = (renData) => {
@@ -44,7 +44,7 @@ const InvoicePrint = React.forwardRef(
         <Grid container>
           <GridItem xs="6" style={{ textAlign: "start" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              invoice To
+              Invoice To
             </Typography>
             <Typography variant="body2">{clienObj?.name}</Typography>
             <Typography variant="body2">{clienObj?.phone}</Typography>
@@ -116,7 +116,7 @@ const InvoicePrint = React.forwardRef(
         <Grid container>
           <GridItem xs="6" style={{ textAlign: "start" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              invoice To
+              Invoice To
             </Typography>
             <Typography variant="body2">{clienObj?.name}</Typography>
             <Typography variant="body2">{clienObj?.phone}</Typography>
@@ -144,14 +144,12 @@ const InvoicePrint = React.forwardRef(
               <TableCell style={{ padding: "1px", textAlign: "center" }}>
                 SL#
               </TableCell>
-              <TableCell width="65%">Description</TableCell>
+              <TableCell>Category</TableCell>
               <TableCell>Unit</TableCell>
+              <TableCell>Product Size</TableCell>
               <TableCell>QTY</TableCell>
-        
               <TableCell>Price</TableCell>
               <TableCell>Total(TK)</TableCell>
-            
-              
             </TableRow>
           </TableHead>
 
@@ -162,14 +160,10 @@ const InvoicePrint = React.forwardRef(
                   <TableCell component="th" scope="row">
                     {index + 1}
                   </TableCell>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    style={{ fontSize: "12px" }}
-                  >
-                    {prd.product_name?.slice(0, 55)}
-                  </TableCell>
-                  <TableCell align="right">{prd.product_unit_name}</TableCell>
+
+                  <TableCell>{prd.product_category_name}</TableCell>
+                  <TableCell>{prd.product_unit_name}</TableCell>
+                  <TableCell>{prd.product_size_name}</TableCell>
                   <TableCell align="right">{prd.qty}</TableCell>
                   <TableCell align="right">{prd.purchase_price}</TableCell>
                   <TableCell align="right">
@@ -178,8 +172,8 @@ const InvoicePrint = React.forwardRef(
                 </TableRow>
               ))}
 
-<TableRow>
-              <TableCell align="right" colSpan={5}>
+            <TableRow>
+              <TableCell align="right" colSpan={6}>
                 Sub Total
               </TableCell>
               <TableCell align="right">
@@ -199,10 +193,11 @@ const InvoicePrint = React.forwardRef(
               <TableCell style={{ padding: "1px", textAlign: "center" }}>
                 SL#
               </TableCell>
-              <TableCell width="65%">Description</TableCell>
+              <TableCell>Category</TableCell>
+              <TableCell>Unit</TableCell>
               <TableCell>Unit</TableCell>
               <TableCell>QTY</TableCell>
-        
+
               <TableCell>Price</TableCell>
               <TableCell>Total(TK)</TableCell>
             </TableRow>
@@ -215,16 +210,11 @@ const InvoicePrint = React.forwardRef(
                   <TableCell component="th" scope="row">
                     {index + 1}
                   </TableCell>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    style={{ fontSize: "12px" }}
-                  >
-                    {prd.product_name?.slice(0, 55)}
-                  </TableCell>
+                  <TableCell>{prd.product_category_name}</TableCell>
+                  <TableCell>{prd.product_unit_name}</TableCell>
                   <TableCell align="right">{prd.product_unit_name}</TableCell>
                   <TableCell align="right">{prd.qty}</TableCell>
-               
+
                   <TableCell align="right">{prd.purchase_price}</TableCell>
                   <TableCell align="right">
                     {prd.purchase_price * prd.qty}
@@ -233,7 +223,7 @@ const InvoicePrint = React.forwardRef(
               ))}
 
             <TableRow>
-              <TableCell align="right" colSpan={5}>
+              <TableCell align="right" colSpan={6}>
                 Sub Total
               </TableCell>
               <TableCell align="right">
@@ -242,7 +232,7 @@ const InvoicePrint = React.forwardRef(
             </TableRow>
 
             <TableRow>
-              <TableCell align="right" colSpan={5}>
+              <TableCell align="right" colSpan={6}>
                 Discount
               </TableCell>
               <TableCell align="right">
@@ -251,7 +241,7 @@ const InvoicePrint = React.forwardRef(
             </TableRow>
 
             <TableRow>
-              <TableCell align="right" colSpan={5}>
+              <TableCell align="right" colSpan={6}>
                 After Discount
               </TableCell>
               <TableCell align="right">
@@ -260,7 +250,7 @@ const InvoicePrint = React.forwardRef(
             </TableRow>
 
             <TableRow>
-              <TableCell align="right" colSpan={5}>
+              <TableCell align="right" colSpan={6}>
                 Less Amount
               </TableCell>
               <TableCell align="right">
@@ -269,7 +259,7 @@ const InvoicePrint = React.forwardRef(
             </TableRow>
 
             <TableRow>
-              <TableCell align="right" colSpan={5}>
+              <TableCell align="right" colSpan={6}>
                 After Less
               </TableCell>
               <TableCell align="right">
@@ -278,8 +268,8 @@ const InvoicePrint = React.forwardRef(
             </TableRow>
 
             <TableRow>
-              <TableCell align="right" colSpan={5}>
-               Grand Total
+              <TableCell align="right" colSpan={6}>
+                Grand Total
               </TableCell>
               <TableCell align="right">
                 {defaultprintData?.grand_total_amount}
@@ -287,7 +277,7 @@ const InvoicePrint = React.forwardRef(
             </TableRow>
 
             <TableRow>
-              <TableCell align="right" colSpan={5}>
+              <TableCell align="right" colSpan={6}>
                 Payment Type
               </TableCell>
               <TableCell align="right">
@@ -297,7 +287,7 @@ const InvoicePrint = React.forwardRef(
 
             {defaultprintData.payment_type == "Cheque" && (
               <TableRow>
-                <TableCell align="right" colSpan={5}>
+                <TableCell align="right" colSpan={6}>
                   Cheque Approved Status
                 </TableCell>
                 <TableCell align="right">
@@ -308,7 +298,7 @@ const InvoicePrint = React.forwardRef(
 
             {defaultprintData.payment_type == "Cheque" && (
               <TableRow>
-                <TableCell align="right" colSpan={5}>
+                <TableCell align="right" colSpan={6}>
                   Cheque Date
                 </TableCell>
                 <TableCell align="right">
@@ -318,7 +308,7 @@ const InvoicePrint = React.forwardRef(
             )}
 
             <TableRow>
-              <TableCell align="right" colSpan={5}>
+              <TableCell align="right" colSpan={6}>
                 Paid
               </TableCell>
               <TableCell align="right">
@@ -326,7 +316,7 @@ const InvoicePrint = React.forwardRef(
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell align="right" colSpan={5}>
+              <TableCell align="right" colSpan={6}>
                 Due
               </TableCell>
               <TableCell align="right">
@@ -373,7 +363,7 @@ const InvoicePrint = React.forwardRef(
             >
               <GridItem xs="6">
                 <Typography style={{ fontWeight: "bold" }} align="left">
-                  date: {dateFormatWithoutTime(defaultprintData.date_time)}
+                  Date: {dateFormatWithoutTime(defaultprintData.date_time)}
                 </Typography>
               </GridItem>
               <GridItem xs="6">
@@ -381,6 +371,14 @@ const InvoicePrint = React.forwardRef(
                   Invoice No:{" "}
                   {convertFristCharcapital(defaultprintData?.invoice_no)}
                 </Typography>
+                {defaultprintData?.supplier_invoice_no && (
+                  <Typography style={{ fontWeight: "bold" }} align="right">
+                    Supplier Invoice No:{" "}
+                    {convertFristCharcapital(
+                      defaultprintData?.supplier_invoice_no
+                    )}
+                  </Typography>
+                )}
               </GridItem>
             </Grid>
 

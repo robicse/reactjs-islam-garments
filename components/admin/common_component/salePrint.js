@@ -42,7 +42,7 @@ const InvoicePrint = React.forwardRef(
         <Grid container>
           <GridItem xs="6" style={{ textAlign: "start" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              invoice To
+              Invoice To
             </Typography>
             <Typography variant="body2">{clienObj?.name}</Typography>
             <Typography variant="body2">{clienObj?.phone}</Typography>
@@ -78,7 +78,7 @@ const InvoicePrint = React.forwardRef(
         <Grid container>
           <GridItem xs="6" style={{ textAlign: "start" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              invoice To
+              Invoice To
             </Typography>
             <Typography variant="body2">{clienObj?.name}</Typography>
             <Typography variant="body2">{clienObj?.phone}</Typography>
@@ -114,7 +114,7 @@ const InvoicePrint = React.forwardRef(
         <Grid container>
           <GridItem xs="6" style={{ textAlign: "start" }}>
             <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              invoice To
+              Invoice To
             </Typography>
             <Typography variant="body2">{clienObj?.name}</Typography>
             <Typography variant="body2">{clienObj?.phone}</Typography>
@@ -172,7 +172,7 @@ const InvoicePrint = React.forwardRef(
             >
               <GridItem xs="6">
                 <Typography style={{ fontWeight: "bold" }} align="left">
-                  date:{" "}
+                  Date:{" "}
                   {dateFormatWithoutTime(defaultprintData.date_time)}
                 </Typography>
               </GridItem>

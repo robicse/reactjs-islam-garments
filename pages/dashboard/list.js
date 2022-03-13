@@ -90,541 +90,183 @@ const Dashboard = observer(() => {
   const url = `${baseUrl}/dashboard_count_information`;
   const { data, error, mutate } = useSWR([url, user.auth_token], fetcher);
   // console.log('data',data)
-  // console.log('dataresponse',data?.response?.storeTotalCurrentStock)
-  console.log("role", user?.details?.role);
+  console.log("dataresponse", data?.response);
+  // console.log("role", user?.details?.role);
+
+  console.log(data);
 
   const router = useRouter();
 
   return (
     <div>
       <Gurd subject={subject}>
-        <Grid container direction="row" justify="space-evenly" spacing={3}>
-          {user?.details?.role === "Super Admin" ? (
+        {user?.details?.role === "Super Admin" && (
+          <Grid container direction="row" justify="space-evenly" spacing={3}>
             <Grid item xs={12} md={3}>
-              <Link href="/supplier/list">
-                <Card
-                  className={classes.root}
-                  style={{ cursor: "pointer", backgroundColor: "#3399FF" }}
-                >
-                  <Grid container direction="row">
-                    <Grid item xs={8} md={8}>
-                      <CardContent>
-                        <Typography
-                          component="h5"
-                          variant="h5"
-                          style={{ fontWeight: "700", color: "#ffffff" }}
-                        >
-                          {data?.response?.totalSupplier}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          style={{ color: "#ffffff" }}
-                        >
-                          Total Supplier
-                        </Typography>
-                      </CardContent>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      md={4}
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                    >
-                      <PeopleIcon style={{ color: "#ffffff", fontSize: 65 }} />
-                    </Grid>
-                  </Grid>
-                </Card>
-              </Link>
+              <InfoCard
+                link="/supplier/list"
+                iconData={
+                  <PeopleIcon style={{ color: "#ffffff", fontSize: 65 }} />
+                }
+                backgroundColor="#3399FF"
+                title="Total Supplier"
+                value={data?.response?.totalSupplier}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Link href="/whole_sale_customer/list">
-                <Card
-                  className={classes.root}
-                  style={{ cursor: "pointer", backgroundColor: "#321FDB" }}
-                >
-                  <Grid container direction="row">
-                    <Grid item xs={8} md={8}>
-                      <CardContent>
-                        <Typography
-                          component="h5"
-                          variant="h5"
-                          style={{ fontWeight: "700", color: "#ffffff" }}
-                        >
-                          {data?.response?.totalCustomer}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          style={{ color: "#ffffff" }}
-                        >
-                          Total Customer
-                        </Typography>
-                      </CardContent>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      md={4}
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                    >
-                      <PeopleIcon style={{ color: "#ffffff", fontSize: 65 }} />
-                    </Grid>
-                  </Grid>
-                </Card>
-              </Link>
+              <InfoCard
+                link="/whole_sale_customer/list"
+                iconData={
+                  <PeopleIcon style={{ color: "#ffffff", fontSize: 65 }} />
+                }
+                backgroundColor="#321FDB"
+                title="Total Customer"
+                value={data?.response?.totalCustomer}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Card
-                className={classes.root}
-                style={{ cursor: "pointer", backgroundColor: "#F9B115" }}
-              >
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: "700", color: "#ffffff" }}
-                      >
-                        {data?.response?.totalStaff}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: "#ffffff" }}
-                      >
-                        Total Staff
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center"
-                  >
-                    <PeopleIcon style={{ color: "#ffffff", fontSize: 65 }} />
-                  </Grid>
-                </Grid>
-              </Card>
+              <InfoCard
+                link="/whole_sale_customer/list"
+                iconData={
+                  <PeopleIcon style={{ color: "#ffffff", fontSize: 65 }} />
+                }
+                backgroundColor="#F9B115"
+                title="Total Staff"
+                value={data?.response?.totalStaff}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Link href="/warehouse_management/warehouse_stock_in">
-                <Card
-                  className={classes.root}
-                  style={{ cursor: "pointer", backgroundColor: "#E55353" }}
-                >
-                  <Grid container direction="row">
-                    <Grid item xs={8} md={8}>
-                      <CardContent>
-                        <Typography
-                          component="h5"
-                          variant="h5"
-                          style={{ fontWeight: "700", color: "#ffffff" }}
-                        >
-                          {data?.response?.todayPurchase}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          style={{ color: "#ffffff" }}
-                        >
-                          Today Purchase
-                        </Typography>
-                      </CardContent>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      md={4}
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                    >
-                      <ShoppingCartRoundedIcon
-                        style={{ color: "#ffffff", fontSize: 65 }}
-                      />
-                    </Grid>
-                  </Grid>
-                </Card>
-              </Link>
+              <InfoCard
+                link="/warehouse_management/warehouse_stock_in"
+                iconData={
+                  <ShoppingCartRoundedIcon
+                    style={{ color: "#ffffff", fontSize: 65 }}
+                  />
+                }
+                backgroundColor="#E55353"
+                title="Today Purchase"
+                value={data?.response?.todayPurchase}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Link href="/warehouse_management/warehouse_stock_in">
-                <Card
-                  className={classes.root}
-                  style={{ cursor: "pointer", backgroundColor: "#4875B4" }}
-                >
-                  <Grid container direction="row">
-                    <Grid item xs={8} md={8}>
-                      <CardContent>
-                        <Typography
-                          component="h5"
-                          variant="h5"
-                          style={{ fontWeight: "700", color: "#ffffff" }}
-                        >
-                          {data?.response?.totalPurchase}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          style={{ color: "#ffffff" }}
-                        >
-                          Total Purchase
-                        </Typography>
-                      </CardContent>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      md={4}
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                    >
-                      <ShoppingCartRoundedIcon
-                        style={{ color: "#ffffff", fontSize: 65 }}
-                      />
-                    </Grid>
-                  </Grid>
-                </Card>
-              </Link>
+              <InfoCard
+                link="/warehouse_management/warehouse_stock_in"
+                iconData={
+                  <ShoppingCartRoundedIcon
+                    style={{ color: "#ffffff", fontSize: 65 }}
+                  />
+                }
+                backgroundColor="#4875B4"
+                title="Total Purchase"
+                value={data?.response?.totalPurchase}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Link href="/warehouse_management/warehouse_stock">
-                <Card
-                  className={classes.root}
-                  style={{ cursor: "pointer", backgroundColor: "#2EB85C" }}
-                >
-                  <Grid container direction="row">
-                    <Grid item xs={8} md={8}>
-                      <CardContent>
-                        <Typography
-                          component="h5"
-                          variant="h5"
-                          style={{ fontWeight: "700", color: "#ffffff" }}
-                        >
-                          {data?.response?.warehouseTotalCurrentStock}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          style={{ color: "#ffffff" }}
-                        >
-                          WH Stock
-                        </Typography>
-                      </CardContent>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      md={4}
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                    >
-                      <ShoppingCartRoundedIcon
-                        style={{ color: "#ffffff", fontSize: 65 }}
-                      />
-                    </Grid>
-                  </Grid>
-                </Card>
-              </Link>
+              <InfoCard
+                link="/warehouse_management/warehouse_stock"
+                iconData={
+                  <ShoppingCartRoundedIcon
+                    style={{ color: "#ffffff", fontSize: 65 }}
+                  />
+                }
+                backgroundColor="#2EB85C"
+                title=" WH Stock"
+                value={data?.response?.warehouseTotalCurrentStock}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Card
-                className={classes.root}
-                style={{ cursor: "pointer", backgroundColor: "#84995c" }}
-              >
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: "700", color: "#ffffff" }}
-                      >
-                        {data?.response?.warehouseTotalCurrentStockAmount}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: "#ffffff" }}
-                      >
-                        WH Amount
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center"
-                  >
-                    <ShoppingCartRoundedIcon
-                      style={{ color: "#ffffff", fontSize: 65 }}
-                    />
-                  </Grid>
-                </Grid>
-              </Card>
+              <InfoCard
+                link="/warehouse_management/warehouse_stock"
+                iconData={
+                  <ShoppingCartRoundedIcon
+                    style={{ color: "#ffffff", fontSize: 65 }}
+                  />
+                }
+                backgroundColor="#84995c"
+                title="WH Amount"
+                value={data?.response?.warehouseTotalCurrentStockAmount}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Link href="/store_management/store_stock">
-                <Card
-                  className={classes.root}
-                  style={{ cursor: "pointer", backgroundColor: "#55bac9" }}
-                >
-                  <Grid container direction="row">
-                    <Grid item xs={8} md={8}>
-                      <CardContent>
-                        <Typography
-                          component="h5"
-                          variant="h5"
-                          style={{ fontWeight: "700", color: "#ffffff" }}
-                        >
-                          {data?.response?.storeTotalCurrentStock}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          style={{ color: "#ffffff" }}
-                        >
-                          Store Stock
-                        </Typography>
-                      </CardContent>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      md={4}
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                    >
-                      <ShoppingCartRoundedIcon
-                        style={{ color: "#ffffff", fontSize: 65 }}
-                      />
-                    </Grid>
-                  </Grid>
-                </Card>
-              </Link>
+              <InfoCard
+                link="/store_management/store_stock"
+                iconData={
+                  <ShoppingCartRoundedIcon
+                    style={{ color: "#ffffff", fontSize: 65 }}
+                  />
+                }
+                backgroundColor="#55bac9"
+                title="Store Stock"
+                value={data?.response?.storeTotalCurrentStock}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Card
-                className={classes.root}
-                style={{ cursor: "pointer", backgroundColor: "#967963" }}
-              >
-                <Grid container direction="row">
-                  <Grid item xs={8} md={8}>
-                    <CardContent>
-                      <Typography
-                        component="h5"
-                        variant="h5"
-                        style={{ fontWeight: "700", color: "#ffffff" }}
-                      >
-                        {data?.response?.storeTotalCurrentStockAmount}
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="textSecondary"
-                        style={{ color: "#ffffff" }}
-                      >
-                        Store Amount
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    md={4}
-                    container
-                    direction="row"
-                    justify="flex-start"
-                    alignItems="center"
-                  >
-                    <ShoppingCartRoundedIcon
-                      style={{ color: "#ffffff", fontSize: 65 }}
-                    />
-                  </Grid>
-                </Grid>
-              </Card>
+              <InfoCard
+                link="/store_management/store_stock"
+                iconData={
+                  <ShoppingCartRoundedIcon
+                    style={{ color: "#ffffff", fontSize: 65 }}
+                  />
+                }
+                backgroundColor="#967963"
+                title="Store Amount"
+                value={data?.response?.storeTotalCurrentStockAmount}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Link href="/sale_management/whole_sale">
-                <Card
-                  className={classes.root}
-                  style={{ cursor: "pointer", backgroundColor: "#266915" }}
-                >
-                  <Grid container direction="row">
-                    <Grid item xs={8} md={8}>
-                      <CardContent>
-                        <Typography
-                          component="h5"
-                          variant="h5"
-                          style={{ fontWeight: "700", color: "#ffffff" }}
-                        >
-                          {data?.response?.todaySale}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          style={{ color: "#ffffff" }}
-                        >
-                          Today Sale
-                        </Typography>
-                      </CardContent>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      md={4}
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                    >
-                      <ShoppingCartRoundedIcon
-                        style={{ color: "#ffffff", fontSize: 65 }}
-                      />
-                    </Grid>
-                  </Grid>
-                </Card>
-              </Link>
+              <InfoCard
+                link="/sale_management/whole_sale"
+                iconData={
+                  <ShoppingCartRoundedIcon
+                    style={{ color: "#ffffff", fontSize: 65 }}
+                  />
+                }
+                backgroundColor="#266915"
+                title="Today Sale"
+                value={data?.response?.todaySale}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          {user?.details?.role === "Super Admin" ? (
             <Grid item xs={12} md={3}>
-              <Link href="/sale_management/whole_sale">
-                <Card
-                  className={classes.root}
-                  style={{ cursor: "pointer", backgroundColor: "#156969" }}
-                >
-                  <Grid container direction="row">
-                    <Grid item xs={8} md={8}>
-                      <CardContent>
-                        <Typography
-                          component="h5"
-                          variant="h5"
-                          style={{ fontWeight: "700", color: "#ffffff" }}
-                        >
-                          {data?.response?.totalSale}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          color="textSecondary"
-                          style={{ color: "#ffffff" }}
-                        >
-                          Total Sale
-                        </Typography>
-                      </CardContent>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      md={4}
-                      container
-                      direction="row"
-                      justify="flex-start"
-                      alignItems="center"
-                    >
-                      <MoneyIcon style={{ color: "#ffffff", fontSize: 65 }} />
-                    </Grid>
-                  </Grid>
-                </Card>
-              </Link>
+              <InfoCard
+                link="/sale_management/whole_sale"
+                iconData={
+                  <MoneyIcon style={{ color: "#ffffff", fontSize: 65 }} />
+                }
+                backgroundColor="#156969"
+                title="Total Sale"
+                value={data?.response?.todaySale}
+              />
             </Grid>
-          ) : (
-            ""
-          )}
 
-          <Grid item xs={12} md={3}>
-            <InfoCard
-              link="/sale_management/whole_sale"
-              iconData={
-                <MoneyIcon style={{ color: "#ffffff", fontSize: 65 }} />
-              }
-              backgroundColor="#156969"
-              title="Test"
-              value="00"
-            />
+            <Grid item xs={12} md={3}>
+              <InfoCard
+                link="/sale_management/whole_sale"
+                iconData={
+                  <MoneyIcon style={{ color: "#ffffff", fontSize: 65 }} />
+                }
+                backgroundColor="#156969"
+                title="Total Cash Sale"
+                value={data?.response?.totalCashSale}
+              />
+            </Grid>
           </Grid>
+        )}
 
-
-
-
-          <Grid item xs={12} md={12}>
-            <InfoTable
-              warehouseWiseInformation={
-                data?.response?.warehouseWiseInformation
-              }
-              storeWiseInformation={data?.response?.storeWiseInformation}
-            />
-          </Grid>
+        <Grid item xs={12} md={12}>
+          <InfoTable
+            warehouseWiseInformation={data?.response?.warehouseWiseInformation}
+            storeWiseInformation={data?.response?.storeWiseInformation}
+          />
         </Grid>
       </Gurd>
     </div>

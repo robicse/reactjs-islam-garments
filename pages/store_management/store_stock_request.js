@@ -218,7 +218,7 @@ const endpoint = {
             ref={componentRef}
             defaultprintData={defaultprintData}
             printData={printData}
-            invoiceTitle="Store Stock Request"
+            invoiceTitle="Store Stock In"
         />
       </div>
       <GridContainer>

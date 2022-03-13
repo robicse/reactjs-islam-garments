@@ -205,7 +205,7 @@ const TrialBalance = observer(() => {
               <FormControl
                 component="fieldset"
                 size="small"
-                style={{ marginLeft: "8px", marginTop: "-14px" }}
+                style={{ marginLeft: "30px", marginTop: "-14px" }}
               >
                 {/* <FormLabel component="legend">Gender</FormLabel> */}
                 <RadioGroup
@@ -223,7 +223,7 @@ const TrialBalance = observer(() => {
                     size="small"
                     value="None"
                     control={<Radio size="small" />}
-                    label="ALL"
+                    label="Company"
                   />
                   <FormControlLabel
                     size="small"
@@ -318,7 +318,7 @@ const TrialBalance = observer(() => {
 
                 <TableContainer>
                   <Table size="small" aria-label="a dense table">
-                    <TableHead style={{ backgroundColor: "green" }}>
+                    <TableHead style={{ backgroundColor: "gray" }}>
                       <TableRow>
                         <TableCell>SL</TableCell>
                         <TableCell>Lager Name</TableCell>
@@ -347,7 +347,7 @@ const TrialBalance = observer(() => {
                             </TableCell>
                           </TableRow>
                         ))}
-                      <TableRow style={{ backgroundColor: "yellow" }}>
+                      <TableRow style={{ backgroundColor: "gray" }}>
                         <TableCell component="th" scope="row">
                           Total
                         </TableCell>

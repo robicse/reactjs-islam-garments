@@ -102,7 +102,7 @@ const wholesaleList = observer(() => {
     productWholeSaleListApi: `${baseUrl}/product_whole_sale_list_search`,
     ProductdetailsUrl: `${baseUrl}/product_sale_details`,
     printUrl: `${baseUrl}/product_sale_details_print`,
-    headers: { headers: { Authorization: "Bearer " + user.details.token } },
+    headers: { headers: { Authorization: "Bearer " + user?.details?.token } },
     loginStore:{
       id:user?.details?.store_id,
       name: user?.details?.store_name,
@@ -129,6 +129,7 @@ const wholesaleList = observer(() => {
   };
 
   const handleDetails = (row) => {
+    console.log(row)
     setEditData(row);
     setOpenDetailModal(true);
   };

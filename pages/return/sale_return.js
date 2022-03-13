@@ -72,7 +72,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const title = "Sale Return";
-const subject = "Whole Sale";
+const subject = "Whole Sale Return";
 
 const wholesaleList = observer(() => {
   const classes = useStyles();
@@ -84,7 +84,7 @@ const wholesaleList = observer(() => {
 
   const endpoint = {
     title: "Stock Out (POS)",
-    subject: "Whole Sale",
+    subject: "Whole Sale Return",
     storeActiveListUrl: `${baseUrl}/store_active_list`,
     sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
     unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
@@ -100,13 +100,13 @@ const wholesaleList = observer(() => {
     productWholeSaleListApi: `${baseUrl}/product_sale_return_list_pagination_with_search`,
     ProductdetailsUrl: `${baseUrl}/product_sale_return_details`,
     printUrl: `${baseUrl}/product_sale_return_details_print`,
-    headers: { headers: { Authorization: "Bearer " + user.details.token } },
+    headers: { headers: { Authorization: "Bearer " + user?.details?.token } },
     loginStore:{
       id:user?.details?.store_id,
       name: user?.details?.store_name,
       role:user?.role
-    }
-
+    },
+    customerDueAPi: `${baseUrl}/customer_current_total_due_by_customer_id`,
   };
 
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -141,7 +141,7 @@ const wholesaleList = observer(() => {
 
     { title: "Saller Name", field: "user_name" },
     {
-      title: "Sale Date Time",
+      title: "Return Date Time",
       field: "date_time",
       render: (rowData) => dateFormatWithTime(rowData.date_time),
     },
@@ -194,6 +194,9 @@ const wholesaleList = observer(() => {
     }
     setOpenCreateModal(true);
   };
+
+
+
  
   return (
      <Gurd subject={subject}>
@@ -369,6 +372,10 @@ const wholesaleList = observer(() => {
               idType="product_sale_return_id"
             />
           </Dialog>
+
+
+
+
         </GridItem>
       </GridContainer>
     </Gurd>

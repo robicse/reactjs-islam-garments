@@ -193,6 +193,8 @@ const OwnProductStockIn = ({ endpoint, modal, handleRefress }) => {
     }
   };
 
+  console.log(selectedDate)
+
   return (
     <div>
       <GridContainer style={{ padding: "15px", marginTop: 250 }}>

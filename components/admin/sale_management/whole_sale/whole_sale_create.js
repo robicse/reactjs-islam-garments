@@ -80,7 +80,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedCustomer, setselectedCustomer] = React.useState(null);
   const [selectedCustomerData, setSelectedCustomerData] = React.useState(null);
-
+ 
   console.log(selectedCustomerData)
   const [selectedStore, setSelecteStore] = React.useState(
     endpoint?.loginStore?.id
@@ -196,12 +196,12 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
 
   // handle sitock in create
   const handleFinalStockInCreate = async () => {
-    if (!selectedDate) {
-      return cogoToast.warn("Please Select Date", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-    }
+    // if (!selectedDate) {
+    //   return cogoToast.warn("Please Select Date", {
+    //     position: "top-right",
+    //     bar: { size: "10px" },
+    //   });
+    // }
 
     if (!selectedCustomer) {
       return cogoToast.warn("Please Select customer", {
@@ -223,9 +223,20 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
         bar: { size: "10px" },
       });
     }
+    // const today = new Date();
+    // const yyyy = today.getFullYear();
+    // let mm = today.getMonth() + 1; // Months start at 0!
+    // let dd = today.getDate();
+    
+    // if (dd < 10) dd = '0' + dd;
+    // if (mm < 10) mm = '0' + mm;
+    
+    // const formatDate = dd + '/' + mm + '/' + yyyy;
 
+
+ 
     const body = {
-      date: selectedDate,
+      // date: formatDate,
       customer_id: selectedCustomer,
       store_id: selectedStore,
       products: JSON.stringify(selectedProductList),
@@ -273,7 +284,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   return (
     <div>
       <GridContainer style={{ padding: "20px 30px", marginTop: 250 }}>
-        <GridItem xs={12} sm={3} md={3}>
+        {/* <GridItem xs={12} sm={3} md={3}>
           <TextField
             size="small"
             id="standard-basic"
@@ -283,7 +294,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
             onChange={(e) => setSelectedDate(e.target.value)}
             style={{ width: "100%" }}
           />
-        </GridItem>
+        </GridItem> */}
         <GridItem xs={12} sm={3} md={3}>
           {endpoint?.loginStore?.role == "Super Admin" && (
             <Autocomplete
@@ -339,7 +350,8 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
               // console.log(v)
               if(!v){
                 setselectedCustomer(null)
-                setSelectedCustomerData({shop_name: 'Not Found'})
+  
+                setSelectedCustomerData({shop_name: 'Not Foundd',phone: 'Not Found'})
                return null
               }
               setselectedCustomer(v?.id)
@@ -353,7 +365,9 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
             </div>
           
         </GridItem>
-        <GridItem xs={12} sm={3} md={2}>
+
+
+    <GridItem xs={12} sm={3} md={2}>
         <TextField
               disabled={true}
               size="small"
@@ -361,9 +375,23 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
               variant="outlined"
               type="text"
               value={selectedCustomerData?.shop_name}
-              // style={{ width: "100%" }}
             />
    </GridItem>
+
+   <GridItem xs={12} sm={3} md={2}>
+        <TextField
+              disabled={true}
+              size="small"
+              id="standard-basic"
+              variant="outlined"
+              type="text"
+              value={selectedCustomerData?.phone}
+            />
+   </GridItem>
+
+
+
+  
         {/* <GridItem xs={12} sm={3} md={3}>
           <div style={{ marginTop: "-8px" }}>
             <Productsearch

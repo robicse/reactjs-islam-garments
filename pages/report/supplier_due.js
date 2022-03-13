@@ -75,7 +75,7 @@ const CustomerDue = observer(() => {
 
   const endpoint = {
     supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
-    headers: { headers: { Authorization: "Bearer " + user.details.token } },
+    headers: { headers: { Authorization: "Bearer " + user?.details?.token } },
     supplierDueApi: `${baseUrl}/supplier_current_total_due_by_supplier_id`,
     supplier_due_paid: `${baseUrl}/supplier_due_paid`,
   };

@@ -41,7 +41,7 @@ const useStyles = makeStyles(styles);
 const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
   //console.log(endpoint?.loginStore);
-// console.log(endpoint, modal, handleRefress)
+  // console.log(endpoint, modal, handleRefress)
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
   const [paid, setPaid] = React.useState();
@@ -60,14 +60,17 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedCustomer, setselectedCustomer] = React.useState(null);
-  const [selectedStore, setSelecteStore] = React.useState(endpoint?.loginStore?.id);
+  const [selectedStore, setSelecteStore] = React.useState(
+    endpoint?.loginStore?.id
+  );
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   // selected prodict state
   const [selectedProductList, setSelectedProduct] = React.useState([]);
 
+  const [PreviousDue, setPreviousDue] = React.useState(0);
+  const [currentBalance, setCurrentBalance] = React.useState(0);
 
-  console.log(paymentType)
   //loading when component run
   useAsyncEffect(async (isMounted) => {
     try {
@@ -88,6 +91,22 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
     }
   }, []);
 
+  // subtotal calculation
+  React.useEffect(() => {
+    let tempAMount = 0;
+    selectedProductList &&
+      selectedProductList.map(
+        (prd) =>
+          (tempAMount = tempAMount + parseFloat(prd.purchase_price) * prd.qty)
+      );
+    setSubTotal(tempAMount);
+  }, [selectedProductList]);
+
+  React.useEffect(() => {
+    const current = PreviousDue - subTotal;
+    setCurrentBalance(current);
+  }, [subTotal]);
+
   // handle product add
   const handleProductAdd = (prod) => {
     if (!selectedProductList.length) {
@@ -97,6 +116,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
       });
       return setSelectedProduct([prod]);
     }
+
     selectedProductList.filter((item) => {
       if (item.id == prod.id) {
         cogoToast.info("Product Alreday Exits", {
@@ -125,7 +145,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
   };
 
   // handle quantity change
-  const handdleQuantityChange = (prodId,current_stock, qty) => {
+  const handdleQuantityChange = (prodId, current_stock, qty) => {
     if (qty < 0) {
       return cogoToast.error("Enter Valid QTY", {
         position: "top-right",
@@ -140,8 +160,6 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
     //   });
     // }
 
-  
-
     setSelectedProduct(
       selectedProductList.map((item) =>
         item.id === prodId ? { ...item, qty: qty } : item
@@ -149,21 +167,20 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
     );
   };
 
-
-    // handle handdlePriceChange change
-    const handdlePriceChange = (prodId, price) => {
-      if (price < 0) {
-        return cogoToast.error("Enter Valid price", {
-          position: "top-right",
-          bar: { size: "10px" },
-        });
-      }
-      setSelectedProduct(
-        selectedProductList.map((item) =>
-          item.id === prodId ? { ...item, purchase_price: price } : item
-        )
-      );
-    };
+  // handle handdlePriceChange change
+  const handdlePriceChange = (prodId, price) => {
+    if (price < 0) {
+      return cogoToast.error("Enter Valid price", {
+        position: "top-right",
+        bar: { size: "10px" },
+      });
+    }
+    setSelectedProduct(
+      selectedProductList.map((item) =>
+        item.id === prodId ? { ...item, purchase_price: price } : item
+      )
+    );
+  };
 
   // handle sitock in create
   const handleFinalStockInCreate = async () => {
@@ -203,15 +220,15 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
       miscellaneous_comment: "",
       miscellaneous_charge: "",
       sub_total_amount: subTotal,
-      discount_type: discountType,
-      discount_percent: discountParcent,
-      discount_amount: discountAmount,
-      after_discount_amount: afterDiscountAmount,
+      discount_type: "",
+      discount_percent: 0,
+      discount_amount: 0,
+      after_discount_amount: subTotal,
       sub_total_amount: subTotal,
-      grand_total_amount: grand,
-      paid_amount: paid ? paid : 0,
-      due_amount: due,
-      payment_type_id: paymentType,
+      grand_total_amount: subTotal,
+      paid_amount: subTotal,
+      due_amount: 0,
+      payment_type_id: "",
     };
 
     // convert formdata
@@ -227,15 +244,34 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
       const submitResponse = await axios.post(
         endpoint.wholeSaleStockOutAPi,
         data,
-        endpoint.headers,
+        endpoint.headers
       );
       handleRefress();
       setButtonLoading(false);
       modal(false);
-     
     } catch (error) {
       AllApplicationErrorNotification(error);
       setButtonLoading(false);
+    }
+  };
+
+  const findCustomerDue = async (customerId) => {
+    try {
+      setPreviousDue(0);
+      setCurrentBalance(0);
+      let data = new FormData();
+      data.append("customer_id", JSON.stringify(customerId));
+      const result = await axios.post(
+        endpoint.customerDueAPi,
+        data,
+        endpoint.headers
+      );
+      // console.log(result?.data?.data)
+      setPreviousDue(result?.data?.data);
+    } catch (error) {
+      console.log(error);
+      setPreviousDue(0);
+      setCurrentBalance(0);
     }
   };
 
@@ -280,10 +316,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
               style={{ width: "100%" }}
             />
           )}
-
-
         </GridItem>
-
 
         <GridItem
           xs={12}
@@ -294,7 +327,6 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
           <ArrowForwardIcon size="large" />
         </GridItem>
 
-    
         <GridItem xs={12} sm={3} md={3}>
           <Autocomplete
             size="small"
@@ -306,7 +338,10 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
             renderInput={(params) => (
               <TextField {...params} label="Customer" variant="outlined" />
             )}
-            onChange={(e, v) => setselectedCustomer(v.id)}
+            onChange={(e, v) => {
+              setselectedCustomer(v.id);
+              findCustomerDue(v.id);
+            }}
           />
         </GridItem>
 
@@ -324,15 +359,14 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
           </div>
         </GridItem> */}
 
-
         <GridItem xs={12} sm={12} md={12}>
           <div style={{ marginTop: "15px" }}>
             <ProductSelectByDropdown
               endpoint={endpoint}
               handleProductAdd={handleProductAdd}
               idRequired={true}
-            //   warehouseIdRequired={false}
-            //   storeidRequired={true}
+              //   warehouseIdRequired={false}
+              //   storeidRequired={true}
               searchBody={{ store_id: selectedStore }}
             />
           </div>
@@ -345,7 +379,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
           </Typography>
         </GridItem>
 
-        <GridItem xs={12} sm={12} md={12}>
+        <GridItem xs={12} sm={12} md={12} style={{ marginBottom: "20px" }}>
           {selectedProductList.length > 0 && (
             <Productstable
               products={selectedProductList}
@@ -356,43 +390,78 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
           )}
         </GridItem>
 
-{/*       
-          <GridItem xs={12} sm={12} md={12}>
-            {selectedProductList.length > 0 && (
-              <Calculation
-                products={selectedProductList}
-                subTotal={subTotal}
-                setSubTotal={setSubTotal}
-                grand={grand}
-                setGrand={setGrand}
-                paid={paid}
-                setPaid={setPaid}
-                due={due}
-                setDue={setDue}
-                discountAmount={discountAmount}
-                setDiscountAmount={setDiscountAmount}
-                discountType={discountType}
-                setDiscountType={setDiscountType}
-                discountParcent={discountParcent}
-                setDiscountParcent={setDiscountParcent}
-                afterDiscountAmount={afterDiscountAmount}
-                setAfterDiscountAmount={setAfterDiscountAmount}
-                paymentType={paymentType}
-                setPaymentType={setPaymentType}
-              />
-            )}
-          </GridItem> */}
-   
-
-          <GridItem
+        <GridItem
           xs={12}
-          sm={12}
-          md={12}
-          style={{ textAlign: "right", marginTop: "5px" }}
+          sm={3}
+          md={3}
+          //  style={{ textAlign: "right", marginTop: "10px" }}
+        >
+          <TextField
+            fullWidth={true}
+            size="small"
+            variant="filled"
+            type="number"
+            label="Previous Due"
+            value={parseFloat(PreviousDue)}
+            InputProps={{
+              className: classes.multilineColor,
+              readOnly: true,
+            }}
+          />
+        </GridItem>
+
+        <GridItem
+          xs={12}
+          sm={3}
+          md={3}
+          //  style={{ textAlign: "right", marginTop: "10px" }}
+        >
+          <TextField
+            fullWidth={true}
+            size="small"
+            variant="filled"
+            type="number"
+            label="Sub Total"
+            value={parseFloat(subTotal)}
+            InputProps={{
+              className: classes.multilineColor,
+              readOnly: true,
+            }}
+          />
+        </GridItem>
+
+        <GridItem
+          xs={12}
+          sm={3}
+          md={3}
+          //  style={{ textAlign: "right", marginTop: "10px" }}
+        >
+          <TextField
+            fullWidth={true}
+            size="small"
+            variant="filled"
+            type="number"
+            label="Current Balance"
+            value={parseFloat(currentBalance)}
+            InputProps={{
+              className: classes.multilineColor,
+              readOnly: true,
+            }}
+          />
+        </GridItem>
+
+        <GridItem
+          xs={12}
+          sm={3}
+          md={3}
+          // style={{ textAlign: "right", marginTop: "5px" }}
         >
           {selectedProductList.length > 0 && (
             <Button
-              size="large"
+            style={{height:"45px"}}
+              fullWidth={true}
+              disabled={currentBalance < 0 ? true : false}
+              size="samll"
               variant="contained"
               color="primary"
               onClick={handleFinalStockInCreate}

@@ -197,6 +197,15 @@ const dashboardRoutes = [
         id: 2,
         collapse: false,
         path: '/warehouse_management',
+        childPath: '/warehouse_stock_transfer',
+        name: 'Warehouse Stock Out In',
+        permission: 'warehouse_stock',
+        icon: FunctionsIcon,
+      },
+      {
+        id: 3,
+        collapse: false,
+        path: '/warehouse_management',
         childPath: '/warehouse_stock',
         name: 'Warehouse Stock',
         permission: 'warehouse_stock',
@@ -240,7 +249,7 @@ const dashboardRoutes = [
         name: 'Stock Request',
         permission: 'warehouse_stock',
         icon: FunctionsIcon,
-      },
+      }
  
     ],
   },

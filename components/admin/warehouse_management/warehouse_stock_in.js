@@ -38,9 +38,8 @@ const styles = {
   },
 };
 const useStyles = makeStyles(styles);
-const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
+const warehouseStockOutIn = ({ endpoint, modal, handleRefress }) => {
   const classes = useStyles();
-  // console.log(endpoint?.loginStore);
   // calculation statte
   const [subTotal, setSubTotal] = React.useState(0);
   // const [paid, setPaid] = React.useState();
@@ -54,12 +53,11 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
 
   //initial load state
   const [warehouseList, setWarehouseList] = React.useState([]);
-  const [storeList, setStoreList] = React.useState([]);
 
   // input data state
   const [selectedDate, setSelectedDate] = React.useState(null);
-  const [selectedWarehouse, setSelectedWarehouse] = React.useState(null);
-  const [selectedStore, setSelecteStore] = React.useState(endpoint?.loginStore?.id);
+  const [selectedFromWarehouse, setSelectedFromWarehouse] = React.useState(null);
+  const [selectedToWarehouse, setSelectedToWarehouse] = React.useState(null);
   const [submitButtonLoading, setButtonLoading] = React.useState(false);
 
   // selected prodict state
@@ -73,13 +71,7 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
         endpoint.headers
       );
 
-      const storeRes = await axios.get(
-        endpoint.storeActiveListUrl,
-        endpoint.headers
-      );
-
       setWarehouseList(warehouseRes?.data?.data);
-      setStoreList(storeRes?.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -182,15 +174,15 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
       });
     }
 
-    if (!selectedWarehouse) {
-      return cogoToast.warn("Please Select Warehouse", {
+    if (!selectedFromWarehouse) {
+      return cogoToast.warn("Please Select From Warehouse", {
         position: "top-right",
         bar: { size: "10px" },
       });
     }
 
-    if (!selectedStore) {
-      return cogoToast.warn("Please Select Store", {
+    if (!selectedToWarehouse) {
+      return cogoToast.warn("Please Select To Warehouse", {
         position: "top-right",
         bar: { size: "10px" },
       });
@@ -206,8 +198,8 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
     const body = {
       date: selectedDate,
       // supplier_id: selectedSupplyer,
-      warehouse_id: selectedWarehouse,
-      store_id: selectedStore,
+      transfer_from_warehouse_id: selectedFromWarehouse,
+      transfer_to_warehouse_id: selectedToWarehouse,
       products: JSON.stringify(selectedProductList),
       miscellaneous_comment: "",
       miscellaneous_charge: "",
@@ -265,14 +257,14 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
           <Autocomplete
             size="small"
             fullWidth={true}
-            // value={selectedWarehouse}
+            // value={selectedFromWarehouse}
             id="combo-box-demo"
             options={warehouseList}
             getOptionLabel={(option) => option.name}
             renderInput={(params) => (
-              <TextField {...params} label="Warehouse" variant="outlined" />
+              <TextField {...params} label="From Warehouse" variant="outlined" />
             )}
-            onChange={(e, v) => setSelectedWarehouse(v.id)}
+            onChange={(e, v) => setSelectedFromWarehouse(v.id)}
           />
         </GridItem>
 
@@ -286,32 +278,19 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
         </GridItem>
 
         <GridItem xs={12} sm={3} md={3}>
-          {endpoint?.loginStore?.role == "Super Admin" && (
+          
             <Autocomplete
               size="small"
               fullWidth={true}
-              // value={selectedWarehouse}
+              // value={selectedToWarehouse}
               id="combo-box-demo"
-              options={storeList}
-              getOptionLabel={(option) => option.store_name}
+              options={warehouseList}
+              getOptionLabel={(option) => option.name}
               renderInput={(params) => (
-                <TextField {...params} label="Store" variant="outlined" />
+                <TextField {...params} label="To Warehouse" variant="outlined" />
               )}
-              onChange={(e, v) => setSelecteStore(v.id)}
+              onChange={(e, v) => setSelectedToWarehouse(v.id)}
             />
-          )}
-
-          {endpoint?.loginStore?.role !== "Super Admin" && (
-            <TextField
-              disabled={true}
-              size="small"
-              id="standard-basic"
-              variant="outlined"
-              type="text"
-              value={endpoint?.loginStore?.name}
-              style={{ width: "100%" }}
-            />
-          )}
 
 
         </GridItem>
@@ -337,7 +316,7 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
               handleProductAdd={handleProductAdd}
               warehouseIdRequired={true}
               idRequired={true}
-              searchBody={{ warehouse_id: selectedWarehouse }}
+              searchBody={{ warehouse_id: selectedFromWarehouse }}
             />
           </div>
         </GridItem>
@@ -416,4 +395,4 @@ const StoreStockIn = ({ endpoint, modal, handleRefress }) => {
   );
 };
 
-export default StoreStockIn;
+export default warehouseStockOutIn;

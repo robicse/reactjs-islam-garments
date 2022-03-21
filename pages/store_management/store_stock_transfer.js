@@ -29,7 +29,7 @@ import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
 import tableIcons from "components/table_icon/icon";
 import { useReactToPrint } from "react-to-print";
 // custom component
-import StockInComponent from 'components/admin/warehouse_management/warehouseStockOutIn';
+import StockInComponent from 'components/admin/store_management/storeStockOutIn';
 import Details from "components/admin/common_component/details";
 import StockInPrint from "components/admin/common_component/invoicePrint";
 // utils component
@@ -72,11 +72,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const title = "Warehouse Stock In";
-const subject = "Warehouse Stock In";
+const title = "Store Stock Out In";
+const subject = "Store Stock Out In";
 
 
-const WarehouseStockOutComponent = observer(() => {
+const StoreStockOutComponent = observer(() => {
   const classes = useStyles();
   const { user } = useRootStore();
   const tableRef = React.createRef();
@@ -86,25 +86,25 @@ const WarehouseStockOutComponent = observer(() => {
 
 
 const endpoint = {
-  title:"Warehouse Stock Out In",
-  subject: "Warehouse Stock",
+  title:"Store Stock Out In",
+  subject: "Store Stock Out In",
   warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
   supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,
-  //storeActiveListUrl:`${baseUrl}/store_active_list`,
+  storeActiveListUrl:`${baseUrl}/store_active_list`,
   sizesActiveListUrl: `${baseUrl}/product_size_active_list`,
   unitActiveListUrl: `${baseUrl}/product_unit_active_list`,
   categoryActiveListUrl: `${baseUrl}/product_category_active_list`,
-  stockInAPi: `${baseUrl}/warehouse_to_warehouse_stock_create`,
+  stockInAPi: `${baseUrl}/store_to_store_stock_create`,
   stockInEditAPi: `${baseUrl}/warehouse_stock_in_edit`,
   deleteAPi: `${baseUrl}/warehouse_stock_in_delete`,
   stockInInvoiceDetailsAPi: `${baseUrl}/warehouse_stock_in_invoice_details`,
-  productFintByDeopDownItemAPi: `${baseUrl}/product_search_for_stock_transfer_by_warehouse_id`,
+  productFintByDeopDownItemAPi: `${baseUrl}/product_search_for_sale_by_store_id`,
   productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
   paymentTypeListAPI: `${baseUrl}/payment_type_active_list`,
-  stockInListAPI: `${baseUrl}/warehouse_to_warehouse_stock_transfer_list_with_search`,
+  stockInListAPI: `${baseUrl}/store_to_store_stock_transfer_list_with_search`,
   ProductdetailsUrl:`${baseUrl}/stock_transfer_details`,
   headers: { headers: { Authorization: "Bearer " + user.details.token }},
-  printUrl: `${baseUrl}/warehouse_to_warehouse_stock_transfer_details_print`,
+  printUrl: `${baseUrl}/store_to_store_stock_transfer_details_print`,
   subUnitActiveListUrl:`${baseUrl}/product_sub_unit_list`,
   loginStore:{
     id:user?.details?.store_id,
@@ -138,8 +138,8 @@ const endpoint = {
 
   const columns = [
     { title: "Invoice No",   render: (rowData) => convertFristCharcapital(rowData.invoice_no)},
-    { title: "From Warehouse", field: "transfer_from_warehouse_name" },
-    { title: "To Warehouse", field: "transfer_to_warehouse_name" },
+    { title: "From Store", field: "transfer_from_store_name" },
+    { title: "To Store", field: "transfer_to_store_name" },
     { title: "User", field: "user_name" },
     { title: "Date", field: "date_time",render: (rowData) => dateFormatWithTime(rowData.date_time)},
     {
@@ -164,7 +164,7 @@ const endpoint = {
        )
        console.log(result)
        setPrintData(result.data);
-       // console.log(result)
+       console.log('sss',result.data)
        setDefaultPrintData(row);
        // setPrintData(result);
       
@@ -191,29 +191,31 @@ const endpoint = {
 
 
     
-  // handle create
-  const handleCreate = () => {
-    if (!user.can("Create", subject)) {
-      cogoToast.error("You don't  have Create permission!", {
-        position: "top-right",
-        bar: { size: "10px" },
-      });
-      return null;
-    }
-    handleClickOpenCreate(true);
-  };
+      // handle create
+      const handleCreate = () => {
+        // if (!user.can("Create", subject)) {
+        //   cogoToast.error("You don't  have Create permission!", {
+        //     position: "top-right",
+        //     bar: { size: "10px" },
+        //   });
+        //   return null;
+        // }
+        handleClickOpenCreate(true);
+      };
     
       
 
   return (
-   <Gurd subject={subject}>
+    <>
+  {/*  <Gurd subject={subject}> */}
+
 
       <div style={{ display: "none" }}>
         <StockInPrint
             ref={componentRef}
             defaultprintData={defaultprintData}
             printData={printData}
-            invoiceTitle="Warehouse Stock Out In"
+            invoiceTitle="Store Stock Out In"
         />
       </div>
       <GridContainer>
@@ -395,8 +397,9 @@ const endpoint = {
 
         </GridItem>
       </GridContainer>
-    </Gurd>
+    {/* </Gurd> */}
+    </>
   );
 });
 
-export default WarehouseStockOutComponent;
+export default StoreStockOutComponent;

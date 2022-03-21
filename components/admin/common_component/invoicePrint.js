@@ -206,6 +206,43 @@ const InvoicePrint = React.forwardRef(
       );
     };
 
+    const stockOutInStoreRender = (renData) => {
+      console.log('aaabb', renData)
+      const clienObj = {
+        name: renData?.transfer_to_store_name,
+        phone: renData?.transfer_to_store_phone,
+        address: renData?.transfer_to_store_address,
+      };
+
+      const adminObj = {
+        name: renData?.transfer_from_store_name,
+        phone: renData?.transfer_from_store_phone,
+        address: renData?.transfer_from_store_address,
+      };
+      console.log('ccc',clienObj)
+      return (
+        <Grid container>
+          <GridItem xs="6" style={{ textAlign: "start" }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+              Invoice To
+            </Typography>
+            <Typography variant="body2">{adminObj?.name}</Typography>
+            <Typography variant="body2">{adminObj?.phone}</Typography>
+            <Typography variant="body2">{adminObj?.address}</Typography>
+          </GridItem>
+
+          <GridItem xs="6" style={{ textAlign: "end" }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
+              Invoice From
+            </Typography>
+            <Typography variant="body2">{clienObj?.name}</Typography>
+            <Typography variant="body2">{clienObj?.phone}</Typography>
+            <Typography variant="body2">{clienObj?.address}</Typography>
+          </GridItem>
+        </Grid>
+      );
+    };
+
     return (
       <div ref={ref}>
         {defaultprintData && (
@@ -269,6 +306,9 @@ const InvoicePrint = React.forwardRef(
 
               {invoiceTitle == "Warehouse Stock Out In" &&
                 stockOutInWarehouseRender(printData?.info[0])}
+
+              {invoiceTitle == "Store Stock Out In" &&
+                stockOutInStoreRender(printData?.info[0])}
             </Box>
 
             <Box mt={4}>

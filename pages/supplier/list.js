@@ -35,6 +35,8 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import Avatar from "@material-ui/core/Avatar";
+
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -133,6 +135,16 @@ const SuplierComponent = observer(() => {
   // end block
 
   const columns = [
+    {
+      title: "Image",
+      render: (rowData) => (
+        <Avatar
+          alt="o"
+          variant="square"
+          src={`${webUrl}/uploads/suppliers/${rowData?.image}`}
+        />
+      ),
+    },
     {
       title: "Name",
       field: "name",

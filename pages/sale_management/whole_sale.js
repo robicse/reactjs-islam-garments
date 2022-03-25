@@ -71,7 +71,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const title = "Stock Out (POS)";
+const title = "Stock Out (Whole)";
 const subject = "Whole Sale";
 
 const wholesaleList = observer(() => {
@@ -83,7 +83,7 @@ const wholesaleList = observer(() => {
   };
 
   const endpoint = {
-    title: "Stock Out (POS)",
+    title: "Stock Out (Whole)",
     subject: "Whole Sale",
     // warehouseActiveListUrl: `${baseUrl}/warehouse_active_list`,
     // supplyerActiveListUrl: `${baseUrl}/supplier_active_list`,

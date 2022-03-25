@@ -295,7 +295,7 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
             style={{ width: "100%" }}
           />
         </GridItem> */}
-        <GridItem xs={12} sm={3} md={3}>
+        <GridItem xs={12} sm={2} md={2}>
           {endpoint?.loginStore?.role == "Super Admin" && (
             <Autocomplete
               size="small"
@@ -324,14 +324,14 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
           )}
         </GridItem>
 
-        <GridItem
+        {/* <GridItem
           xs={12}
           sm={3}
           md={1}
           style={{ textAlign: "center", marginTop: "10px" }}
         >
           <ArrowForwardIcon size="large" />
-        </GridItem>
+        </GridItem> */}
 
         <GridItem xs={12} sm={3} md={3}>
           <div style={{display:"flex"}}>
@@ -342,16 +342,16 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
             // value={selectedCustomerData?.name}
             id="combo-box-demo"
             options={customerList}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) => option.name + '=>' + option.shop_name + '=>' + option.phone}
             renderInput={(params) => (
               <TextField {...params} label="Customer" variant="outlined" />
             )}
             onChange={(e,v) =>{
-              // console.log(v)
+              //  console.log('aaa',v)
               if(!v){
                 setselectedCustomer(null)
   
-                setSelectedCustomerData({shop_name: 'Not Foundd',phone: 'Not Found'})
+                setSelectedCustomerData({name: 'Not Foundd',shop_name: 'Not Foundd',phone: 'Not Found'})
                return null
               }
               setselectedCustomer(v?.id)
@@ -367,27 +367,37 @@ const StockOutComponent = ({ endpoint, modal, handleRefress }) => {
         </GridItem>
 
 
-    <GridItem xs={12} sm={3} md={2}>
-        <TextField
-              disabled={true}
-              size="small"
-              id="standard-basic"
-              variant="outlined"
-              type="text"
-              value={selectedCustomerData?.shop_name}
-            />
-   </GridItem>
+        <GridItem xs={12} sm={2} md={2}>
+            <TextField
+                  disabled={true}
+                  size="small"
+                  id="standard-basic"
+                  variant="outlined"
+                  type="text"
+                  value={selectedCustomerData?.name}
+                />
+        </GridItem>
 
-   <GridItem xs={12} sm={3} md={2}>
-        <TextField
-              disabled={true}
-              size="small"
-              id="standard-basic"
-              variant="outlined"
-              type="text"
-              value={selectedCustomerData?.phone}
-            />
-   </GridItem>
+        <GridItem xs={12} sm={2} md={2}>
+              <TextField
+                    disabled={true}
+                    size="small"
+                    id="standard-basic"
+                    variant="outlined"
+                    type="text"
+                    value={selectedCustomerData?.shop_name}
+                  />
+        </GridItem>
+        <GridItem xs={12} sm={2} md={2}>
+              <TextField
+                    disabled={true}
+                    size="small"
+                    id="standard-basic"
+                    variant="outlined"
+                    type="text"
+                    value={selectedCustomerData?.phone}
+                  />
+        </GridItem>
 
 
 

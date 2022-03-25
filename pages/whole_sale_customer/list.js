@@ -35,6 +35,7 @@ import ErrorIcon from "@material-ui/icons/Error";
 import MaterialTable from "material-table";
 import tableIcons from "components/table_icon/icon";
 import EditTwoToneIcon from "@material-ui/icons/EditTwoTone";
+import Avatar from "@material-ui/core/Avatar";
 
 const styles = {
   cardCategoryWhite: {
@@ -171,6 +172,16 @@ const TableList = observer(() => {
   };
 
   const columns = [
+    {
+      title: "Image",
+      render: (rowData) => (
+        <Avatar
+          alt="o"
+          variant="square"
+          src={`${webUrl}/uploads/customers/${rowData?.image}`}
+        />
+      ),
+    },
     { title: "Name", field: "name" },
     { title: "Shop", field: "shop_name" },
     { title: "Code", field: "code" },

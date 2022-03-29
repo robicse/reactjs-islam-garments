@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import GridItem from "components/Grid/GridItem.js";
 import cogoToast from "cogo-toast";
@@ -7,9 +7,13 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-material-ui";
-import { Button} from "@material-ui/core";
+import { Button, MenuItem} from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Axios from "axios";
+import { useAsyncEffect } from "use-async-effect";
+import axios from "axios";
+import { Autocomplete } from "formik-material-ui-lab";
+import MuiTextField from "@material-ui/core/TextField";
 import { baseUrl } from "../../../const/api";
 import Slide from "@material-ui/core/Slide";
 import AllApplicationErrorNotification from "../../utils/errorNotification";
@@ -45,8 +49,46 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
   console.log(mutate)
   const classes = useStyles();
 
-  const [frontImage, setFrontImage] = React.useState(null);
-  const [backImage, setBackImag] = React.useState(null);
+  const [frontImage, setFrontImage] = useState(null);
+  const [backImage, setBackImag] = useState(null);
+  const [sizeList, setSizeList] = useState([]);
+  const [unitList, setUnitList] = useState([]);
+  const [subunitList, setSubUnitList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
+  const [productType, setProductType] = useState("Own");
+  const [unitType, setUnitType] = useState(editData.unit_name);
+
+  console.log('endpoint',endpoint)
+  console.log('editData',editData)
+
+  // load data
+  useAsyncEffect(async (isMounted) => {
+    await axios
+      .all([
+        axios.get(endpoint.sizesUrl, endpoint.headers),
+        axios.get(endpoint.unitUrl, endpoint.headers),
+        axios.get(endpoint.subunitUrl, endpoint.headers),
+        axios.get(endpoint.categoryUrl, endpoint.headers),
+      ])
+      .then(
+        axios.spread((...responses) => {
+          if (!isMounted()) return;
+          const responseOneB = responses[0];
+          const responseTwoU = responses[1];
+          const responseTwoSU = responses[2];
+          const responseThree = responses[3];
+          setSizeList(responseOneB.data.data);
+          setUnitList(responseTwoU.data.data);
+          setSubUnitList(responseTwoSU.data.data);
+          setCategoryList(responseThree.data.data);
+          // setLoad(true);
+        })
+      )
+      .catch((errors) => {
+        console.error(errors);
+        // setLoad(false);
+      });
+  }, []);
 
   return (
     <div>
@@ -58,9 +100,11 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                 initialValues={{
                   id: editData.id,
                   type: editData.type,
-                  product_category_id: editData.category_id,
-                  product_unit_id: editData.unit_id,
-                  product_size_id: editData.size_id,
+                  category_name: editData.category_id,
+                  unit_name: editData.unit_id,
+                  size_name: editData.size_id,
+                  sub_unit_name: editData.sub_unit_id,
+
                   //product_code: editData.product_code,
                   name: editData.name,
                   purchase_price: editData.purchase_price,
@@ -75,6 +119,13 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                   //   errors.item_code = "Required";
                   // }
 
+                  if (values.unit_name) {
+                    setUnitType(values?.unit_name?.name);
+                  }
+                  if (values.unit_name?.name == "Pcs") {
+                    values.sub_unit_name = "";
+                  }
+
                      
                   if (!values.purchase_price) {
                     errors.purchase_price = "Required";
@@ -87,6 +138,15 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                     product_id: values.id,
                     // product_code: values.product_code,
                     //name: values.name,
+                    //product_category_id: values.category_name.id,
+                    product_category_id: values.category_name,
+                    product_unit_id: values.unit_name,
+                    product_sub_unit_id: values.unit_name
+                      ? values.sub_unit_name
+                      : "",
+                    product_size_id: values.size_name
+                      ? values.size_name
+                      : "",
                     purchase_price: values.purchase_price,
                     color: values.color,
                     design: values.design,
@@ -100,7 +160,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                     formData.append(key, body[key])
                   );
                   setTimeout(() => {
-                    Axios.post(`${baseUrl}/${endpoint}`, formData, {
+                    Axios.post(`${baseUrl}/${endpoint.edit}`, formData, {
                       headers: {
                         Authorization: "Bearer " + token,
                         "Content-type": "multipart/form-data",
@@ -128,7 +188,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                     <div className={classes.paper}>
                       <form className={classes.form} noValidate>
                         <GridContainer>
-                          <GridItem xs={12} sm={12} md={4}>
+                          <GridItem xs={12} sm={4} md={3}>
                             <Field
                               component={TextField}
                               name="name"
@@ -153,7 +213,107 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                             />
                           </GridItem> */}
 
-                          <GridItem xs={12} sm={12} md={4}>
+                          <GridItem xs={6} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              type="text"
+                              name="type"
+                              // value={productType}
+                              label="Type"
+                              select
+                              fullWidth
+                              variant="outlined"
+                              //onChange={(e) => setProductType(e.target.value)}
+                              margin="normal"
+                              disabled
+                            >
+                              <MenuItem value="Own">Own</MenuItem>
+                              <MenuItem value="Buy">Buy</MenuItem>
+                            </Field>
+                          </GridItem>
+                    
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              type="text"
+                              name="category_name"
+                              label="Category Name"
+                              select
+                              fullWidth
+                              variant="outlined"
+                              helperText="Please select Category"
+                              margin="normal"
+                            >
+                              <MenuItem value={null}>Unselect</MenuItem>
+                              {categoryList.map((item) => (
+                                <MenuItem value={item.id}>{item.name}</MenuItem>
+                              ))}
+                            </Field>
+                          </GridItem>
+
+                          <GridItem xs={12} sm={4} md={3}>
+                            <Field
+                              component={TextField}
+                              type="text"
+                              name="unit_name"
+                              label="Unit Name"
+                              select
+                              fullWidth
+                              variant="outlined"
+                              helperText="Please select Unit"
+                              margin="normal"
+                              disabled
+                            >
+                              <MenuItem value={null}>Unselect</MenuItem>
+                              {unitList.map((item) => (
+                                <MenuItem value={item.id}>{item.name}</MenuItem>
+                              ))}
+                            </Field>
+                          </GridItem>
+
+                          {unitType == "Bundle" && (
+                            <GridItem xs={12} sm={4} md={3}>
+                              <Field
+                                component={TextField}
+                                type="text"
+                                name="sub_unit_name"
+                                label="Sub Unit Name"
+                                select
+                                fullWidth
+                                variant="outlined"
+                                helperText="Please select Sub Unit"
+                                margin="normal"
+                              >
+                                <MenuItem value={null}>Unselect</MenuItem>
+                                {subunitList.map((item) => (
+                                  <MenuItem value={item.id}>{item.sub_unit_name}</MenuItem>
+                                ))}
+                              </Field>
+                            </GridItem>
+                          )}
+
+                          {productType == "Own" && (
+                            <GridItem xs={12} sm={4} md={3}>
+                              <Field
+                                component={TextField}
+                                type="text"
+                                name="size_name"
+                                label="Size Name"
+                                select
+                                fullWidth
+                                variant="outlined"
+                                helperText="Please select Size"
+                                margin="normal"
+                              >
+                                <MenuItem value={null}>Unselect</MenuItem>
+                                {sizeList.map((item) => (
+                                  <MenuItem value={item.id}>{item.name}</MenuItem>
+                                ))}
+                              </Field>
+                            </GridItem>
+                          )}
+
+                          <GridItem xs={12} sm={4} md={3}>
                             <Field
                               component={TextField}
                               variant="outlined"
@@ -164,6 +324,20 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               name="purchase_price"
                             />
                           </GridItem>
+
+                          {productType == "Own" && (
+                            <GridItem xs={12} sm={4} md={3}>
+                              <Field
+                                component={TextField}
+                                name="item_code"
+                                type="text"
+                                label="Product Code"
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                              />
+                            </GridItem>
+                          )}
 
                           <GridItem xs={12} sm={12} md={4}>
                             <Field
@@ -227,7 +401,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               margin="normal"
                               fullWidth
                               type="text"
-                              label="Note"
+                              label="Note1"
                               name="note"
                             />
                           </GridItem>

@@ -510,7 +510,7 @@ const TableList = observer(() => {
           token={user.auth_token}
           modal={setOpenEditModal}
           editData={editData}
-          endpoint={endpoint.edit}
+          endpoint={endpoint}
           mutate={handleRefress}
         />
       </Dialog>

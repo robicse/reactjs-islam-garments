@@ -72,6 +72,7 @@ const Create = ({ token, modal, endpoint, mutate }) => {
   const [productType, setProductType] = React.useState("Own");
   const [unitType, setUnitType] = React.useState("Pcs");
   console.log(unitType);
+  console.log('endpoint',endpoint)
   // load data
   useAsyncEffect(async (isMounted) => {
     await axios

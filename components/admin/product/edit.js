@@ -55,11 +55,13 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
   const [unitList, setUnitList] = useState([]);
   const [subunitList, setSubUnitList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
-  const [productType, setProductType] = useState("Own");
-  const [unitType, setUnitType] = useState(editData.unit_name);
+  const [productType, setProductType] = useState(editData.type);
+  //const [unitType, setUnitType] = useState(editData.unit_name);
+  const [unitType, setUnitType] = useState(editData.unit_id);
 
-  console.log('endpoint',endpoint)
-  console.log('editData',editData)
+  //console.log('endpoint',endpoint)
+  // console.log('editData',editData)
+  // console.log('unitType',unitType)
 
   // load data
   useAsyncEffect(async (isMounted) => {
@@ -104,8 +106,7 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                   unit_name: editData.unit_id,
                   size_name: editData.size_id,
                   sub_unit_name: editData.sub_unit_id,
-
-                  //product_code: editData.product_code,
+                  product_code: editData.product_code,
                   name: editData.name,
                   purchase_price: editData.purchase_price,
                   color: editData.color,
@@ -114,17 +115,29 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
               
                 }}
                 validate={(values) => {
-                  const errors = {};
-                  // if (!values.product_code) {
-                  //   errors.item_code = "Required";
-                  // }
+                  
+                  console.log('values',values)
 
-                  if (values.unit_name) {
-                    setUnitType(values?.unit_name?.name);
+                  const errors = {};
+
+                  // if (values.unit_name) {
+                  //   setUnitType(values?.unit_name?.name);
+                  // }
+                  // if (values.unit_name?.name == "Pcs") {
+                  //   values.sub_unit_name = "";
+                  // }
+                  if (values.type) {
+                    setProductType(values?.type);
                   }
-                  if (values.unit_name?.name == "Pcs") {
+                  
+                  if (values.unit_name) {
+                    setUnitType(values?.unit_name);
+                  }
+                  if (values.unit_name == "1") {
                     values.sub_unit_name = "";
                   }
+
+                  console.log('unit_name from values',values.unit_name)
 
                      
                   if (!values.purchase_price) {
@@ -136,11 +149,13 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                 onSubmit={(values, { setSubmitting }) => {
                   const body = {
                     product_id: values.id,
-                    // product_code: values.product_code,
+                    type: values.type,
+                    product_code: values.product_code,
                     //name: values.name,
                     //product_category_id: values.category_name.id,
                     product_category_id: values.category_name,
-                    product_unit_id: values.unit_name,
+                    //product_unit_id: values.unit_name,
+                    product_unit_id: unitType,
                     product_sub_unit_id: values.unit_name
                       ? values.sub_unit_name
                       : "",
@@ -201,31 +216,19 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                             />
                           </GridItem>
 
-                          {/* <GridItem xs={12} sm={12} md={4}>
-                            <Field
-                              component={TextField}
-                              name="product_code"
-                              type="text"
-                              label="Product Code"
-                              variant="outlined"
-                              margin="normal"
-                              fullWidth
-                            />
-                          </GridItem> */}
-
                           <GridItem xs={6} sm={4} md={3}>
                             <Field
                               component={TextField}
                               type="text"
                               name="type"
-                              // value={productType}
+                              //value={productType}
                               label="Type"
                               select
                               fullWidth
                               variant="outlined"
                               //onChange={(e) => setProductType(e.target.value)}
                               margin="normal"
-                              disabled
+                              
                             >
                               <MenuItem value="Own">Own</MenuItem>
                               <MenuItem value="Buy">Buy</MenuItem>
@@ -262,16 +265,15 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               variant="outlined"
                               helperText="Please select Unit"
                               margin="normal"
-                              disabled
+                              
                             >
-                              <MenuItem value={null}>Unselect</MenuItem>
                               {unitList.map((item) => (
                                 <MenuItem value={item.id}>{item.name}</MenuItem>
                               ))}
                             </Field>
                           </GridItem>
 
-                          {unitType == "Bundle" && (
+                          {/* {unitType == "Bundle" && (
                             <GridItem xs={12} sm={4} md={3}>
                               <Field
                                 component={TextField}
@@ -284,7 +286,26 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                                 helperText="Please select Sub Unit"
                                 margin="normal"
                               >
-                                <MenuItem value={null}>Unselect</MenuItem>
+                                {subunitList.map((item) => (
+                                  <MenuItem value={item.id}>{item.sub_unit_name}</MenuItem>
+                                ))}
+                              </Field>
+                            </GridItem>
+                          )} */}
+
+                          {unitType == "2" && (
+                            <GridItem xs={12} sm={4} md={3}>
+                              <Field
+                                component={TextField}
+                                type="text"
+                                name="sub_unit_name"
+                                label="Sub Unit Name"
+                                select
+                                fullWidth
+                                variant="outlined"
+                                helperText="Please select Sub Unit"
+                                margin="normal"
+                              >
                                 {subunitList.map((item) => (
                                   <MenuItem value={item.id}>{item.sub_unit_name}</MenuItem>
                                 ))}
@@ -305,11 +326,24 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                                 helperText="Please select Size"
                                 margin="normal"
                               >
-                                <MenuItem value={null}>Unselect</MenuItem>
                                 {sizeList.map((item) => (
                                   <MenuItem value={item.id}>{item.name}</MenuItem>
                                 ))}
                               </Field>
+                            </GridItem>
+                          )}
+
+                          {productType == "Own" && (
+                            <GridItem xs={12} sm={4} md={3}>
+                              <Field
+                                component={TextField}
+                                name="product_code"
+                                type="text"
+                                label="Product Code"
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                              />
                             </GridItem>
                           )}
 
@@ -324,20 +358,6 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                               name="purchase_price"
                             />
                           </GridItem>
-
-                          {productType == "Own" && (
-                            <GridItem xs={12} sm={4} md={3}>
-                              <Field
-                                component={TextField}
-                                name="item_code"
-                                type="text"
-                                label="Product Code"
-                                variant="outlined"
-                                margin="normal"
-                                fullWidth
-                              />
-                            </GridItem>
-                          )}
 
                           <GridItem xs={12} sm={12} md={4}>
                             <Field

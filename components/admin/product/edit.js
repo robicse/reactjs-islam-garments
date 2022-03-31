@@ -140,9 +140,9 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                   console.log('unit_name from values',values.unit_name)
 
                      
-                  if (!values.purchase_price) {
-                    errors.purchase_price = "Required";
-                  }
+                  // if (!values.purchase_price) {
+                  //   errors.purchase_price = "Required";
+                  // }
              
                   return errors;
                 }}

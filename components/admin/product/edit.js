@@ -126,9 +126,20 @@ function Edit({ token, modal, editData, endpoint, mutate }) {
                   // if (values.unit_name?.name == "Pcs") {
                   //   values.sub_unit_name = "";
                   // }
+
                   if (values.type) {
                     setProductType(values?.type);
                   }
+
+                  // if (values.type  == "Own") {
+                  //   if (!values.product_code) {
+                  //     errors.product_code = "Required";
+                  //   }
+
+                  //   if (!values.size_name) {
+                  //     errors.size_name = "Required";
+                  //   }
+                  // }
                   
                   if (values.unit_name) {
                     setUnitType(values?.unit_name);

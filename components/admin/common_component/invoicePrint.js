@@ -325,7 +325,8 @@ const InvoicePrint = React.forwardRef(
               
                     <TableCell>Category</TableCell>
               <TableCell>Unit</TableCell>
-              <TableCell>Product Size</TableCell>
+              <TableCell>Sub Unit</TableCell>
+              <TableCell>Size</TableCell>
               <TableCell>QTY</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Total(TK)</TableCell>
@@ -342,6 +343,7 @@ const InvoicePrint = React.forwardRef(
                      
                   <TableCell>{prd.product_category_name}</TableCell>
                   <TableCell>{prd.product_unit_name}</TableCell>
+                  <TableCell>{prd.product_sub_unit_name}</TableCell>
                   <TableCell>{prd.product_size_name}</TableCell>
                   <TableCell align="right">{prd.qty}</TableCell>
                   <TableCell align="right">{prd.purchase_price}</TableCell>
@@ -352,7 +354,7 @@ const InvoicePrint = React.forwardRef(
                     ))}
 
                   <TableRow>
-                    <TableCell align="right" colSpan={6}>
+                    <TableCell align="right" colSpan={7}>
                       Sub Total
                     </TableCell>
                     <TableCell align="right">

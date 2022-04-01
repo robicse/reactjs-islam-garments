@@ -144,7 +144,7 @@ const InvoicePrint = React.forwardRef(
               <TableCell style={{ padding: "1px", textAlign: "center" }}>
                 SL#
               </TableCell>
-              <TableCell>Category</TableCell>
+              <TableCell>Category2</TableCell>
               <TableCell>Unit</TableCell>
               <TableCell>Product Size</TableCell>
               <TableCell>QTY</TableCell>
@@ -195,7 +195,7 @@ const InvoicePrint = React.forwardRef(
               </TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Unit</TableCell>
-              <TableCell>Unit</TableCell>
+              <TableCell>Sub Unit</TableCell>
               <TableCell>QTY</TableCell>
 
               <TableCell>Price</TableCell>
@@ -212,7 +212,7 @@ const InvoicePrint = React.forwardRef(
                   </TableCell>
                   <TableCell>{prd.product_category_name}</TableCell>
                   <TableCell>{prd.product_unit_name}</TableCell>
-                  <TableCell align="right">{prd.product_unit_name}</TableCell>
+                  <TableCell align="right">{prd.product_sub_unit_name}</TableCell>
                   <TableCell align="right">{prd.qty}</TableCell>
 
                   <TableCell align="right">{prd.purchase_price}</TableCell>
@@ -222,14 +222,14 @@ const InvoicePrint = React.forwardRef(
                 </TableRow>
               ))}
 
-            <TableRow>
+            {/* <TableRow>
               <TableCell align="right" colSpan={6}>
                 Sub Total
               </TableCell>
               <TableCell align="right">
                 {defaultprintData?.grand_total_amount}
               </TableCell>
-            </TableRow>
+            </TableRow> */}
 
             <TableRow>
               <TableCell align="right" colSpan={6}>

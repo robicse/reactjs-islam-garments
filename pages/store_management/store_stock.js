@@ -126,10 +126,12 @@ React.useEffect(()=>{
     //     </Typography>
     //   ),
     // },
-    { title: "Code", field: "product_code" },
+    { title: "Name", field: "product_name" },
     { title: "Category", field: "product_category_name" },
     { title: "Unit", field: "product_unit_name" },
+    { title: "Sub Unit", field: "product_sub_unit_name" },
     { title: "Size", field: "product_size_name" },
+    { title: "Code", field: "product_code" },
     { title: "Price(TK)", field: "purchase_price" },
     
     { title: "Stock", field: "current_stock" },

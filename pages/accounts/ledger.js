@@ -330,7 +330,7 @@ const LagerCom = observer(() => {
                     size="small"
                     value="None"
                     control={<Radio size="small" />}
-                    label="ALL"
+                    label="Company"
                   />
                   <FormControlLabel
                     size="small"

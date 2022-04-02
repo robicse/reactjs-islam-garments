@@ -274,7 +274,7 @@ const Dashboard = observer(() => {
                 }
                 backgroundColor="#156969"
                 title="Total Sale"
-                value={data?.response?.todaySale}
+                value={data?.response?.totalSale}
               />
             </Grid>
 

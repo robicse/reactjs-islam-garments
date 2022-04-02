@@ -53,27 +53,27 @@ const TableList = observer(
         (a, item) => {
           return {
             totalStaff: item.store_staff + a.totalStaff,
-            todayPurchase: item.store_today_sale_amount + a.todayPurchase,
-            totalPurchase: item.store_total_sale_amount + a.totalPurchase,
+            todaySale: item.store_today_sale_amount + a.todaySale,
+            totalSale: item.store_total_sale_amount + a.totalSale,
             totalStock: item.store_current_stock + a.totalStock,
             totalStockAmount:
               item.store_current_stock_amount + a.totalStockAmount,
-            store_today_cash_purchase_amount:
-              item.store_today_cash_purchase_amount +
-              a.store_today_cash_purchase_amount,
-            totalCashPurchase:
-              item.store_total_cash_purchase_amount +
-              a.store_total_cash_purchase_amount,
+            store_today_cash_sale_amount:
+              item.store_today_cash_sale_amount +
+              a.store_today_cash_sale_amount,
+              store_total_cash_sale_amount:
+              item.store_total_cash_sale_amount +
+              a.store_total_cash_sale_amount,
           };
         },
         {
           totalStaff: 0,
-          todayPurchase: 0,
-          totalPurchase: 0,
+          todaySale: 0,
+          totalSale: 0,
           totalStock: 0,
           totalStockAmount: 0,
-          store_today_cash_purchase_amount: 0,
-          store_total_cash_purchase_amount: 0,
+          store_today_cash_sale_amount: 0,
+          store_total_cash_sale_amount: 0,
         }
       );
 
@@ -314,22 +314,20 @@ const TableList = observer(
                       {totalForStore?.totalStaff}
                     </TableCell>
                     <TableCell align="right">
-                      {totalForStore?.todayPurchase}
+                      {totalForStore?.todaySale}
                     </TableCell>
                     <TableCell align="right">
-                      {totalForStore?.totalPurchase}
+                      {totalForStore?.totalSale}
+                    </TableCell>
+                    <TableCell align="right">
+                      {totalForStore?.store_today_cash_sale_amount}
+                    </TableCell>
+                    <TableCell align="right">
+                      {totalForStore?.store_total_cash_sale_amount}
                     </TableCell>
                     <TableCell align="right">
                       {totalForStore?.totalStock}
                     </TableCell>
-
-                    <TableCell align="right">
-                          {totalForStore?.store_today_cash_sale_amount}
-                        </TableCell>
-                        <TableCell align="right">
-                          {totalForStore?.store_total_cash_sale_amount}
-                        </TableCell>
-
                     <TableCell align="right">
                       {totalForStore?.totalStockAmount}
                     </TableCell>

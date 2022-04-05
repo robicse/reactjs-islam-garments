@@ -160,6 +160,7 @@ const SuplierComponent = observer(() => {
     { title: "Email", field: "email" },
     { title: "Address", field: "address" },
     { title: "Initial Due(TK)", field: "initial_due" },
+    { title: "Current Due(TK)", field: "current_total_due" },
   
     {
       title: "Status",

@@ -188,6 +188,7 @@ const TableList = observer(() => {
     { title: "Phone", field: "phone" },
     { title: "Address", field: "address" },
     { title: "Initial Due(TK)", field: "initial_due" },
+    { title: "Current Due(TK)", field: "current_total_due" },
     // { title: "Total Amount", field: "sale_total_amount" },
     {
       title: "Status",

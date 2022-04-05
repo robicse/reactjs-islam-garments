@@ -100,6 +100,7 @@ const ClaculationComponent = ({
     let l = parseFloat(lessAmount) || 0
     const aftrlesCal = afterDisCal - l;
     setGrand(aftrlesCal);
+    setAfterLessAmount(aftrlesCal)
     //set paid
     const p = paid || 0;
     setDue(aftrlesCal - p);

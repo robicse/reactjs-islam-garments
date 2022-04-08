@@ -354,7 +354,7 @@ const TableList = observer(() => {
                     let url = `${baseUrl}/${endpoint.list}?type=${selectType}`;
                     //searching
                     if (query.search) {
-                      url += `search=${query.search}`;
+                      url += `&search=${query.search}`;
                     }
 
                     url += `&page=${query.page + 1}`;

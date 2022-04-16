@@ -29,7 +29,7 @@ import PrintTwoToneIcon from "@material-ui/icons/PrintTwoTone";
 import tableIcons from "components/table_icon/icon";
 import { useReactToPrint } from "react-to-print";
 // custom component
-import StockOutPOS from "components/admin/sale_management/whole_sale/wholesaleRetun";
+import StockOutPOS from "components/admin/warehouse_management/PurchaseReturn";
 import Details from "components/admin/common_component/details";
 import StockOutPrint from "components/admin/common_component/invoicePrint";
 // utils component
@@ -97,7 +97,7 @@ const purchaseReturnList = observer(() => {
     //wholeSaleStockOutAPi: `${baseUrl}/product_sale_return_create`,
     purchaseStockInAPi: `${baseUrl}/product_purchase_return_create`,
     // by dropdown
-    productFintByDeopDownItemAPi: `${baseUrl}/product_search_for_sale_by_store_id`,
+    productFintByDeopDownItemAPi: `${baseUrl}/product_search_for_stock_transfer_by_warehouse_id`,
     //by search filed
     productsearchForStockIn: `${baseUrl}/warehouse_current_stock_list_pagination_product_name`,
     //productWholeSaleListApi: `${baseUrl}/product_sale_return_list_pagination_with_search`,
@@ -106,9 +106,9 @@ const purchaseReturnList = observer(() => {
     // ProductPurchaseReturnDetailsUrl: `${baseUrl}/product_purchase_return_details`,
     printUrl: `${baseUrl}/product_purchase_return_details_print`,
     headers: { headers: { Authorization: "Bearer " + user?.details?.token } },
-    loginStore:{
-      id:user?.details?.store_id,
-      name: user?.details?.store_name,
+    loginWarehouse:{
+      id:user?.details?.warehouse_id,
+      name: user?.details?.warehouse_name,
       role:user?.role
     },
     //customerDueAPi: `${baseUrl}/customer_current_total_due_by_customer_id`,

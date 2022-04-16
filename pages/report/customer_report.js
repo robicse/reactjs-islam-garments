@@ -20,7 +20,7 @@ import Button from "@material-ui/core/Button";
 import { Box, Chip, Grid, TextField, Divider } from "@material-ui/core";
 import { baseUrl } from "../../const/api";
 import { useReactToPrint } from "react-to-print";
-import PrintSupplierHistory from "components/admin/common_component/printSupplierHistory";
+import PrintCustomerHistory from "components/admin/common_component/printCustomerHistory";
 
 const styles = {
   cardCategoryWhite: {
@@ -64,7 +64,7 @@ const SupplierReport = () => {
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [reportData, setReportData] = useState(null);
+  const [customerReportData, setCustomerReportData] = useState(null);
   const [totalcount, setTotalcount] = useState(0);
   const [invoiceNumber, setInvoiceNumber] = useState("");
 
@@ -125,10 +125,6 @@ const SupplierReport = () => {
       title: "Invoice No",
       field: "invoice_no",
     },
-    {
-      title: "Supplier invoice No",
-      field: "supplier_invoice_no",
-    },
 
     {
       title: "Date invoice No",
@@ -142,10 +138,9 @@ const SupplierReport = () => {
   return (
     <div>
       <div style={{ display: "none" }}>
-      <PrintSupplierHistory
-          defaultprintData={true}
+      <PrintCustomerHistory
           ref={componentRef}
-          invoiceTitle="Supplier History"
+          customerReportData={customerReportData}
           from={from}
           to={to}
         />
@@ -280,7 +275,7 @@ const SupplierReport = () => {
                                 totalCount: resp?.data?.total,
                               });
                               console.log(resp?.data.current_page);
-
+                              setCustomerReportData(resp?.data?.data);
                               setTotalcount(resp.total_amount);
                             } else {
                               resolve({

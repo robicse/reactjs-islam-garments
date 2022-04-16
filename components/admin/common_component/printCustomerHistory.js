@@ -24,14 +24,14 @@ const useStyles = makeStyles({
 });
 
 const InvoicePrint = React.forwardRef(
-  ({ supplierReportData, from,to}, ref) => {
+  ({ customerReportData, from,to}, ref) => {
 
-    console.log(supplierReportData)
+    console.log(customerReportData)
     const classes = useStyles();
 
     return (
       <div ref={ref}>
-        {supplierReportData && (
+        {customerReportData && (
           <div style={{ margin: "15px" }}>
             <Grid container>
               <GridItem xs="6">
@@ -47,7 +47,7 @@ const InvoicePrint = React.forwardRef(
                   style={{ textAlign: "end", fontWeight: "bold" }}
                   variant="h5"
                 >
-                  Supplier Report
+                  Customer Report
                 </Typography>
               </GridItem>
             </Grid>
@@ -94,14 +94,13 @@ const InvoicePrint = React.forwardRef(
                       <TableRow>
                         <TableCell>SL</TableCell>
                         <TableCell>Invoice No</TableCell>
-                        <TableCell>Supplier invoice No</TableCell>
                         <TableCell>Date invoice No</TableCell>
                         <TableCell>Total(TK)</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {supplierReportData &&
-                        supplierReportData?.map((item, index) => (
+                      {customerReportData &&
+                        customerReportData?.map((item, index) => (
                           <TableRow>
                             <TableCell component="th" scope="row">
                               {index + 1}
@@ -109,10 +108,6 @@ const InvoicePrint = React.forwardRef(
 
                             <TableCell component="th" scope="row">
                               {item.invoice_no}
-                            </TableCell>
-
-                            <TableCell component="th" scope="row">
-                              {item.supplier_invoice_no}
                             </TableCell>
 
                             <TableCell component="th" scope="row">

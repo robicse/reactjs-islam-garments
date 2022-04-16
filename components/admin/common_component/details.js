@@ -50,12 +50,10 @@ const Details = ({ endpoint,id, idType}) => {
   }, []);
 
   const columns = [
-    {
-
-      title: "Category",
-      field: "product_category_name",
-    },
+    {title: "Type",field: "type"},
+    {title: "Category",field: "product_category_name"},
     { title: "Unit", field: "product_unit_name" },
+    { title: "Sub Unit", field: "product_sub_unit_name" },
     { title: "Size", field: "product_size_name" },
     {
       title: "Product Code",

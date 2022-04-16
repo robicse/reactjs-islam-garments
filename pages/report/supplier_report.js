@@ -64,7 +64,7 @@ const SupplierReport = () => {
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [reportData, setReportData] = useState(null);
+  const [supplierReportData, setSupplierReportData] = useState(null);
   const [totalcount, setTotalcount] = useState(0);
   const [invoiceNumber, setInvoiceNumber] = useState("");
 
@@ -142,10 +142,16 @@ const SupplierReport = () => {
   return (
     <div>
       <div style={{ display: "none" }}>
-        <PrintSupplierHistory
+        {/* <PrintSupplierHistory
           defaultprintData={true}
           ref={componentRef}
           invoiceTitle="Supplier History"
+          from={from}
+          to={to}
+        /> */}
+        <PrintSupplierHistory
+          ref={componentRef}
+          supplierReportData={supplierReportData}
           from={from}
           to={to}
         />
@@ -281,7 +287,8 @@ const SupplierReport = () => {
                               totalCount: resp?.data?.total,
                             });
                             console.log(resp?.data.current_page);
-
+                            
+                            setSupplierReportData(resp?.data?.data);
                             setTotalcount(resp.total_amount);
                           } else {
                             resolve({

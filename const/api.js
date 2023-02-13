@@ -3,7 +3,7 @@
  */
 
 const protocol = 'https://'
-const host = 'islam-garments-backend.starit-ltd.xyz'
+const host = 'starittech.xyz'
 const host2 = 'demo-islam-garments-backend.starit-ltd.xyz'
 
 const api = '/api';
